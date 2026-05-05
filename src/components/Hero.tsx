@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 
 export default function Hero() {
   return (
-    <section className="px-6 py-20 lg:py-24 lg:px-10 relative overflow-hidden" id="sobre">
+    <section className="px-5 sm:px-6 py-20 lg:py-24 lg:px-10 relative overflow-hidden" id="sobre">
       <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         
         {/* Left Column: Text Content */}
@@ -54,10 +54,13 @@ export default function Hero() {
             transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
             className="relative transform-gpu"
           >
-            {/* Soft shadow for the IDE */}
-            <div className="absolute inset-0 bg-slate-900/5 blur-[40px] rounded-[32px] -z-10 translate-y-8"></div>
+            {/* Massive diffuse light for IDE */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-cyan-500/20 blur-[80px] rounded-[40px] -z-10 translate-y-8"></div>
             
-            <div className="rounded-2xl border border-slate-200/60 bg-white/80 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col overflow-hidden max-h-[500px]">
+            <div className="rounded-2xl border border-slate-200/60 bg-white/60 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.05)] flex flex-col overflow-hidden max-h-[500px] relative">
+              {/* Inner ring for glassmorphism */}
+              <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/50 pointer-events-none z-50"></div>
+              
               {/* IDE Header */}
               <div className="h-10 border-b border-slate-100 bg-slate-50/80 backdrop-blur-sm flex items-center justify-between px-4">
                 <div className="flex gap-1.5">
@@ -130,7 +133,7 @@ export default function Hero() {
                    </div>
 
                    {/* Terminal area with Telemetry */}
-                   <div className="h-40 border-t border-slate-200 bg-white p-3 flex flex-col font-mono text-[10px] sm:text-xs text-slate-500 relative">
+                   <div className="h-40 border-t border-slate-200/60 bg-white/80 backdrop-blur-md p-3 flex flex-col font-mono text-[10px] sm:text-xs text-slate-500 relative">
                      <div className="flex justify-between items-center mb-2 pb-1 text-slate-400 font-bold cursor-default border-b border-slate-100">
                         <div className="flex gap-4">
                           <span className="text-slate-800 border-b-2 border-purple-500 px-1 pb-1">BuildOutput</span>

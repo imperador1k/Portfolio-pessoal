@@ -38,21 +38,29 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section className="px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10 bg-white" id="projetos">
+    <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="projetos">
       <div className="flex items-center justify-between mb-16 cursor-default">
-        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase">
+        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase flex items-center gap-3">
+          <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
           02 // Projetos em Destaque
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         {projects.map((project, idx) => (
           <div
             key={idx}
-            className="group bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)] hover:border-slate-300 transition-all duration-300 flex flex-col h-full relative"
+            className="group bg-white/60 backdrop-blur-xl border border-white/60 rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_30px_60px_rgba(168,85,247,0.1)] hover:-translate-y-1 transition-all duration-500 flex flex-col h-full relative"
           >
+            {/* Diffuse glow effect behind the card */}
+            <div className="absolute -inset-0.5 bg-gradient-to-br from-purple-500 to-cyan-500 opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500 rounded-[32px] -z-10"></div>
+            {/* Inner Ring */}
+            <div className="absolute inset-0 rounded-[32px] ring-1 ring-inset ring-slate-200/50 pointer-events-none z-30 group-hover:ring-purple-200/50 transition-colors"></div>
+
             {/* Visual Area */}
-            <div className="relative h-64 border-b border-slate-100 overflow-hidden shrink-0 bg-slate-50">
+            <div className="relative h-72 border-b border-slate-100/50 overflow-hidden shrink-0 bg-[#FAFAFA]">
+              {/* Overlay shadow for depth */}
+              <div className="absolute inset-0 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.02)] z-20 pointer-events-none"></div>
               {project.type === 'network' && <NetworkVisual />}
               {project.type === 'microservices' && <MicroservicesVisual />}
               {project.type === 'neural' && <NeuralVisual />}
@@ -60,18 +68,18 @@ export default function Projects() {
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 p-8 flex flex-col z-10 bg-white">
-              <h3 className={`text-2xl font-bold mb-3 text-slate-900 group-hover:text-purple-600 transition-colors`}>{project.title}</h3>
-              <p className="text-sm text-slate-500 flex-1 leading-relaxed mb-6 font-medium">
+            <div className="flex-1 p-8 md:p-10 flex flex-col z-10 bg-white/50">
+              <h3 className={`text-2xl font-bold mb-3 text-slate-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-cyan-500 transition-all duration-300`}>{project.title}</h3>
+              <p className="text-[15px] text-slate-600 flex-1 leading-relaxed mb-8 font-medium">
                 {project.description}
               </p>
 
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2 mb-10">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[11px] font-mono px-2.5 py-1 bg-slate-100 rounded-md text-slate-600 font-bold tracking-wide"
+                    className="text-[11px] font-mono px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-slate-600 font-bold tracking-wide shadow-sm"
                   >
                     {tag}
                   </span>

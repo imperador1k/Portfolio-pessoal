@@ -69,7 +69,7 @@ function TimelineItem({ item, index }: { item: typeof timeline[0], index: number
             initial={{ scale: 0, opacity: 0 }}
             animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
             transition={{ delay: index * 0.2, type: "spring" }}
-            className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-[3px] border-white shadow-[0_0_15px_rgba(168,85,247,0.5)] z-10 absolute left-1/2 -translate-x-1/2 top-1.5"
+            className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 shadow-[0_0_15px_rgba(168,85,247,0.6)] z-10 absolute left-1/2 -translate-x-1/2 top-1.5"
           ></motion.div>
         </div>
 
@@ -78,17 +78,24 @@ function TimelineItem({ item, index }: { item: typeof timeline[0], index: number
           initial={{ x: 20, opacity: 0 }}
           animate={isInView ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 }}
           transition={{ delay: index * 0.2 + 0.2 }}
-          className="md:col-span-3 bg-white p-2 rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all group overflow-hidden"
+          className="md:col-span-3 bg-white/80 backdrop-blur-xl p-2 rounded-3xl border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-500 group overflow-hidden relative"
         >
-          <div className="relative h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
-            <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors z-10"></div>
+          {/* Subtle gradient border inset */}
+          <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-slate-200/50 group-hover:ring-purple-200 transition-colors duration-500 z-30 pointer-events-none"></div>
+
+          <div className="relative h-48 md:h-56 rounded-2xl overflow-hidden mb-5">
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/20 to-transparent z-10"></div>
             <img src={item.image} alt={item.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-            <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl z-20"></div>
+            <div className="absolute bottom-4 left-4 z-20">
+               <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-white font-mono text-[10px] font-bold tracking-wider uppercase border border-white/20">
+                 {item.year}
+               </span>
+            </div>
           </div>
-          <div className="px-4 pb-4">
-            <h3 className="text-xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">{item.title}</h3>
-            <div className="text-purple-600 font-medium text-[13px] mb-3">{item.organization}</div>
-            <p className="text-slate-500 text-sm leading-relaxed">{item.description}</p>
+          <div className="px-5 pb-5 relative z-20">
+            <h3 className="text-2xl font-bold text-slate-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-cyan-500 transition-all duration-300 mb-1">{item.title}</h3>
+            <div className="text-purple-600 font-bold text-[13px] mb-4 bg-purple-50 inline-block px-2.5 py-1 rounded-md border border-purple-100">{item.organization}</div>
+            <p className="text-slate-600 text-[15px] leading-relaxed font-medium">{item.description}</p>
           </div>
         </motion.div>
       </div>
@@ -98,7 +105,7 @@ function TimelineItem({ item, index }: { item: typeof timeline[0], index: number
 
 export default function Skills() {
   return (
-    <section className="px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full border-t border-slate-100 bg-[#FAFAFA]" id="skills">
+    <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="skills">
       {/* Grid Secção */}
       <div className="mb-24">
         <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase mb-12 text-center md:text-left">
@@ -115,12 +122,14 @@ export default function Skills() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 key={skill.name}
-                className={`group flex items-center gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300 relative overflow-hidden cursor-default`}
+                className={`group flex items-center gap-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_30px_rgba(168,85,247,0.1)] transition-all duration-500 relative overflow-hidden cursor-default`}
               >
                 {/* Glow border effect on hover */}
-                <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 bg-gradient-to-r from-purple-500 to-cyan-500`}></div>
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br from-purple-500 to-cyan-500`}></div>
+                {/* Inner inset ring */}
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-slate-200/50 pointer-events-none group-hover:ring-purple-200/50 transition-colors"></div>
                 
-                <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-100 group-hover:-translate-y-1 transition-transform duration-300 shadow-sm z-10`}>
+                <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-white border border-slate-100 group-hover:-translate-y-1 group-hover:rotate-3 transition-transform duration-500 shadow-sm z-10`}>
                   <Icon className={`w-6 h-6 ${skill.color}`} />
                 </div>
                 <span className="font-bold text-slate-700 z-10">{skill.name}</span>
