@@ -1,52 +1,53 @@
 import { ExternalLink, Github } from 'lucide-react';
+import { NetworkVisual, MicroservicesVisual, NeuralVisual, TerminalVisual } from './ProjectVisuals';
 
 const projects = [
   {
     title: 'Platform Optimizer',
-    description: 'Sistema de gestão e otimização de recursos académicos. Permite escalar e distribuir processamento de dados.',
+    description: 'Sistema de gestão e otimização de recursos académicos. Permite escalar e distribuir processamento de dados geograficamente.',
     tags: ['React', 'Java', 'Spring Boot', 'PostgreSQL'],
     demo: '#',
     github: '#',
-    gradient: 'from-purple-500/20 to-transparent',
     hoverText: 'group-hover:text-purple-600',
-    linkColor: 'text-purple-600'
+    linkColor: 'text-purple-600',
+    type: 'network'
   },
   {
     title: 'Task Orchestrator',
-    description: 'Aplicação distribuída para coordenar tarefas complexas em ambiente de microsserviços. Implementado usando o padrão Event Sourcing.',
+    description: 'Aplicação distribuída para coordenar tarefas complexas em ambiente de microsserviços. Usando o padrão Event Sourcing.',
     tags: ['Golang', 'Docker', 'RabbitMQ', 'Vue.js'],
     demo: '#',
     github: '#',
-    gradient: 'from-cyan-500/20 to-transparent',
     hoverText: 'group-hover:text-cyan-600',
-    linkColor: 'text-cyan-600'
+    linkColor: 'text-cyan-600',
+    type: 'microservices'
   },
   {
     title: 'Neural Web Analyst',
-    description: 'Ferramenta de visualização de redes neurais a correr diretamente no browser. Focado em performance máxima.',
+    description: 'Ferramenta interativa e 3D para visualização de redes neurais a correr  no browser. Focado em performance máxima.',
     tags: ['TypeScript', 'WebGL', 'Python', 'FastAPI'],
     demo: '#',
     github: '#',
-    gradient: 'from-emerald-500/20 to-transparent',
     hoverText: 'group-hover:text-emerald-600',
-    linkColor: 'text-emerald-600'
+    linkColor: 'text-emerald-600',
+    type: 'neural'
   },
   {
     title: 'CLI Scaffolding Tool',
-    description: 'Interface de linha de comandos (CLI) desenhada para inicializar projetos rapidamente de acordo com os padrões da universidade.',
+    description: 'Interface de linha de comandos (CLI) desenhada para inicializar e manter projetos complexos rapidamente.',
     tags: ['Node.js', 'Bash', 'Commander.js'],
     demo: null,
     github: '#',
-    gradient: 'from-orange-500/20 to-transparent',
     hoverText: 'group-hover:text-orange-600',
-    linkColor: 'text-orange-600'
+    linkColor: 'text-orange-600',
+    type: 'terminal'
   },
 ];
 
 export default function Projects() {
   return (
-    <section className="px-6 py-12 lg:px-10 flex-1 bg-slate-50/50" id="projetos">
-      <div className="flex items-center justify-between mb-8 cursor-default">
+    <section className="px-6 py-20 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="projetos">
+      <div className="flex items-center justify-between mb-12 cursor-default">
         <h2 className="text-xl font-bold font-mono tracking-tighter text-slate-800 uppercase">
           02 // Projetos em Destaque
         </h2>
@@ -57,30 +58,20 @@ export default function Projects() {
         {projects.map((project, idx) => (
           <div
             key={idx}
-            className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col md:flex-row md:h-[240px]"
+            className="group bg-white/70 backdrop-blur-md border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col md:flex-row md:h-[260px] relative"
           >
-            {/* Visual Area (Placeholder) */}
-            <div className="relative h-48 md:h-auto md:w-1/3 bg-slate-100 overflow-hidden shrink-0">
-              <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient}`}></div>
-              <div className="flex items-center justify-center h-full">
-                <span className="font-mono text-xs tracking-widest text-slate-400 opacity-60">
-                  IMAGE PREVIEW
-                </span>
-              </div>
-              {/* Optional: Pattern for placeholder */}
-              <div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage: 'radial-gradient(#94a3b8 1px, transparent 1px)',
-                  backgroundSize: '16px 16px',
-                }}
-              ></div>
+            {/* Visual Area */}
+            <div className="relative h-56 md:h-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-100 overflow-hidden shrink-0">
+              {project.type === 'network' && <NetworkVisual />}
+              {project.type === 'microservices' && <MicroservicesVisual />}
+              {project.type === 'neural' && <NeuralVisual />}
+              {project.type === 'terminal' && <TerminalVisual />}
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 p-6 flex flex-col">
+            <div className="flex-1 p-6 flex flex-col z-10 bg-white/50">
               <h3 className={`text-xl font-bold mb-2 transition-colors ${project.hoverText}`}>{project.title}</h3>
-              <p className="text-sm text-slate-500 flex-1 leading-relaxed mb-4">
+              <p className="text-sm text-slate-600 flex-1 leading-relaxed mb-4 font-medium">
                 {project.description}
               </p>
 
@@ -89,7 +80,7 @@ export default function Projects() {
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[10px] font-mono px-2 py-1 bg-slate-100 rounded text-slate-600"
+                    className="text-[10px] font-mono px-2.5 py-1 bg-slate-100/80 border border-slate-200 rounded-md text-slate-600 font-bold tracking-wide"
                   >
                     #{tag}
                   </span>
@@ -97,23 +88,23 @@ export default function Projects() {
               </div>
 
               {/* Links */}
-              <div className="flex items-center gap-4 mt-auto">
+              <div className="flex items-center gap-6 mt-auto">
                 {project.github && (
                   <a
                     href={project.github}
-                    className={`flex items-center gap-1.5 text-xs font-bold transition-colors hover:opacity-80 ${project.linkColor}`}
+                    className={`flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors`}
                   >
-                    <Github className="h-3.5 w-3.5" />
-                    <span>VER CÓDIGO &rarr;</span>
+                    <Github className="h-4 w-4" />
+                    <span>REPO GITHUB</span>
                   </a>
                 )}
                 {project.demo && (
                   <a
                     href={project.demo}
-                    className={`flex items-center gap-1.5 text-xs font-bold transition-colors hover:opacity-80 ${project.linkColor}`}
+                    className={`flex items-center gap-1.5 text-xs font-bold transition-colors hover:opacity-70 ${project.linkColor}`}
                   >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    <span>LIVE DEMO &rarr;</span>
+                    <ExternalLink className="h-4 w-4" />
+                    <span>LIVE DEMO</span>
                   </a>
                 )}
               </div>
