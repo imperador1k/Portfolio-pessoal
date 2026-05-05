@@ -1,67 +1,58 @@
-import { ExternalLink, Github } from 'lucide-react';
+import { ArrowRight, ExternalLink, Github } from 'lucide-react';
 import { NetworkVisual, MicroservicesVisual, NeuralVisual, TerminalVisual } from './ProjectVisuals';
 
 const projects = [
   {
-    title: 'Platform Optimizer',
+    title: 'Cluster Data Engine',
     description: 'Sistema de gestão e otimização de recursos académicos. Permite escalar e distribuir processamento de dados geograficamente.',
     tags: ['React', 'Java', 'Spring Boot', 'PostgreSQL'],
     demo: '#',
     github: '#',
-    hoverText: 'group-hover:text-purple-600',
-    linkColor: 'text-purple-600',
     type: 'network'
   },
   {
     title: 'Task Orchestrator',
-    description: 'Aplicação distribuída para coordenar tarefas complexas em ambiente de microsserviços. Usando o padrão Event Sourcing.',
-    tags: ['Golang', 'Docker', 'RabbitMQ', 'Vue.js'],
+    description: 'Aplicação distribuída para coordenar tarefas complexas em ambiente de microsserviços. Implementado usando o padrão Event Sourcing.',
+    tags: ['Kotlin', 'Docker', 'RabbitMQ', 'Android'],
     demo: '#',
     github: '#',
-    hoverText: 'group-hover:text-cyan-600',
-    linkColor: 'text-cyan-600',
     type: 'microservices'
   },
   {
     title: 'Neural Web Analyst',
-    description: 'Ferramenta interativa e 3D para visualização de redes neurais a correr  no browser. Focado em performance máxima.',
+    description: 'Ferramenta interativa para visualização de redes neurais no browser focada em performance máxima e tipagem forte.',
     tags: ['TypeScript', 'WebGL', 'Python', 'FastAPI'],
     demo: '#',
     github: '#',
-    hoverText: 'group-hover:text-emerald-600',
-    linkColor: 'text-emerald-600',
     type: 'neural'
   },
   {
     title: 'CLI Scaffolding Tool',
-    description: 'Interface de linha de comandos (CLI) desenhada para inicializar e manter projetos complexos rapidamente.',
+    description: 'Interface de linha de comandos (CLI) desenhada para inicializar e manter projetos corporativos rapidamente.',
     tags: ['Node.js', 'Bash', 'Commander.js'],
     demo: null,
     github: '#',
-    hoverText: 'group-hover:text-orange-600',
-    linkColor: 'text-orange-600',
     type: 'terminal'
   },
 ];
 
 export default function Projects() {
   return (
-    <section className="px-6 py-20 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="projetos">
-      <div className="flex items-center justify-between mb-12 cursor-default">
-        <h2 className="text-xl font-bold font-mono tracking-tighter text-slate-800 uppercase">
+    <section className="px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10 bg-white" id="projetos">
+      <div className="flex items-center justify-between mb-16 cursor-default">
+        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase">
           02 // Projetos em Destaque
         </h2>
-        <div className="h-[1px] flex-1 ml-6 bg-slate-200"></div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {projects.map((project, idx) => (
           <div
             key={idx}
-            className="group bg-white/70 backdrop-blur-md border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col md:flex-row md:h-[260px] relative"
+            className="group bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)] hover:border-slate-300 transition-all duration-300 flex flex-col h-full relative"
           >
             {/* Visual Area */}
-            <div className="relative h-56 md:h-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-100 overflow-hidden shrink-0">
+            <div className="relative h-64 border-b border-slate-100 overflow-hidden shrink-0 bg-slate-50">
               {project.type === 'network' && <NetworkVisual />}
               {project.type === 'microservices' && <MicroservicesVisual />}
               {project.type === 'neural' && <NeuralVisual />}
@@ -69,20 +60,20 @@ export default function Projects() {
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 p-6 flex flex-col z-10 bg-white/50">
-              <h3 className={`text-xl font-bold mb-2 transition-colors ${project.hoverText}`}>{project.title}</h3>
-              <p className="text-sm text-slate-600 flex-1 leading-relaxed mb-4 font-medium">
+            <div className="flex-1 p-8 flex flex-col z-10 bg-white">
+              <h3 className={`text-2xl font-bold mb-3 text-slate-900 group-hover:text-purple-600 transition-colors`}>{project.title}</h3>
+              <p className="text-sm text-slate-500 flex-1 leading-relaxed mb-6 font-medium">
                 {project.description}
               </p>
 
               {/* Tags */}
-              <div className="flex gap-2 flex-wrap mb-4">
+              <div className="flex flex-wrap gap-2 mb-8">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[10px] font-mono px-2.5 py-1 bg-slate-100/80 border border-slate-200 rounded-md text-slate-600 font-bold tracking-wide"
+                    className="text-[11px] font-mono px-2.5 py-1 bg-slate-100 rounded-md text-slate-600 font-bold tracking-wide"
                   >
-                    #{tag}
+                    {tag}
                   </span>
                 ))}
               </div>
@@ -92,19 +83,21 @@ export default function Projects() {
                 {project.github && (
                   <a
                     href={project.github}
-                    className={`flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors`}
+                    className="flex items-center gap-1.5 text-[13px] font-bold text-slate-600 hover:text-slate-900 transition-colors group/link"
                   >
                     <Github className="h-4 w-4" />
-                    <span>REPO GITHUB</span>
+                    <span>VER CÓDIGO</span>
+                    <ArrowRight className="h-3 w-3 opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-1 transition-all -ml-1" />
                   </a>
                 )}
                 {project.demo && (
                   <a
                     href={project.demo}
-                    className={`flex items-center gap-1.5 text-xs font-bold transition-colors hover:opacity-70 ${project.linkColor}`}
+                    className="flex items-center gap-1.5 text-[13px] font-bold text-purple-600 hover:text-purple-700 transition-colors group/link"
                   >
                     <ExternalLink className="h-4 w-4" />
                     <span>LIVE DEMO</span>
+                    <ArrowRight className="h-3 w-3 opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-1 transition-all -ml-1" />
                   </a>
                 )}
               </div>
