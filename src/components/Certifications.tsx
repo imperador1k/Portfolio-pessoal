@@ -1,4 +1,4 @@
-import { Award, ShieldCheck, Trophy } from 'lucide-react';
+import { Award, ShieldCheck, Trophy, BadgeCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const certs = [
@@ -11,6 +11,7 @@ const certs = [
     gradient: 'from-orange-500 to-red-500',
     bg: 'bg-orange-50',
     border: 'border-orange-100',
+    glow: 'group-hover:shadow-[0_0_30px_rgba(249,115,22,0.2)]'
   },
   {
     title: 'Google Associate Android Developer',
@@ -21,6 +22,7 @@ const certs = [
     gradient: 'from-green-500 to-emerald-500',
     bg: 'bg-green-50',
     border: 'border-green-100',
+    glow: 'group-hover:shadow-[0_0_30px_rgba(34,197,94,0.2)]'
   },
   {
     title: 'AWS Certified Cloud Practitioner',
@@ -31,6 +33,7 @@ const certs = [
     gradient: 'from-purple-500 to-cyan-500',
     bg: 'bg-purple-50',
     border: 'border-purple-100',
+    glow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]'
   }
 ];
 
@@ -38,7 +41,8 @@ export default function Certifications() {
   return (
     <section className="px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full bg-[#FAFAFA]" id="certificacoes">
       <div className="flex items-center justify-between mb-16 cursor-default">
-        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase text-center w-full md:text-left">
+        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase text-center w-full md:text-left flex items-center justify-center md:justify-start gap-3">
+          <BadgeCheck className="w-6 h-6 text-purple-600" />
           Hall of Fame // Certificações
         </h2>
       </div>
@@ -54,24 +58,24 @@ export default function Certifications() {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.15 }}
               whileHover={{ y: -5 }}
-              className="bg-white border border-slate-200 rounded-3xl p-8 relative overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all flex flex-col group cursor-default"
+              className={`bg-white border border-slate-200 rounded-3xl p-8 relative overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.02)] transition-all duration-300 flex flex-col group cursor-default ${cert.glow}`}
             >
-              {/* Subtle top gradient accent */}
+              {/* Animated top gradient accent */}
               <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${cert.gradient}`}></div>
               
-              <div className={`w-14 h-14 rounded-2xl ${cert.bg} border ${cert.border} flex items-center justify-center mb-6`}>
+              <div className={`w-14 h-14 rounded-2xl ${cert.bg} border ${cert.border} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 <Icon className={`w-7 h-7 ${cert.color}`} />
               </div>
               
-              <h3 className="text-lg font-bold text-slate-900 mb-1">{cert.title}</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-1 leading-tight">{cert.title}</h3>
               <p className="text-sm font-medium text-slate-500 mb-6">{cert.subtitle}</p>
               
               <div className="mt-auto flex justify-between items-center">
-                 <span className="font-mono text-xs font-bold text-slate-400 bg-slate-50 px-3 py-1 rounded-full border border-slate-100 group-hover:border-slate-300 transition-colors">
-                   {cert.date}
+                 <span className="font-mono text-[11px] font-bold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200 group-hover:border-slate-300 transition-colors">
+                   AQUIRED // {cert.date}
                  </span>
                  
-                 <div className="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                 <div className={`w-8 h-8 rounded-full ${cert.bg} border ${cert.border} flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
                     <Award className={`w-4 h-4 ${cert.color}`} />
                  </div>
               </div>

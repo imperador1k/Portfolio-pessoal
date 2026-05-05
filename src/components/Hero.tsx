@@ -129,19 +129,56 @@ export default function Hero() {
                      </table>
                    </div>
 
-                   {/* Terminal area */}
-                   <div className="h-28 border-t border-slate-200 bg-white p-2 flex flex-col font-mono text-[10px] sm:text-xs text-slate-500">
-                     <div className="flex gap-4 mb-2 pb-1 text-slate-400 font-bold cursor-default">
-                        <span className="text-slate-800 border-b-2 border-purple-500 px-1">Run</span>
-                        <span>Logcat</span>
-                        <span>Build</span>
+                   {/* Terminal area with Telemetry */}
+                   <div className="h-40 border-t border-slate-200 bg-white p-3 flex flex-col font-mono text-[10px] sm:text-xs text-slate-500 relative">
+                     <div className="flex justify-between items-center mb-2 pb-1 text-slate-400 font-bold cursor-default border-b border-slate-100">
+                        <div className="flex gap-4">
+                          <span className="text-slate-800 border-b-2 border-purple-500 px-1 pb-1">BuildOutput</span>
+                          <span className="pb-1 hover:text-slate-600 transition-colors">Telemetry</span>
+                          <span className="pb-1 hover:text-slate-600 transition-colors">Logcat</span>
+                        </div>
+                        <div className="flex gap-3 text-[9px] items-center text-slate-400">
+                           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></div> CPU: 12%</span>
+                           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-purple-400"></div> RAM: 1.2GB</span>
+                        </div>
                      </div>
-                     <div className="flex-1 overflow-y-auto space-y-1">
-                        <div><span className="text-green-600 font-bold">INFO:</span> Gradle build finished in 1s 234ms</div>
+                     <div className="flex-1 overflow-y-auto space-y-1 relative z-10">
+                        <div className="flex items-center gap-2">
+                          <span className="text-green-600 font-bold">INFO:</span> 
+                          <span>Daemon started resolving dependencies...</span>
+                          <motion.div className="w-16 h-1 bg-slate-100 rounded-full overflow-hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                             <motion.div className="h-full bg-green-400" initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 1.5, repeat: Infinity }} />
+                          </motion.div>
+                        </div>
                         <div><span className="text-blue-600 font-bold">Executing</span> tasks: [:app:assembleDebug]</div>
-                        <div className="text-slate-700">BUILD SUCCESSFUL in 2s</div>
-                        <div className="text-slate-400">Waiting for device connection...</div>
+                        <div className="flex justify-between max-w-sm">
+                           <span><span className="text-purple-500">{'>'}</span> Task :app:compileDebugKotlin</span>
+                           <span className="text-slate-400">451ms</span>
+                        </div>
+                        <div className="flex justify-between max-w-sm">
+                           <span><span className="text-purple-500">{'>'}</span> Task :app:packageDebug</span>
+                           <span className="text-slate-400">120ms</span>
+                        </div>
+                        <div className="text-slate-700 font-bold mt-1">BUILD SUCCESSFUL in 1s 874ms</div>
                      </div>
+                     
+                     {/* Data flow lines background */}
+                     <svg className="absolute right-0 bottom-0 w-32 h-32 opacity-20 pointer-events-none" viewBox="0 0 100 100">
+                        <motion.path 
+                           d="M 100 100 Q 50 50 100 0" 
+                           fill="none" stroke="#9333ea" strokeWidth="2" 
+                           initial={{ strokeDasharray: "0 100" }}
+                           animate={{ strokeDasharray: "100 100", strokeDashoffset: [100, 0] }}
+                           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        />
+                        <motion.path 
+                           d="M 80 100 Q 30 50 80 0" 
+                           fill="none" stroke="#06b6d4" strokeWidth="1" 
+                           initial={{ strokeDasharray: "0 100" }}
+                           animate={{ strokeDasharray: "100 100", strokeDashoffset: [100, 0] }}
+                           transition={{ duration: 2.5, repeat: Infinity, ease: "linear", delay: 0.5 }}
+                        />
+                     </svg>
                    </div>
                 </div>
               </div>

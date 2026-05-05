@@ -2,20 +2,37 @@ import { motion } from 'motion/react';
 import { Network, ServerCog, TerminalSquare, Workflow } from 'lucide-react';
 
 export const NetworkVisual = () => (
-  <div className="absolute inset-0 bg-[#fafafa] flex items-center justify-center overflow-hidden">
+  <div className="absolute inset-0 bg-[#FAFAFA] flex items-center justify-center overflow-hidden">
     <div className="absolute inset-0 bg-[radial-gradient(#d8b4fe_1px,transparent_1px)] [background-size:20px_20px] opacity-30"></div>
-    <div className="relative w-full h-full flex items-center justify-center">
-      <motion.div animate={{ rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="w-32 h-32 border border-purple-200 rounded-full flex items-center justify-center absolute">
-        <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} className="w-2 h-2 bg-purple-500 rounded-full absolute -top-1"></motion.div>
-        <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, delay: 0.5 }} className="w-2 h-2 bg-pink-500 rounded-full absolute -bottom-1"></motion.div>
-      </motion.div>
-      <div className="w-20 h-20 bg-white border border-slate-200 rounded-2xl shadow-lg flex items-center justify-center z-10 relative">
-        <Workflow className="w-8 h-8 text-purple-500" />
-        <motion.div animate={{ scale: [1, 1.5], opacity: [1, 0] }} transition={{ duration: 1.5, repeat: Infinity }} className="absolute inset-0 border-2 border-purple-400 rounded-2xl"></motion.div>
-      </div>
-      <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
-        <path d="M 0 50 Q 80 0 150 100 T 300 50" fill="transparent" stroke="#e9d5ff" strokeWidth="2" strokeDasharray="4 4" className="opacity-50" />
-      </svg>
+    <div className="relative w-full h-full flex items-center justify-center perspective-1000">
+       <motion.div 
+         animate={{ rotateX: [20, 25, 20], rotateY: [-10, -5, -10] }} 
+         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+         className="w-full h-full flex items-center justify-center transform-gpu preserve-3d"
+       >
+          <motion.div animate={{ rotateZ: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="w-48 h-48 border-[0.5px] border-purple-200 rounded-full flex items-center justify-center absolute">
+            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} className="w-2 h-2 bg-purple-500 rounded-full absolute -top-1 shadow-[0_0_10px_#a855f7]"></motion.div>
+            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, delay: 0.5 }} className="w-2 h-2 bg-cyan-500 rounded-full absolute -bottom-1 shadow-[0_0_10px_#06b6d4]"></motion.div>
+          </motion.div>
+          
+          <motion.div animate={{ rotateZ: -360 }} transition={{ duration: 50, repeat: Infinity, ease: "linear" }} className="w-32 h-32 border-[0.5px] border-pink-200 border-dashed rounded-full flex items-center justify-center absolute">
+            <motion.div animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-1.5 h-1.5 bg-pink-500 rounded-full absolute right-0 shadow-[0_0_10px_#ec4899]"></motion.div>
+          </motion.div>
+
+          <div className="w-20 h-20 bg-white/90 backdrop-blur-md border border-slate-200 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] flex items-center justify-center z-10 relative">
+            <Workflow className="w-8 h-8 text-purple-600" />
+            <motion.div animate={{ scale: [1, 1.5], opacity: [1, 0] }} transition={{ duration: 2, repeat: Infinity }} className="absolute inset-0 border-2 border-purple-400 rounded-2xl"></motion.div>
+          </div>
+          <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
+            <path d="M 0 100 Q 150 0 300 100" fill="transparent" stroke="url(#grad1)" strokeWidth="1.5" strokeDasharray="4 4" className="opacity-50" />
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#a855f7" />
+                <stop offset="100%" stopColor="#06b6d4" />
+              </linearGradient>
+            </defs>
+          </svg>
+       </motion.div>
     </div>
   </div>
 );

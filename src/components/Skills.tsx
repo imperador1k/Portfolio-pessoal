@@ -17,19 +17,22 @@ const timeline = [
     year: '2023 - Presente',
     title: 'Engenharia Informática',
     organization: 'Universidade X',
-    description: 'Foco em estruturas de dados, algoritmos, arquiteturas e desenvolvimento backend corporativo.',
+    description: 'Foco intensivo em estruturas de dados complexas, análise de algoritmos e arquiteturas de software escaláveis para ambientes corporativos.',
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop'
   },
   {
     year: '2022 - 2023',
     title: 'Desenvolvimento Mobile Privado',
-    organization: 'Projetos Pessoais',
-    description: 'Desenvolvimento de aplicações utilitárias em Kotlin e Android Studio com integrações REST.',
+    organization: 'Projetos Independentes',
+    description: 'Criação do zero de aplicações nativas utilitárias em Kotlin, adoção de Clean Architecture e integração profunda com APIs RESTful.',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop'
   },
   {
     year: '2021 - 2022',
-    title: 'Iniciação à Programação',
+    title: 'Iniciação à Arquitetura de Software',
     organization: 'Autodidata',
-    description: 'Primeiros passos em lógica de programação com Java, focando na orientação a objetos.',
+    description: 'Mergulho profundo nos paradigmas de programação orientada a objetos com Java. Construção das bases estruturais para desenvolvimento sólido.',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop'
   }
 ];
 
@@ -44,7 +47,7 @@ function TimelineItem({ item, index }: { item: typeof timeline[0], index: number
         initial={{ scale: 0, opacity: 0 }}
         animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
         transition={{ delay: index * 0.2, type: "spring" }}
-        className="md:hidden absolute left-0 top-1.5 w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-2 border-white shadow-[0_0_10px_rgba(168,85,247,0.4)] z-10"
+        className="md:hidden absolute left-[3px] top-1.5 w-3 h-3 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 shadow-[0_0_10px_rgba(168,85,247,0.4)] z-10"
       ></motion.div>
 
       <div className="md:grid md:grid-cols-5 md:gap-8 items-start">
@@ -53,9 +56,9 @@ function TimelineItem({ item, index }: { item: typeof timeline[0], index: number
           initial={{ x: -20, opacity: 0 }}
           animate={isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
           transition={{ delay: index * 0.2 + 0.1 }}
-          className="md:col-span-1 md:text-right mb-2 md:mb-0 pt-1"
+          className="md:col-span-1 md:text-right mb-4 md:mb-0 pt-1"
         >
-          <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 font-mono text-xs font-bold rounded-full border border-slate-200">
+          <span className="inline-block px-4 py-1.5 bg-white text-slate-700 font-mono text-[11px] uppercase tracking-wider font-bold rounded-full border border-slate-200 shadow-sm">
             {item.year}
           </span>
         </motion.div>
@@ -66,7 +69,7 @@ function TimelineItem({ item, index }: { item: typeof timeline[0], index: number
             initial={{ scale: 0, opacity: 0 }}
             animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
             transition={{ delay: index * 0.2, type: "spring" }}
-            className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-2 border-white shadow-[0_0_10px_rgba(168,85,247,0.4)] z-10 absolute left-1/2 -translate-x-1/2 top-1.5"
+            className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 border-[3px] border-white shadow-[0_0_15px_rgba(168,85,247,0.5)] z-10 absolute left-1/2 -translate-x-1/2 top-1.5"
           ></motion.div>
         </div>
 
@@ -75,11 +78,18 @@ function TimelineItem({ item, index }: { item: typeof timeline[0], index: number
           initial={{ x: 20, opacity: 0 }}
           animate={isInView ? { x: 0, opacity: 1 } : { x: 20, opacity: 0 }}
           transition={{ delay: index * 0.2 + 0.2 }}
-          className="md:col-span-3 bg-white p-6 rounded-2xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all"
+          className="md:col-span-3 bg-white p-2 rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all group overflow-hidden"
         >
-          <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
-          <div className="text-purple-600 font-medium text-sm mb-3">{item.organization}</div>
-          <p className="text-slate-500 text-sm leading-relaxed">{item.description}</p>
+          <div className="relative h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
+            <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors z-10"></div>
+            <img src={item.image} alt={item.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl z-20"></div>
+          </div>
+          <div className="px-4 pb-4">
+            <h3 className="text-xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">{item.title}</h3>
+            <div className="text-purple-600 font-medium text-[13px] mb-3">{item.organization}</div>
+            <p className="text-slate-500 text-sm leading-relaxed">{item.description}</p>
+          </div>
         </motion.div>
       </div>
     </div>
