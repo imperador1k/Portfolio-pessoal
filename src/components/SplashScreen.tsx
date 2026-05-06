@@ -60,7 +60,7 @@ const ProgressCounter = () => {
     
     return (
         <div className="font-mono text-xs text-slate-400 mt-4 tracking-widest">
-            {progress.toString().padStart(3, '0')}%
+            {progress}%
         </div>
     );
 };
@@ -75,9 +75,9 @@ export default function SplashScreen({ isLoading }: { isLoading: boolean }) {
           exit={{ 
             y: "-100%",
             transition: {
-              delay: 0.2, // Phase 2: Slide up after contents fade out
-              duration: 0.6,
-              ease: [0.76, 0, 0.24, 1] // Custom easeInOut for smooth curtain effect
+              delay: 0.1, // Minimal delay
+              duration: 0.4,
+              ease: "circIn" // Snappy exit
             }
           }}
         >

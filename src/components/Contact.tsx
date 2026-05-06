@@ -1,51 +1,89 @@
 import React, { useState } from 'react';
-import { Terminal, Send, Loader2, Github, Linkedin, Mail } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Terminal, Send, Loader2, Clipboard, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 const FloatingInput = ({ id, label, type = "text", required = false, isTextarea = false }: any) => {
-  const baseClasses = "absolute left-3 -top-2.5 bg-white px-1 text-[10px] font-mono font-bold text-slate-500 transition-all duration-300 pointer-events-none rounded";
-  const placeholderClasses = "peer-placeholder-shown:text-sm peer-placeholder-shown:top-4 peer-placeholder-shown:left-4 peer-placeholder-shown:bg-transparent peer-placeholder-shown:font-sans peer-placeholder-shown:font-normal peer-placeholder-shown:text-slate-400";
-  const focusClasses = "peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-[10px] peer-focus:bg-white peer-focus:font-mono peer-focus:font-bold peer-focus:text-jb-primary";
-  
+  const [value, setValue] = useState("");
+  const isFilled = value.length > 0;
+
   return (
-    <div className="relative">
+    <div className="relative group">
+      <div className={`
+        absolute left-4 transition-all duration-300 pointer-events-none z-10
+        ${isFilled ? 'top-2 text-[10px] font-mono font-bold text-jb-primary' : 'top-5 text-sm text-slate-400 font-sans'}
+        group-focus-within:top-2 group-focus-within:text-[10px] group-focus-within:font-mono group-focus-within:font-bold group-focus-within:text-jb-primary
+      `}>
+        {label}
+      </div>
+      
       {isTextarea ? (
         <textarea 
           id={id}
-          className="peer w-full bg-slate-50 text-jb-dark placeholder-transparent px-4 py-4 outline-none text-sm font-sans rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-jb-primary focus:bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] focus:shadow-none transition-all duration-300 resize-none block min-h-[140px]"
-          placeholder={label}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="peer w-full bg-slate-50 text-slate-900 px-4 pt-7 pb-3 outline-none text-sm font-sans rounded-xl border border-slate-200 focus:border-transparent focus:bg-white focus:ring-2 focus:ring-jb-primary focus:shadow-lg focus:shadow-jb-primary/10 transition-all duration-300 resize-none min-h-[140px]"
           required={required}
         />
       ) : (
         <input 
           type={type} 
           id={id}
-          className="peer w-full bg-slate-50 text-jb-dark placeholder-transparent px-4 py-4 outline-none text-sm font-sans rounded-xl ring-1 ring-slate-200 focus:ring-2 focus:ring-jb-primary focus:bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] focus:shadow-none transition-all duration-300 block"
-          placeholder={label}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="peer w-full bg-slate-50 text-slate-900 px-4 pt-7 pb-3 outline-none text-sm font-sans rounded-xl border border-slate-200 focus:border-transparent focus:bg-white focus:ring-2 focus:ring-jb-primary focus:shadow-lg focus:shadow-jb-primary/10 transition-all duration-300"
           required={required}
         />
       )}
-      <label 
-        htmlFor={id} 
-        className={`${baseClasses} ${placeholderClasses} ${focusClasses}`}
-      >
-        {label}
-      </label>
     </div>
   );
 };
 
-const ContactVar = ({ name, value, type, icon: Icon, href }: any) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 p-3 -ml-3 rounded-xl hover:bg-white/80 transition-colors border border-transparent hover:border-slate-200/60 hover:shadow-sm">
-    <div className="w-10 h-10 shrink-0 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-jb-primary/10 group-hover:scale-110 transition-all duration-300">
-      <Icon className="w-5 h-5 text-slate-500 group-hover:text-jb-primary transition-colors" />
-    </div>
-    <div className="font-mono text-[13px] sm:text-sm overflow-hidden text-ellipsis">
-      <span className="text-pink-500">val</span> <span className="text-jb-dark font-bold">{name}</span><span className="text-slate-400">: {type} = </span><br className="sm:hidden" />
-      <span className="text-emerald-600 break-all">"{value}"</span>
-    </div>
-  </a>
-);
+const CodeWindow = () => {
+    const [copied, setCopied] = useState(false);
+    
+    const handleCopy = () => {
+        navigator.clipboard.writeText("migasmps2005@gmail.com");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="bg-[#19191C] rounded-xl shadow-2xl overflow-hidden mt-10 relative group border border-white/5">
+            {/* Header */}
+            <div className="bg-[#2A2A2F] px-4 py-2.5 flex items-center justify-between border-b border-white/5">
+                <div className="flex gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></div>
+                </div>
+                <div className="font-mono text-[10px] text-slate-400 lowercase tracking-wider opacity-60">contact.kt</div>
+                <div className="w-12"></div>
+            </div>
+            
+            {/* Body */}
+            <div className="p-6 font-mono text-[13px] leading-relaxed relative">
+                <div className="flex items-start gap-4">
+                    <div className="text-slate-600 text-right select-none pr-2 border-r border-white/5">
+                        1<br/>2<br/>3
+                    </div>
+                    <div className="flex-1">
+                        <span className="text-purple-400 italic">package</span> <span className="text-white">me.miguel</span><br/>
+                        <span className="text-purple-400">val</span> <span className="text-blue-300">email</span> <span className="text-white">=</span> <span className="text-green-300">"migasmps2005@gmail.com"</span><br/>
+                        <span className="text-purple-400">val</span> <span className="text-blue-300">linkedin</span> <span className="text-white">=</span> <span className="text-green-300">"/in/miguel"</span>
+                    </div>
+                </div>
+
+                {/* Copy Button Overlay */}
+                <button 
+                    onClick={handleCopy}
+                    className="absolute top-4 right-4 p-2 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300"
+                >
+                    {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Clipboard className="w-4 h-4" />}
+                </button>
+            </div>
+        </div>
+    );
+};
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,38 +96,45 @@ export default function Contact() {
 
   return (
     <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="contactos">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-        {/* Left Column: Info & Context */}
-        <div className="flex flex-col">
-          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-r from-jb-primary to-cyan-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-            <Terminal className="w-8 h-8 text-jb-primary group-hover:scale-110 transition-transform duration-500" />
+      <motion.div 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="max-w-6xl mx-auto bg-white border border-slate-100 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.08)] rounded-[2.5rem] overflow-hidden"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-5 min-h-[650px]">
+          
+          {/* Left Column: Info & Code */}
+          <div className="lg:col-span-2 bg-slate-50/50 p-8 lg:p-14 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-center">
+            <div className="max-w-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-jb-primary/10 text-jb-primary rounded-full text-[10px] font-mono font-bold uppercase tracking-widest mb-6">
+                    <Terminal className="w-3 h-3" />
+                    Connect_Sequence
+                </div>
+                
+                <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+                    Vamos compilar <br />
+                    algo <span className="text-jb-primary">juntos?</span>
+                </h2>
+                
+                <p className="text-slate-500 text-base leading-relaxed font-medium mb-2">
+                    Estás à procura de um engenheiro para transformar a tua visão em código nativo de alta performance?
+                </p>
+                
+                <CodeWindow />
+            </div>
           </div>
-          
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-jb-dark tracking-tight mb-6 leading-[1.1]">
-            Vamos compilar a <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-jb-primary to-cyan-500">próxima grande ideia</span> juntos?
-          </h2>
-          
-          <p className="text-slate-600 text-lg mb-10 max-w-xl font-medium leading-relaxed">
-            Seja para discutir arquiteturas complexas, resolver desafios de integração no ecossistema mobile ou simplesmente trocar ideias sobre engenharia de software, estou sempre disponível.
-          </p>
 
-          <div className="space-y-3">
-             <ContactVar name="email" type="String" value="migasmps2005@gmail.com" icon={Mail} href="mailto:migasmps2005@gmail.com" />
-             <ContactVar name="linkedIn" type="URL" value="linkedin.com/in/miguel" icon={Linkedin} href="https://linkedin.com" />
-             <ContactVar name="gitHub" type="URL" value="github.com/miguel" icon={Github} href="https://github.com" />
-          </div>
-        </div>
+          {/* Right Column: IDE Form */}
+          <div className="lg:col-span-3 p-8 lg:p-16 bg-white flex flex-col justify-center">
+            <div className="mb-10">
+                <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-[0.2em]">Contact_Form.kt</span>
+                <div className="h-[2px] w-12 bg-jb-primary mt-2"></div>
+            </div>
 
-        {/* Right Column: Form */}
-        <div className="relative w-full max-w-lg mx-auto lg:mx-0 lg:ml-auto">
-          {/* Subtle glow behind form */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-br from-jb-primary/10 to-cyan-500/10 blur-[80px] pointer-events-none -z-10 rounded-full"></div>
-          
-          <div className="bg-white/70 backdrop-blur-md rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] ring-1 ring-slate-200/50 p-8 sm:p-10">
-            <form className="w-full text-left space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <FloatingInput id="firstName" label="O teu Nome" required />
                 <FloatingInput id="lastName" label="O teu Apelido" />
               </div>
@@ -98,34 +143,46 @@ export default function Contact() {
               
               <FloatingInput id="message" label="A tua Mensagem..." isTextarea required />
 
-              <div className="pt-2">
+              <div className="pt-4">
                 <motion.button 
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.01, filter: "brightness(1.1)" }}
+                  whileTap={{ scale: 0.98 }}
                   disabled={isSubmitting}
-                  className="relative w-full bg-gradient-to-r from-jb-primary to-cyan-500 text-white px-8 py-4 rounded-xl font-bold text-sm shadow-[0_10px_30px_rgba(127,82,255,0.3)] hover:shadow-[0_15px_40px_rgba(127,82,255,0.4)] transition-all flex items-center justify-center overflow-hidden group disabled:opacity-80 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-jb-primary via-jb-primary to-cyan-500 text-white py-4.5 rounded-xl font-bold text-sm shadow-[0_12px_40px_-10px_rgba(127,82,255,0.4)] transition-all flex items-center justify-center overflow-hidden relative group disabled:opacity-80 disabled:cursor-not-allowed h-14"
                 >
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                  <div className="relative flex items-center gap-2">
+                  <AnimatePresence mode="wait">
                     {isSubmitting ? (
-                      <>
-                        <span>Building message...</span>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      </>
+                      <motion.div 
+                        key="loading"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Compilando...</span>
+                      </motion.div>
                     ) : (
-                      <>
-                        <span>Enviar Mensagem</span>
-                        <Send className="w-4 h-4" />
-                      </>
+                      <motion.div 
+                        key="submit"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center gap-2"
+                      >
+                        <span className="tracking-wide uppercase text-[12px]">Executar Envio</span>
+                        <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </motion.div>
                     )}
-                  </div>
+                  </AnimatePresence>
                 </motion.button>
               </div>
             </form>
           </div>
+
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

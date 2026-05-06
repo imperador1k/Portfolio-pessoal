@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Download, LayoutGrid, Menu, Bell, ChevronDown, ChevronRight, FileText, Check, RefreshCw, Folder } from 'lucide-react';
+import { Download, LayoutGrid, Menu, Bell, ChevronDown, ChevronRight, FileText, Check, RefreshCw, Folder, Wifi, Battery, User, Home, Code, UserCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { KotlinIcon, AndroidIcon, ReactIcon } from './Icons';
 
@@ -76,6 +76,15 @@ export default function Hero() {
   const [activeTab, setActiveTab] = useState<TabName>('HeroContent.kt');
   const [visibleLines, setVisibleLines] = useState<number>(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
+  const [emulatorTab, setEmulatorTab] = useState<'home' | 'work' | 'me'>('home');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const activeFile = FILE_SYSTEM[activeTab];
 
@@ -149,41 +158,55 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-cyan-500/5 blur-[100px] rounded-full -z-10 translate-y-20 mx-auto w-3/4 max-w-3xl pointer-events-none"></div>
       
       {/* Aura Effects */}
-      <div className="absolute top-1/2 left-[10%] w-64 h-64 bg-cyan-400 rounded-full mix-blend-multiply blur-[80px] opacity-40 animate-[pulse_6s_ease-in-out_infinite] -translate-y-1/2 pointer-events-none"></div>
-      <div className="absolute top-1/3 right-[10%] w-64 h-64 bg-purple-400 rounded-full mix-blend-multiply blur-[80px] opacity-40 animate-[pulse_4s_ease-in-out_infinite] -translate-y-1/2 pointer-events-none"></div>
+      <div className="absolute top-1/4 left-[5%] w-96 h-96 bg-orange-400/5 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+      <div className="absolute top-1/2 right-[5%] w-96 h-96 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none animate-[pulse_8s_ease-in-out_infinite]"></div>
+      <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[600px] h-64 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       {/* Main Title Section */}
-      <div className="mx-auto max-w-7xl w-full flex flex-col items-center text-center mb-16 relative z-20">
-        <motion.h1 
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.6 }}
-           className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-slate-900 tracking-tight font-sans mb-6"
+      <div className="mx-auto max-w-7xl w-full flex flex-col items-center text-center mb-16 relative z-20 px-6">
+        {/* Subtle Status Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-100 mb-8"
         >
-          Miguel <span className="text-purple-600 font-light">//</span> <span className="block sm:inline mt-2 sm:mt-0">Engenheiro Mobile</span>
-        </motion.h1>
+          <span className="w-1.5 h-1.5 rounded-full bg-jb-primary animate-pulse"></span>
+          <span className="text-[10px] font-mono font-medium text-slate-400 tracking-wider uppercase">
+            v2.4.1 Stable
+          </span>
+        </motion.div>
+
+        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tighter mb-6 font-mono italic">
+          Miguel <span className="text-jb-primary not-italic">/</span> 
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#7F52FF] via-[#D946EF] to-[#F97316] ml-3 not-italic">
+            Engenheiro Mobile
+          </span>
+        </h1>
+
         <motion.p 
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.6, delay: 0.1 }}
-           className="text-lg md:text-xl text-slate-500 max-w-2xl font-medium"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed"
         >
-          Explora a minha arquitetura. <span className="text-slate-700 font-semibold">Clica nas abas do código</span> para veres a interface a reagir em tempo real no dispositivo.
+          Explora a minha arquitetura. <span className="text-slate-900 font-bold underline decoration-jb-primary/30 decoration-2 underline-offset-4">Interage com o código</span> para veres a interface a reagir em tempo real.
         </motion.p>
       </div>
 
       <div className="mx-auto max-w-7xl w-full flex flex-col-reverse lg:flex-row items-center justify-center gap-8 lg:gap-16 min-h-[70vh] relative z-10">
+        {/* Dynamic Stage Background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(50%_50%_at_50%_50%,rgba(217,70,239,0.03)_0%,rgba(255,255,255,0)_100%)] pointer-events-none z-0"></div>
         
-        {/* === LEFT COLUMN: IDE WINDOW (Hidden on mobile) === */}
+        {/* === LEFT COLUMN: IDE WINDOW === */}
         <AnimatePresence mode="popLayout">
-          {(heroState !== 'success' || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
+          {true && (
             <motion.div 
               layoutId="ide-window"
-              className={`hidden lg:flex w-full lg:w-[60%] min-w-[500px] max-w-[840px] shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
-                ${heroState === 'success' ? 'opacity-50 scale-[0.98]' : ''}`}
+              className={`flex w-full lg:w-[60%] max-w-[840px] shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
+                ${heroState === 'success' ? 'opacity-40 lg:opacity-50 scale-[0.98]' : 'opacity-100 scale-100'}`}
             >
               {/* Fake IDE UI - JetBrains Fleet Light mode */}
-              <div className="rounded-xl bg-white/60 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden flex flex-col font-mono text-[13px] h-[520px] w-full relative">
+              <div className="rounded-xl bg-white/60 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden flex flex-col font-mono text-[11px] sm:text-[13px] h-[400px] sm:h-[520px] w-full relative">
                 {/* IDE Header with Tabs */}
                 <div className="bg-[#E8E8E8]/70 border-b border-gray-300/50 flex flex-col justify-end relative shrink-0 pt-3">
                   <div className="flex gap-2 absolute top-4 left-3 z-20 w-16 mb-2.5">
@@ -192,7 +215,7 @@ export default function Hero() {
                     <div className="w-[11px] h-[11px] rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
                   </div>
                   
-                  <div className="flex items-center pl-[5rem] w-full gap-0 shadow-none z-10 pt-1 overflow-x-auto no-scrollbar">
+                  <div className="flex items-center pl-12 sm:pl-[5rem] w-full gap-0 shadow-none z-10 pt-1 overflow-x-auto no-scrollbar">
                     {(Object.keys(FILE_SYSTEM) as TabName[]).map(tabName => {
                       const isActive = activeTab === tabName;
                       return (
@@ -229,7 +252,7 @@ export default function Hero() {
                 {/* Body Area */}
                 <div className="flex flex-1 overflow-hidden pb-6">
                   {/* File Explorer (Sidebar) */}
-                  <div className="w-48 bg-[#F5F5F5]/80 border-r border-gray-200/50 flex flex-col py-2 px-1 text-gray-600 text-[11px] font-sans shrink-0 overflow-y-auto no-scrollbar">
+                  <div className="hidden sm:flex w-48 bg-[#F5F5F5]/80 border-r border-gray-200/50 flex-col py-2 px-1 text-gray-600 text-[11px] font-sans shrink-0 overflow-y-auto no-scrollbar">
                      <div className="flex items-center gap-1.5 py-[3px] px-1 rounded hover:bg-gray-200/50 cursor-pointer">
                         <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0" />
                         <span className="text-blue-400 text-xs shrink-0 font-bold">src</span>
@@ -436,34 +459,42 @@ export default function Hero() {
                   />
                 )}
 
-                {/* Android Top App Bar / Status Bar */}
-                {heroState === 'success' ? (
+                {/* Android Status Bar */}
+                <div className={`w-full flex justify-between items-center px-6 pt-1 text-[10px] font-mono ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} absolute top-0 left-0 z-50 pointer-events-none`}>
+                   <span>{currentTime}</span>
+                   <div className="flex gap-1.5 items-center">
+                     <Wifi className="w-2.5 h-2.5" />
+                     <Battery className="w-3 h-3" />
+                   </div>
+                </div>
+
+                {/* Android Top App Bar / Header */}
+                {heroState === 'success' && (
                   <motion.div 
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className={`w-full h-14 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C] border-b border-white/5' : 'bg-white shadow-sm'} flex justify-between items-end px-5 pb-3 z-30 shrink-0 relative transition-colors duration-500`}
+                    className={`w-full h-16 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C]/80 border-b border-white/5' : 'bg-white/80 border-b border-slate-100'} backdrop-blur-md flex justify-between items-center px-5 pt-4 z-40 shrink-0 relative transition-colors duration-500`}
                   >
                      <motion.button 
                        whileTap={{ scale: 0.9 }} 
                        onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }} 
-                       className={`relative z-50 p-1 -ml-1 rounded-full ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}
+                       className={`p-2 rounded-xl ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}
                      >
-                       <Menu className="w-5 h-5" />
+                       <Menu className="w-4 h-4" />
                      </motion.button>
-                     <span className={`text-[13px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-sans tracking-tight pt-2 transition-colors`}>Miguel</span>
-                     <motion.button whileTap={{ scale: 0.9 }} className={`p-1 -mr-1 rounded-full ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}>
-                        <Bell className="w-5 h-5" />
+                     <div className="flex flex-col items-center">
+                        <span className={`text-[12px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-mono leading-none`}>miguel.kt</span>
+                        <span className="text-[8px] text-jb-primary font-mono font-bold animate-pulse">● RUNNING</span>
+                     </div>
+                     <motion.button 
+                       whileTap={{ scale: 0.9 }} 
+                       onClick={() => setEmulatorTab('me')}
+                       className={`p-2 rounded-xl ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}
+                     >
+                        <UserCircle className="w-4 h-4" />
                      </motion.button>
                   </motion.div>
-                ) : (
-                  <div className="w-full flex justify-between items-center px-6 pt-2 pb-1 text-[10px] font-semibold absolute top-0 left-0 z-30 text-slate-400 pointer-events-none">
-                     <span>12:00</span>
-                     <div className="flex gap-1.5 items-center">
-                       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21L15.6 16.2C14.6 15.4 13.4 15 12 15C10.6 15 9.4 15.4 8.4 16.2L12 21ZM12 3C7.95 3 4.21 4.34 1.2 6.6L3 9C5.5 7.12 8.62 6 12 6C15.38 6 18.5 7.12 21 9L22.8 6.6C19.79 4.34 16.05 3 12 3Z"/></svg>
-                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2H10V4H8.33C7.6 4 7 4.6 7 5.33V20.67C7 21.4 7.6 22 8.33 22H15.67C16.4 22 17 21.4 17 20.67V5.33C17 4.6 16.4 4 15.67 4Z"/></svg>
-                     </div>
-                  </div>
                 )}
 
                 {/* Global Mobile Context Overlay */}
@@ -502,7 +533,7 @@ export default function Hero() {
                 </AnimatePresence>
 
                 {/* Emulator Contents - Dynamic container */}
-                <div className={`flex-1 w-full relative flex flex-col justify-start items-center overflow-y-auto no-scrollbar z-10 ${heroState === 'success' ? 'px-4 pt-5 pb-24 space-y-6' : 'pt-10 pb-6 px-5'} ${activeTab === 'Styles.css' && heroState === 'success' ? 'debug-mode' : ''}`}>
+                <div className={`flex-1 w-full relative flex flex-col justify-start items-center overflow-y-auto no-scrollbar z-10 ${heroState === 'success' ? 'px-5 pt-8 pb-32 space-y-8' : 'pt-10 pb-6 px-5'} ${activeTab === 'Styles.css' && heroState === 'success' ? 'debug-mode' : ''}`}>
                   <AnimatePresence mode="popLayout">
                     
                     {/* Phase 1 & 2: Terminal Log Wait & Build */}
@@ -521,14 +552,13 @@ export default function Hero() {
                         
                         {heroState === 'building' && (
                            <motion.div initial={{opacity:0}} animate={{opacity:1}} className="flex flex-col gap-1.5 mt-8 px-2">
-                             <div className="text-[#3DDC84] font-semibold break-all">{'>'} Task :app:compileDebugKotlin</div>
-                             <div className="text-slate-500">w: [kapt] Incremental annotation processing uses...</div>
-                             <div className="text-[#3DDC84] font-semibold pt-1">{'>'} Task :app:assembleDebug</div>
-                             <div className="flex flex-col gap-1 mt-1">
-                                <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider">Building</span>
+                             <div className="text-[#3DDC84] font-semibold break-all font-mono">{'>'} Task :app:compile</div>
+                             <div className="text-slate-500 font-mono">Resolving dependencies...</div>
+                             <div className="flex flex-col gap-1 mt-4">
+                                <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider font-mono">Building APK</span>
                                 <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
                                   <motion.div 
-                                     className="h-full bg-[#3DDC84]"
+                                     className="h-full bg-jb-primary"
                                      initial={{ width: "0%" }}
                                      animate={{ width: "100%" }}
                                      transition={{ duration: 1.4, ease: "linear" }}
@@ -540,7 +570,7 @@ export default function Hero() {
                       </motion.div>
                     )}
 
-                    {/* Phase 3: The UAU Moment Content (Native App Experience) */}
+                    {/* Phase 3: Native App Experience */}
                     {heroState === 'success' && (
                       <motion.div 
                         key="emu-success"
@@ -549,102 +579,196 @@ export default function Hero() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ delay: 0.15, duration: 0.5, ease: "easeOut" }}
                       >
-                        {/* Avatar/Tag */}
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.25 }}
-                          className="font-sans flex flex-col gap-1 mb-4"
-                        >
-                          <div className={`w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-[2px] shadow-sm`}>
-                             <div className={`w-full h-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] text-white' : 'bg-white text-slate-800'} rounded-full flex items-center justify-center font-mono text-sm font-black transition-colors`}>
-                               {`</>`}
-                             </div>
-                          </div>
-                        </motion.div>
-                        
-                        <motion.h1 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-                          className={`text-[24px] font-extrabold tracking-tight leading-[1.1] mb-3 ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-sans w-full text-left transition-colors`}
-                        >
-                          Construindo software <br />
-                          <span className={`${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} pt-0.5 block transition-colors`}>limpo e eficiente.</span>
-                        </motion.h1>
-                        
-                        {/* Tech Pills */}
-                        <motion.div 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                          className="flex gap-2 flex-wrap mb-5 w-full"
-                        >
-                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 border border-purple-100 text-[10px] font-bold rounded-lg flex items-center shadow-sm">Kotlin</span>
-                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 border border-purple-100 text-[10px] font-bold rounded-lg flex items-center shadow-sm">Android</span>
-                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 border border-purple-100 text-[10px] font-bold rounded-lg flex items-center shadow-sm">React</span>
-                        </motion.div>
+                        {/* TAB 1: HOME */}
+                        {emulatorTab === 'home' && (
+                          <motion.div 
+                            key="home" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                            className="w-full flex flex-col items-start space-y-6"
+                          >
+                            {/* Profile Header */}
+                            <div className="flex items-center gap-4 w-full">
+                              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-jb-primary to-jb-secondary p-[2px] shadow-lg shadow-jb-primary/20">
+                                <div className={`w-full h-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326]' : 'bg-white'} rounded-[14px] flex items-center justify-center transition-colors`}>
+                                  <User className={`w-6 h-6 ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-jb-primary'}`} />
+                                </div>
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[10px] font-mono text-jb-primary font-bold tracking-tighter uppercase">Mobile Engineer</span>
+                                <span className={`text-xl font-extrabold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} tracking-tight leading-none`}>Miguel</span>
+                              </div>
+                            </div>
+                            
+                            <h2 className={`text-2xl font-bold tracking-tight leading-tight ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-mono italic`}>
+                              Construindo software <br />
+                              <span className="text-jb-primary">limpo & eficiente.</span>
+                            </h2>
+                            
+                            {/* Specialties Section */}
+                            <div className="w-full grid grid-cols-1 gap-3">
+                               <span className={`text-[9px] font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>Services.kt</span>
+                               {[
+                                 { title: 'Native Apps', desc: 'Performance extrema em Android/iOS.', color: 'border-blue-200 bg-blue-50/30' },
+                                 { title: 'Clean UI', desc: 'Interfaces intuitivas e animações fluidas.', color: 'border-purple-200 bg-purple-50/30' }
+                               ].map((service, i) => (
+                                 <div key={i} className={`w-full border rounded-2xl p-4 transition-colors ${service.color} ${activeTab === 'Theme.tsx' ? 'bg-[#232326]/50 border-white/5' : ''}`}>
+                                    <h4 className={`text-xs font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} mb-1`}>{service.title}</h4>
+                                    <p className={`text-[10px] ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} font-mono leading-tight`}>{service.desc}</p>
+                                 </div>
+                               ))}
+                            </div>
 
-                        {/* Bento Box Stats */}
-                        <motion.div 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
-                          className="grid grid-cols-2 gap-3 w-full mb-4"
-                        >
-                          <div className={`${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10' : 'bg-white border-slate-100'} border rounded-xl p-3.5 shadow-sm flex flex-col gap-2 transition-colors`}>
-                             <div className="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
-                               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
-                             </div>
-                             <span className={`text-[11px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} leading-tight transition-colors`}>Mobile<br/>First</span>
-                          </div>
-                          
-                          <div className={`${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10' : 'bg-white border-slate-100'} border rounded-xl p-3.5 shadow-sm flex flex-col gap-2 transition-colors`}>
-                             <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
-                               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                             </div>
-                             <span className={`text-[11px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} leading-tight transition-colors`}>Clean<br/>Architecture</span>
-                          </div>
-                        </motion.div>
+                            {/* Current Learning */}
+                            <div className={`w-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5' : 'bg-slate-50 border-slate-100'} border rounded-2xl p-4 flex items-center justify-between`}>
+                               <div className="flex flex-col">
+                                  <span className="text-[8px] text-slate-500 font-mono uppercase">Currently learning</span>
+                                  <span className={`text-[11px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} font-mono`}>Kotlin Multiplatform</span>
+                               </div>
+                               <RefreshCw className="w-4 h-4 text-jb-primary animate-spin-slow" />
+                            </div>
 
-                        {/* Filler Content for scroll effect */}
-                        <motion.div 
-                           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-                           className={`w-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10' : 'bg-white border-slate-100'} border rounded-xl p-4 shadow-sm transition-colors`}
-                        >
-                           <h3 className={`text-xs font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} mb-2 transition-colors`}>Sobre Mim</h3>
-                           <p className={`text-[11px] ${activeTab === 'Theme.tsx' ? 'text-gray-300' : 'text-slate-500'} leading-relaxed font-medium transition-colors`}>
-                             Apanhado pelo design de interfaces e arquiteturas nativas. Acredito que o bom software não é apenas funcional, mas também uma excelente experiência.
-                           </p>
-                        </motion.div>
+                            {/* Tech Stack Horizontal */}
+                            <div className="w-full">
+                               <span className={`text-[9px] font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-500' : 'text-slate-400'} uppercase mb-3 block`}>TechStack.json</span>
+                               <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                                  {['Kotlin', 'Swift', 'React', 'Compose', 'Figma'].map(tech => (
+                                    <span key={tech} className={`px-3 py-1.5 rounded-full text-[10px] font-bold whitespace-nowrap ${activeTab === 'Theme.tsx' ? 'bg-[#232326] text-white border-white/5' : 'bg-white text-slate-700 border-slate-200'} border shadow-sm transition-colors`}>
+                                      {tech}
+                                    </span>
+                                  ))}
+                               </div>
+                            </div>
+                          </motion.div>
+                        )}
 
+                        {/* TAB 2: WORK */}
+                        {emulatorTab === 'work' && (
+                          <motion.div 
+                            key="work" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                            className="w-full flex flex-col items-start gap-4"
+                          >
+                             <div className="flex justify-between items-center w-full mb-2">
+                                <h3 className={`text-xs font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>Featured.kt</h3>
+                                <div className="flex gap-1.5">
+                                   <span className="w-2 h-2 rounded-full bg-jb-primary"></span>
+                                   <span className="w-2 h-2 rounded-full bg-slate-200"></span>
+                                </div>
+                             </div>
+
+                             {[
+                               { name: 'Fitness App', tech: 'Kotlin / Compose', status: 'Live', desc: 'Transforming health through code.' },
+                               { name: 'Fintech UI', tech: 'React Native', status: 'Dev', desc: 'Secure & fast banking experience.' },
+                               { name: 'Travel Guide', tech: 'Swift / SwiftUI', status: 'Live', desc: 'Your perfect companion.' },
+                               { name: 'AI Chatbot', tech: 'Python / React', status: 'WIP', desc: 'Next-gen conversation.' }
+                             ].map((proj, i) => (
+                               <div key={i} className={`w-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5' : 'bg-white border-slate-100'} border rounded-2xl p-4 shadow-sm flex flex-col gap-3 transition-colors`}>
+                                  <div className="flex justify-between items-start">
+                                     <div className="flex flex-col">
+                                        <span className={`text-sm font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'}`}>{proj.name}</span>
+                                        <span className="text-[10px] font-mono text-jb-primary font-bold">{proj.tech}</span>
+                                     </div>
+                                     <span className={`text-[8px] font-mono font-bold px-2 py-0.5 rounded-full ${proj.status === 'Live' ? 'bg-green-50 text-green-600' : (proj.status === 'Dev' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-blue-600')}`}>
+                                        {proj.status}
+                                     </span>
+                                  </div>
+                                  <p className={`text-[10px] ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} font-mono leading-tight`}>{proj.desc}</p>
+                               </div>
+                             ))}
+                          </motion.div>
+                        )}
+
+                        {/* TAB 3: ME */}
+                        {emulatorTab === 'me' && (
+                          <motion.div 
+                            key="me" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                            className="w-full flex flex-col items-start gap-6"
+                          >
+                             <div className={`w-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5' : 'bg-white border-slate-100'} border rounded-2xl p-5 shadow-sm transition-colors relative overflow-hidden group`}>
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-jb-primary/5 rounded-full -translate-y-12 translate-x-12 blur-2xl group-hover:bg-jb-primary/10 transition-colors"></div>
+                                <div className="flex justify-between items-start mb-3">
+                                   <h3 className={`text-sm font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'}`}>Status</h3>
+                                   <span className="flex items-center gap-1.5">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                                      <span className="text-[9px] font-mono font-bold text-green-600 uppercase">Available</span>
+                                   </span>
+                                </div>
+                                <p className={`text-[11px] ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} leading-relaxed font-mono`}>
+                                   Focado em arquiteturas reativas e UI declarativa. Atualmente a explorar o potencial de animações fluidas em Android.
+                                </p>
+                             </div>
+
+                             <div className="w-full space-y-4">
+                                <span className={`text-[10px] font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>Experience.md</span>
+                                {[
+                                  { role: 'Senior Dev', company: 'Tech Corp', year: '2023-Present' },
+                                  { role: 'Mobile Lead', company: 'Startup X', year: '2021-2023' }
+                                ].map((exp, i) => (
+                                  <div key={i} className="flex gap-4 items-start">
+                                     <div className="w-0.5 h-10 bg-slate-200 mt-1 relative">
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-jb-primary"></div>
+                                     </div>
+                                     <div className="flex flex-col gap-0.5">
+                                        <span className={`text-[11px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'}`}>{exp.role}</span>
+                                        <span className="text-[10px] font-mono text-slate-500">{exp.company} • {exp.year}</span>
+                                     </div>
+                                  </div>
+                                ))}
+                             </div>
+
+                             <div className="w-full grid grid-cols-2 gap-3">
+                                <div className={`flex flex-col gap-1 p-3 rounded-xl border ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5' : 'bg-slate-50 border-slate-200'}`}>
+                                   <span className="text-[8px] text-slate-500 font-mono uppercase">Education</span>
+                                   <span className={`text-[10px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} font-mono`}>CS Degree</span>
+                                </div>
+                                <div className={`flex flex-col gap-1 p-3 rounded-xl border ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5' : 'bg-slate-50 border-slate-200'}`}>
+                                   <span className="text-[8px] text-slate-500 font-mono uppercase">Languages</span>
+                                   <span className={`text-[10px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} font-mono`}>PT / EN / ES</span>
+                                </div>
+                             </div>
+
+                             <div className="w-full grid grid-cols-2 gap-3">
+                                {['LinkedIn', 'GitHub'].map(social => (
+                                  <div key={social} className={`flex items-center justify-center gap-2 p-3 rounded-xl border ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5 text-white' : 'bg-white border-slate-200 text-slate-700 shadow-sm'} font-mono font-bold text-[10px]`}>
+                                     {social}
+                                  </div>
+                                ))}
+                             </div>
+                          </motion.div>
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                {/* Sticky Bottom Action Bar during success */}
+                {/* Bottom Navigation Bar (App Style) */}
                 {heroState === 'success' && (
                   <motion.div 
-                    initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}
-                    className={`absolute bottom-0 inset-x-0 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C]/90 border-white/10' : 'bg-white/90 border-slate-200/50'} backdrop-blur-md border-t p-4 pb-6 flex gap-2.5 z-40 transition-colors duration-500`}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className={`absolute bottom-0 inset-x-0 h-20 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C]/95 border-t border-white/5' : 'bg-white/95 border-t border-slate-100'} backdrop-blur-md z-50 flex items-center justify-around px-8 pb-6 transition-colors duration-500`}
                   >
-                     <motion.div
-                        className="flex-grow w-[70%]"
-                        whileTap={{ scale: 0.97 }}
-                        onClick={(e) => { e.stopPropagation(); document.getElementById('projetos')?.scrollIntoView({behavior: 'smooth'}) }}
-                     >
-                         <button className={`w-full flex items-center justify-center ${activeTab === 'Theme.tsx' ? 'bg-purple-600 hover:bg-purple-500' : 'bg-slate-900 hover:bg-slate-800'} text-white rounded-xl font-bold text-sm h-12 shadow-md transition-colors pointer-events-none relative overflow-hidden group`}>
-                            Ver Projetos
-                            <span className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-[0] transition-transform duration-300 rounded-xl pointer-events-none"></span>
-                         </button>
-                     </motion.div>
-                     <motion.a
-                        href="/cv.pdf"
-                        whileTap={{ scale: 0.97 }}
-                        onClick={(e) => e.stopPropagation()}
-                        className={`w-[30%] flex items-center justify-center ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10 text-white hover:bg-white/5' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'} border rounded-xl font-bold text-sm h-12 shadow-sm transition-colors overflow-hidden relative group`}
-                     >
-                        CV
-                        <span className={`absolute inset-x-0 bottom-0 h-0.5 ${activeTab === 'Theme.tsx' ? 'bg-white/20' : 'bg-slate-200'} translate-y-full group-hover:translate-y-0 transition-transform`}></span>
-                     </motion.a>
+                    {[
+                      { id: 'home', icon: <Home className="w-5 h-5"/>, label: 'Home' },
+                      { id: 'work', icon: <LayoutGrid className="w-5 h-5"/>, label: 'Work' },
+                      { id: 'me', icon: <User className="w-5 h-5"/>, label: 'Me' }
+                    ].map((item, i) => (
+                      <motion.div 
+                        key={item.id} 
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setEmulatorTab(item.id as any)}
+                        className="flex flex-col items-center gap-1 cursor-pointer"
+                      >
+                        <div className={`${emulatorTab === item.id ? 'text-jb-primary' : (activeTab === 'Theme.tsx' ? 'text-slate-500' : 'text-slate-400')}`}>{item.icon}</div>
+                        <span className={`text-[9px] font-mono font-bold ${emulatorTab === item.id ? 'text-jb-primary' : (activeTab === 'Theme.tsx' ? 'text-slate-600' : 'text-slate-400')} uppercase tracking-tighter`}>
+                          {item.label}
+                        </span>
+                        {emulatorTab === item.id && <motion.div layoutId="active-dot" className="w-1 h-1 bg-jb-primary rounded-full mt-0.5" />}
+                      </motion.div>
+                    ))}
+                    {/* Home Indicator */}
+                    <div className="absolute bottom-2 inset-x-0 mx-auto w-20 h-1 bg-slate-800/20 rounded-full"></div>
                   </motion.div>
                 )}
-
-                {/* Emulador Home Indicator (always bottom) */}
-                <div className="absolute bottom-2 inset-x-0 mx-auto w-24 h-1.5 bg-slate-300 rounded-full z-50 pointer-events-none drop-shadow-sm"></div>
 
               </div>
 
@@ -667,6 +791,33 @@ export default function Hero() {
           >
             Processing... Click anywhere to skip
           </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Tech Stack Bar (Subtle) */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-8 opacity-30 hover:opacity-60 transition-opacity duration-500 hidden md:flex"
+      >
+        <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-[0.2em] mr-4">Stack:</span>
+        {['Kotlin', 'Swift', 'React Native', 'Firebase', 'Jetpack Compose'].map((tech) => (
+          <span key={tech} className="text-[11px] font-mono text-slate-500 hover:text-jb-primary cursor-default transition-colors">
+            {tech}
+          </span>
+        ))}
+      </motion.div>
+
+      {/* Success Flash Effect */}
+      <AnimatePresence>
+        {heroState === 'success' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.4, 0] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className="absolute inset-0 bg-white z-[100] pointer-events-none"
+          />
         )}
       </AnimatePresence>
     </section>

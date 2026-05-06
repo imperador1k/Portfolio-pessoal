@@ -67,97 +67,92 @@ const timeline = [
 
 function TimelineItem({ item, index }: { key?: React.Key, item: typeof timeline[0], index: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  // Trigger active state when card's center crosses viewport center
-  const isInView = useInView(ref, { margin: "-40% 0px -40% 0px" });
-  
-  const isEven = index % 2 === 0;
+  const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
 
-  return (
-    <div className="relative w-full mb-16 md:mb-32 flex flex-col md:flex-row items-center md:items-center justify-center">
-      {/* Static Dot mapped to the timeline item */}
-      <div 
-        className={`absolute left-[20px] md:left-1/2 top-12 md:top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full border-2 bg-white z-10 transition-colors duration-500 shadow-sm ${isInView ? 'border-jb-primary shadow-[0_0_10px_rgba(127,82,255,0.4)]' : 'border-slate-300'}`}
-      ></div>
-      
-      {/* Horizontal dashed line connecting dot to card */}
-      <div 
-        className={`absolute top-12 md:top-1/2 -translate-y-1/2 border-t-2 border-dashed transition-colors duration-500 z-0 ${
-          isEven 
-            ? "left-[20px] md:left-auto md:right-1/2 w-8 md:w-16" 
-            : "left-[20px] md:left-1/2 w-8 md:w-16"
-        } ${isInView ? 'border-jb-primary/50' : 'border-slate-300'}`}
-      ></div>
-
-      <div className="pl-[44px] md:pl-0 w-full relative z-20 flex" ref={ref}>
-        {isEven ? (
-           <div className="w-full md:w-1/2 md:pr-16 md:ml-0 flex md:justify-end">
-              <Card item={item} isActive={isInView} />
-           </div>
-        ) : (
-           <div className="w-full md:w-1/2 md:pl-16 md:ml-auto flex md:justify-start">
-              <Card item={item} isActive={isInView} />
-           </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function Card({ item, isActive }: { item: typeof timeline[0], isActive: boolean }) {
   return (
     <div 
-      className={`w-full max-w-[500px] rounded-[24px] p-6 sm:p-8 bg-white/60 backdrop-blur-lg border transition-all duration-700 overflow-hidden relative ${
-        isActive 
-          ? 'shadow-[0_20px_40px_rgba(127,82,255,0.08)] ring-1 ring-jb-primary/40 border-jb-primary/20' 
-          : 'shadow-[0_10px_30px_rgba(0,0,0,0.03)] ring-0 border-slate-200/60'
-      }`}
+      ref={ref}
+      className="relative pl-12 md:pl-20 pb-20 last:pb-0"
     >
-      {/* Internal Glow on Active */}
-      <div className={`absolute top-0 right-0 w-32 h-32 bg-jb-primary/10 rounded-full blur-3xl transition-opacity duration-700 -z-10 ${isActive ? 'opacity-100' : 'opacity-0'}`}></div>
+      {/* The Node on the line */}
+      <div className="absolute left-[-5px] top-2 z-20">
+        <div className={`w-[10px] h-[10px] rounded-full border-2 transition-all duration-500 ${
+          isInView ? 'bg-jb-primary border-jb-primary scale-125 shadow-[0_0_12px_rgba(127,82,255,0.5)]' : 'bg-white border-slate-300'
+        }`} />
+      </div>
 
-      {/* Header: IDE Version Trace */}
-      <div className="mb-6 inline-flex flex-col">
-        <span className={`font-mono text-[11px] sm:text-xs font-bold transition-colors duration-300 ${isActive ? 'text-jb-primary' : 'text-slate-400'}`}>
+      {/* Date / Version Tag - Left side alignment */}
+      <div className="absolute left-[-120px] top-1 hidden lg:block w-24 text-right">
+        <span className={`font-mono text-[11px] font-bold tracking-tighter transition-colors duration-500 ${isInView ? 'text-jb-primary' : 'text-slate-400'}`}>
           {item.version}
         </span>
       </div>
 
-      {/* Image Block */}
-      <div className="relative h-48 sm:h-56 rounded-[16px] overflow-hidden mb-6 ring-1 ring-slate-200/50">
-        <div className="absolute inset-0 bg-gradient-to-t from-jb-dark/70 via-jb-dark/10 to-transparent z-10"></div>
-        <img 
-          src={item.image} 
-          alt={item.title} 
-          className={`w-full h-full object-cover transition-all duration-700 origin-center ${
-            isActive 
-              ? 'grayscale-0 blur-0 opacity-100 scale-105' 
-              : 'grayscale-[50%] md:grayscale blur-[2px] opacity-60 scale-100'
-          }`} 
-          referrerPolicy="no-referrer" 
-        />
-        {/* Active Overlay Effect inside Image */}
-        <div className={`absolute inset-0 ring-4 ring-inset ring-jb-primary/20 transition-opacity duration-700 z-20 pointer-events-none rounded-[16px] ${isActive ? 'opacity-100' : 'opacity-0'}`}></div>
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <Card item={item} isActive={isInView} index={index} />
+      </motion.div>
+    </div>
+  );
+}
+
+function Card({ item, isActive, index }: { item: typeof timeline[0], isActive: boolean, index: number }) {
+  return (
+    <div className={`group relative transition-all duration-700 ${isActive ? 'translate-x-2' : 'opacity-40'}`}>
+      {/* Background ID Number */}
+      <div className="absolute -top-6 -right-2 text-7xl font-black text-slate-50 font-mono pointer-events-none select-none transition-colors duration-700 group-hover:text-slate-100/50">
+        0{index + 1}
       </div>
 
-      {/* Content */}
-      <div className="relative z-20">
-        <h3 className={`text-xl sm:text-2xl font-bold transition-colors duration-500 mb-2 ${isActive ? 'text-jb-dark' : 'text-slate-700'}`}>
-          {item.title}
-        </h3>
-        <div className={`font-bold text-[13px] mb-4 inline-block transition-colors duration-500 ${isActive ? 'text-cyan-600' : 'text-slate-500'}`}>
-          {item.organization}
-        </div>
-        <p className="text-slate-600 text-[14px] sm:text-[15px] leading-relaxed font-medium mb-6 transition-colors duration-500">
-          {item.description}
-        </p>
+      <div className={`rounded-2xl border transition-all duration-700 overflow-hidden ${
+        isActive 
+          ? 'bg-white border-jb-primary/20 shadow-[0_12px_40px_rgba(0,0,0,0.04)] ring-1 ring-jb-primary/5' 
+          : 'bg-slate-50/50 border-slate-100'
+      }`}>
+        <div className="flex flex-col lg:flex-row">
+          {/* Visual Side */}
+          <div className="lg:w-1/3 relative h-48 lg:h-auto overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
+            <img 
+              src={item.image} 
+              alt={item.title} 
+              className={`w-full h-full object-cover transition-transform duration-1000 ${isActive ? 'scale-105' : 'scale-100 grayscale'}`}
+            />
+          </div>
 
-        {/* Tags Stack */}
-        <div className="flex flex-wrap gap-2">
-          {item.tags.map((tag) => (
-             <span key={tag} className={`px-2.5 py-1 text-[10px] sm:text-[11px] font-mono font-bold rounded shadow-sm border transition-colors duration-500 ${isActive ? 'bg-jb-primary/10 text-jb-primary border-jb-primary/20' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
-               {tag}
-             </span>
-          ))}
+          {/* Content Side */}
+          <div className="lg:w-2/3 p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="lg:hidden font-mono text-[10px] font-bold text-jb-primary bg-jb-primary/10 px-2 py-0.5 rounded">
+                  {item.version}
+                </span>
+                <span className={`text-[11px] font-mono font-bold uppercase tracking-widest ${isActive ? 'text-jb-primary' : 'text-slate-400'}`}>
+                  {item.organization}
+                </span>
+              </div>
+              
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-3 tracking-tight">
+                {item.title}
+              </h3>
+              
+              <p className="text-slate-600 text-sm sm:text-[15px] leading-relaxed mb-6 font-medium max-w-xl">
+                {item.description}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-6 border-t border-slate-100">
+              {item.tags.map((tag) => (
+                <span key={tag} className="px-2.5 py-1 text-[10px] font-mono font-bold rounded bg-slate-900 text-white shadow-sm transition-transform hover:-translate-y-0.5">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -167,22 +162,26 @@ function Card({ item, isActive }: { item: typeof timeline[0], isActive: boolean 
 export default function Skills() {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Track scroll progress within the timeline container
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start center", "end center"]
   });
 
-  // Smooth out the progress for the glowing line
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 20 });
   
   return (
-    <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="skills">
-      {/* Grid Secção */}
-      <div className="mb-32">
-        <h2 className="text-2xl font-bold font-mono tracking-tighter text-jb-dark uppercase mb-12 text-center md:text-left">
-          01 // Tech Stack
-        </h2>
+    <section className="px-5 sm:px-6 py-32 lg:px-10 max-w-6xl mx-auto w-full relative z-10" id="skills">
+      {/* 01 // Tech Stack Section */}
+      <div className="mb-40">
+        <div className="flex flex-col mb-12">
+          <span className="text-jb-primary font-mono text-sm font-bold tracking-tighter mb-4 text-center md:text-left">
+            01 // TECH STACK
+          </span>
+          <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase text-center md:text-left">
+            Main <br />
+            <span className="text-slate-300">Toolbox</span>
+          </h2>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillCategories.map((category, catIndex) => (
@@ -206,8 +205,8 @@ export default function Skills() {
                       key={skill.name}
                       className={`group flex items-center gap-2.5 bg-slate-50 border border-slate-100 px-4 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden cursor-default ${skill.hoverBg} ${skill.hoverRing}`}
                     >
-                      <div className="flex items-center justify-center transition-all duration-300 z-10 shrink-0">
-                        <Icon className={`w-5 h-5 text-slate-400 transition-colors duration-300 ${skill.hoverColor}`} />
+                      <div className="flex items-center justify-center transition-all duration-300 z-10 shrink-0 group-hover:scale-110">
+                        <Icon className="w-5 h-5 transition-transform duration-300" />
                       </div>
                       <span className="font-medium text-sm text-slate-700 group-hover:text-slate-900 transition-colors duration-300 z-10 font-sans tracking-tight">
                         {skill.name}
@@ -221,45 +220,31 @@ export default function Skills() {
         </div>
       </div>
 
-      {/* Timeline Secção */}
-      <div>
-        <h2 className="text-2xl font-bold font-mono tracking-tighter text-jb-dark uppercase mb-20 text-center md:text-left">
-          Timeline Pessoal // Experiência
-        </h2>
+      {/* 02 // Experience Section */}
+      <div className="relative">
+        <div className="flex flex-col mb-20">
+          <span className="text-jb-primary font-mono text-sm font-bold tracking-tighter mb-4">
+            02 // CHANGELOG
+          </span>
+          <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase">
+            Personal <br />
+            <span className="text-slate-300">Timeline</span>
+          </h2>
+        </div>
 
-        <div className="relative py-10" ref={containerRef}>
-          {/* Background Static Line */}
-          <div className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200/60 md:-translate-x-1/2 rounded-full z-0"></div>
-          
-          {/* Foreground Animated Gradient Line */}
-          <motion.div 
-            className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-jb-primary via-cyan-500 to-emerald-500 md:-translate-x-1/2 rounded-full z-10 origin-top shadow-[0_0_15px_rgba(127,82,255,0.8)]"
-            style={{ scaleY }}
-          ></motion.div>
+        {/* Professional Timeline Container */}
+        <div ref={containerRef} className="relative max-w-4xl ml-0 lg:ml-32">
+          {/* Main Vertical Track */}
+          <div className="absolute left-0 top-0 bottom-0 w-px bg-slate-100 z-0">
+            <motion.div 
+              style={{ scaleY }}
+              className="absolute top-0 left-0 w-full bg-jb-primary origin-top shadow-[0_0_10px_rgba(127,82,255,0.5)]"
+            />
+          </div>
 
-          {/* The Glowing Dot (Breakpoint) traversing the line */}
-          <motion.div 
-            className="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-[3px] border-jb-primary shadow-[0_0_20px_rgba(127,82,255,1)] z-30"
-            style={{ 
-              top: useTransform(scrollYProgress, (pos) => `calc(${pos * 100}% - 8px)`) 
-            }}
-          >
-             <div className="absolute inset-0 bg-jb-primary rounded-full animate-ping opacity-50 shadow-[0_0_10px_#7F52FF]"></div>
-          </motion.div>
-
-          <motion.div 
-            className="md:hidden absolute left-[20px] -translate-x-1/2 w-4 h-4 rounded-full bg-white border-[3px] border-jb-primary shadow-[0_0_20px_rgba(127,82,255,1)] z-30"
-            style={{ 
-              top: useTransform(scrollYProgress, (pos) => `calc(${pos * 100}% - 8px)`) 
-            }}
-          >
-             <div className="absolute inset-0 bg-jb-primary rounded-full animate-ping opacity-50 shadow-[0_0_10px_#7F52FF]"></div>
-          </motion.div>
-
-          {/* Items */}
-          <div className="relative z-20">
-            {timeline.map((item, idx) => (
-              <TimelineItem key={idx} item={item} index={idx} />
+          <div className="space-y-4">
+            {timeline.map((item, index) => (
+              <TimelineItem key={item.title} item={item} index={index} />
             ))}
           </div>
         </div>
