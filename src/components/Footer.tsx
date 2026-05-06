@@ -25,7 +25,7 @@ export default function Footer() {
       </div>
 
       {/* Diffuse light leak */}
-      <div className="absolute bottom-[-100px] right-[10%] w-[400px] h-[200px] bg-gradient-to-t from-purple-500/20 to-transparent blur-[80px] pointer-events-none rounded-full"></div>
+      <div className="absolute bottom-[-100px] right-[10%] w-[400px] h-[200px] bg-gradient-to-t from-jb-primary/20 to-transparent blur-[80px] pointer-events-none rounded-full"></div>
 
       <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono relative z-10">
         <div className="flex items-center gap-6">
@@ -33,7 +33,7 @@ export default function Footer() {
             href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-purple-600 transition-colors focus:outline-none font-bold"
+            className="flex items-center gap-2 hover:text-jb-primary transition-colors focus:outline-none font-bold"
             aria-label="GitHub"
           >
             <Github className="h-4 w-4" />

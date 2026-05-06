@@ -29,8 +29,8 @@ const certs = [
     subtitle: 'Foundational Cloud Architecture',
     date: '2024',
     icon: ShieldCheck,
-    color: 'text-purple-500',
-    gradient: 'from-purple-500 to-cyan-500',
+    color: 'text-jb-primary',
+    gradient: 'from-jb-primary to-cyan-500',
     bg: 'bg-purple-50',
     border: 'border-purple-100',
     glow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]'
@@ -42,7 +42,7 @@ export default function Certifications() {
     <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full bg-[#FAFAFA]" id="certificacoes">
       <div className="flex items-center justify-between mb-16 cursor-default">
         <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase text-center w-full md:text-left flex items-center justify-center md:justify-start gap-3">
-          <BadgeCheck className="w-6 h-6 text-purple-600" />
+          <BadgeCheck className="w-6 h-6 text-jb-primary" />
           Hall of Fame // Certificações
         </h2>
       </div>

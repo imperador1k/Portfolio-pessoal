@@ -41,7 +41,7 @@ export default function Projects() {
     <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="projetos">
       <div className="flex items-center justify-between mb-16 cursor-default">
         <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase flex items-center gap-3">
-          <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+          <span className="w-2 h-2 rounded-full bg-jb-primary animate-pulse"></span>
           02 // Projetos em Destaque
         </h2>
       </div>
@@ -53,7 +53,7 @@ export default function Projects() {
             className="group bg-white/60 backdrop-blur-xl border border-white/60 rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_30px_60px_rgba(168,85,247,0.1)] hover:-translate-y-1 transition-all duration-500 flex flex-col h-full relative"
           >
             {/* Diffuse glow effect behind the card */}
-            <div className="absolute -inset-0.5 bg-gradient-to-br from-purple-500 to-cyan-500 opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500 rounded-[32px] -z-10"></div>
+            <div className="absolute -inset-0.5 bg-gradient-to-br from-jb-primary to-cyan-500 opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500 rounded-[32px] -z-10"></div>
             {/* Inner Ring */}
             <div className="absolute inset-0 rounded-[32px] ring-1 ring-inset ring-slate-200/50 pointer-events-none z-30 group-hover:ring-purple-200/50 transition-colors"></div>
 
@@ -69,7 +69,7 @@ export default function Projects() {
 
             {/* Content Area */}
             <div className="flex-1 p-8 md:p-10 flex flex-col z-10 bg-white/50">
-              <h3 className={`text-2xl font-bold mb-3 text-slate-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-cyan-500 transition-all duration-300`}>{project.title}</h3>
+              <h3 className={`text-2xl font-bold mb-3 text-slate-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-jb-primary group-hover:to-cyan-500 transition-all duration-300`}>{project.title}</h3>
               <p className="text-[15px] text-slate-600 flex-1 leading-relaxed mb-8 font-medium">
                 {project.description}
               </p>
@@ -101,7 +101,7 @@ export default function Projects() {
                 {project.demo && (
                   <a
                     href={project.demo}
-                    className="flex items-center gap-1.5 text-[13px] font-bold text-purple-600 hover:text-purple-700 transition-colors group/link"
+                    className="flex items-center gap-1.5 text-[13px] font-bold text-jb-primary hover:text-[#5229c1] transition-colors group/link"
                   >
                     <ExternalLink className="h-4 w-4" />
                     <span>LIVE DEMO</span>

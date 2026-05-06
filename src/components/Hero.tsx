@@ -1,5 +1,6 @@
 import { ArrowRight, ChevronRight, FileCode2, LayoutGrid, Terminal } from 'lucide-react';
 import { motion } from 'motion/react';
+import { KotlinIcon, AndroidIcon } from './Icons';
 
 export default function Hero() {
   return (
@@ -13,13 +14,13 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-100 text-purple-600 font-mono text-xs font-bold mb-6">
-              <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-100 text-jb-primary font-mono text-xs font-bold mb-6">
+              <span className="w-2 h-2 rounded-full bg-jb-primary animate-pulse"></span>
               KOTLIN & MOBILE DEVELOPER
             </div>
-            <h1 className="text-5xl font-extrabold tracking-tight leading-[1.05] mb-6 sm:text-6xl md:text-7xl text-slate-900">
+            <h1 className="text-5xl font-extrabold tracking-tight leading-[1.05] mb-6 sm:text-6xl md:text-7xl text-jb-dark">
               Construindo software <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400">limpo e eficiente.</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-jb-primary via-pink-500 to-cyan-500">limpo e eficiente.</span>
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-lg text-slate-500 mb-10 lg:mx-0 leading-relaxed font-normal">
               Estudante de Engenharia Informática em Portugal. Focado em ecossistemas Mobile e Backend corporativos. Arquiteturas escaláveis, código tipado e pragmatismo visual.
@@ -29,7 +30,7 @@ export default function Hero() {
               <motion.a
                 whileTap={{ scale: 0.95 }}
                 href="#projetos"
-                className="group flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl font-bold text-sm shadow-[0_4px_14px_0_rgba(168,85,247,0.39)] hover:shadow-[0_6px_20px_rgba(168,85,247,0.23)] transition-all"
+                className="group flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-jb-primary to-pink-500 text-white rounded-xl font-bold text-sm shadow-[0_4px_14px_0_rgba(127,82,255,0.39)] hover:shadow-[0_6px_20px_rgba(127,82,255,0.23)] transition-all"
               >
                 Explorar Projetos
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -37,7 +38,7 @@ export default function Hero() {
               <motion.a
                 whileTap={{ scale: 0.95 }}
                 href="#contactos"
-                className="flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 bg-white backdrop-blur-md border border-slate-200 text-slate-700 rounded-xl font-bold text-sm hover:bg-slate-50 transition-colors shadow-[0_2px_10px_rgb(0,0,0,0.02)]"
+                className="flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 bg-white backdrop-blur-md border border-slate-200 text-jb-dark rounded-xl font-bold text-sm hover:bg-slate-50 transition-colors shadow-[0_2px_10px_rgb(0,0,0,0.02)]"
               >
                 <Terminal className="h-4 w-4 text-slate-500" />
                 Contactar
@@ -55,9 +56,9 @@ export default function Hero() {
             className="relative transform-gpu"
           >
             {/* Massive diffuse light for IDE */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-cyan-500/20 blur-[80px] rounded-[40px] -z-10 translate-y-8"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 blur-[80px] rounded-[40px] -z-10 translate-y-8"></div>
             
-            <div className="rounded-2xl border border-slate-200/60 bg-white/60 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.05)] flex flex-col overflow-hidden max-h-[500px] relative">
+            <div className="rounded-2xl border border-slate-200/60 bg-white/60 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.05)] flex flex-col overflow-hidden max-h-[500px] relative">
               {/* Inner ring for glassmorphism */}
               <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/50 pointer-events-none z-50"></div>
               
@@ -89,8 +90,8 @@ export default function Hero() {
                       <span className="font-semibold text-slate-700">app</span>
                     </div>
                     <div className="pl-4 space-y-0.5">
-                      <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-50/50 text-purple-700 font-medium rounded cursor-default border border-purple-100/50">
-                        <FileCode2 className="w-3.5 h-3.5 text-purple-500" />
+                      <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-50/50 text-jb-primary font-medium rounded cursor-default border border-purple-100/50">
+                        <FileCode2 className="w-3.5 h-3.5 text-jb-primary" />
                         MainActivity.kt
                       </div>
                       <div className="flex items-center gap-1.5 px-2 py-1 hover:bg-slate-100/50 rounded cursor-pointer">
@@ -106,7 +107,7 @@ export default function Hero() {
                 </div>
 
                 {/* IDE Code Area */}
-                <div className="flex-1 bg-[#FAFAFA] p-0 font-mono text-[13px] overflow-hidden flex flex-col">
+                <div className="flex-1 bg-jb-bg p-0 font-mono text-[13px] overflow-hidden flex flex-col">
                    <div className="flex-1 overflow-y-auto w-full p-4">
                      <table className="w-full text-left border-spacing-0">
                        <tbody className="text-slate-800 leading-relaxed tabular-nums">
@@ -136,16 +137,16 @@ export default function Hero() {
                    <div className="h-40 border-t border-slate-200/60 bg-white/80 backdrop-blur-md p-3 flex flex-col font-mono text-[10px] sm:text-xs text-slate-500 relative">
                      <div className="flex justify-between items-center mb-2 pb-1 text-slate-400 font-bold cursor-default border-b border-slate-100">
                         <div className="flex gap-4">
-                          <span className="text-slate-800 border-b-2 border-purple-500 px-1 pb-1">BuildOutput</span>
+                          <span className="text-jb-dark border-b-2 border-jb-primary px-1 pb-1">BuildOutput</span>
                           <span className="pb-1 hover:text-slate-600 transition-colors">Telemetry</span>
                           <span className="pb-1 hover:text-slate-600 transition-colors">Logcat</span>
                         </div>
                         <div className="flex gap-3 text-[9px] items-center text-slate-400">
                            <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></div> CPU: 12%</span>
-                           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-purple-400"></div> RAM: 1.2GB</span>
+                           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-jb-primary"></div> RAM: 1.2GB</span>
                         </div>
                      </div>
-                     <div className="flex-1 overflow-y-auto space-y-1 relative z-10">
+                     <div className="flex-1 overflow-y-auto space-y-1 relative z-10 text-xs">
                         <div className="flex items-center gap-2">
                           <span className="text-green-600 font-bold">INFO:</span> 
                           <span>Daemon started resolving dependencies...</span>
@@ -155,21 +156,21 @@ export default function Hero() {
                         </div>
                         <div><span className="text-blue-600 font-bold">Executing</span> tasks: [:app:assembleDebug]</div>
                         <div className="flex justify-between max-w-sm">
-                           <span><span className="text-purple-500">{'>'}</span> Task :app:compileDebugKotlin</span>
+                           <span><span className="text-[#7F52FF]">{'>'}</span> Task :app:compileDebugKotlin</span>
                            <span className="text-slate-400">451ms</span>
                         </div>
                         <div className="flex justify-between max-w-sm">
-                           <span><span className="text-purple-500">{'>'}</span> Task :app:packageDebug</span>
+                           <span><span className="text-[#7F52FF]">{'>'}</span> Task :app:packageDebug</span>
                            <span className="text-slate-400">120ms</span>
                         </div>
-                        <div className="text-slate-700 font-bold mt-1">BUILD SUCCESSFUL in 1s 874ms</div>
+                        <div className="text-jb-dark font-bold mt-1">BUILD SUCCESSFUL in 1s 874ms</div>
                      </div>
                      
                      {/* Data flow lines background */}
-                     <svg className="absolute right-0 bottom-0 w-32 h-32 opacity-20 pointer-events-none" viewBox="0 0 100 100">
+                     <svg className="absolute right-0 bottom-0 w-32 h-32 opacity-10 pointer-events-none" viewBox="0 0 100 100">
                         <motion.path 
                            d="M 100 100 Q 50 50 100 0" 
-                           fill="none" stroke="#9333ea" strokeWidth="2" 
+                           fill="none" stroke="#7F52FF" strokeWidth="2" 
                            initial={{ strokeDasharray: "0 100" }}
                            animate={{ strokeDasharray: "100 100", strokeDashoffset: [100, 0] }}
                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
@@ -191,16 +192,16 @@ export default function Hero() {
             <motion.div 
               animate={{ y: [0, -10, 0] }}
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute -right-6 top-20 w-12 h-12 bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 flex items-center justify-center p-2"
+              className="absolute -right-6 top-20 w-12 h-12 bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 flex items-center justify-center p-2 text-[#7F52FF]"
             >
-               <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kotlin_Icon.png" alt="Kotlin" className="w-full h-full object-contain" />
+               <KotlinIcon />
             </motion.div>
             <motion.div 
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-              className="absolute -left-6 bottom-32 w-12 h-12 bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 flex items-center justify-center p-2"
+              className="absolute -left-6 bottom-32 w-12 h-12 bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 flex items-center justify-center p-2 text-[#3DDC84]"
             >
-               <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" alt="Android" className="w-full h-full object-contain" />
+               <AndroidIcon />
             </motion.div>
           </motion.div>
         </div>
