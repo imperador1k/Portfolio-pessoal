@@ -3,10 +3,10 @@ import { Github, Linkedin, Download } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
 
 const navLinks = [
-  { name: 'Sobre', href: '#sobre', id: 'sobre' },
-  { name: 'Skills', href: '#skills', id: 'skills' },
+  { name: 'Hero', href: '#home', id: 'home' },
+  { name: 'Lifestyle', href: '#sobre', id: 'sobre' },
+  { name: 'Tech Stack', href: '#skills', id: 'skills' },
   { name: 'Projetos', href: '#projetos', id: 'projetos' },
-  { name: 'Contactos', href: '#contactos', id: 'contactos' },
 ];
 
 export default function Navbar() {
@@ -30,7 +30,7 @@ export default function Navbar() {
       });
     }, { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" });
     
-    document.querySelectorAll('section[id]').forEach((section) => observer.observe(section));
+    document.querySelectorAll('section[id], #home').forEach((section) => observer.observe(section));
     
     return () => observer.disconnect();
   }, []);
@@ -62,7 +62,7 @@ export default function Navbar() {
         `}>
           
           {/* Logo (Terminal Aesthetic) */}
-          <a href="#" className="group font-mono font-bold text-[20px] text-slate-900 flex items-center gap-1 z-50 transition-transform active:scale-95">
+          <a href="#home" className="group font-mono font-bold text-[20px] text-slate-900 flex items-center gap-1 z-50 transition-transform active:scale-95">
             <span className="text-jb-primary font-bold">{'>_'}</span>
             <span className="relative">
               miguel
@@ -161,6 +161,16 @@ export default function Navbar() {
                   {item.name}
                 </motion.a>
               ))}
+              {/* Added 'Vamos Falar' to mobile menu */}
+              <motion.a
+                variants={itemVariants}
+                href="#contactos"
+                onClick={() => setIsOpen(false)}
+                className="text-3xl font-bold text-jb-primary flex items-center gap-4"
+              >
+                <span className="text-jb-primary/30 text-sm font-mono mt-1">05</span>
+                Vamos Falar
+              </motion.a>
             </div>
 
             <motion.div variants={itemVariants} className="mt-auto pt-16 flex flex-col gap-5">
