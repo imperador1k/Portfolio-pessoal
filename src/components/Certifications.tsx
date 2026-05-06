@@ -1,92 +1,101 @@
-import { Award, ShieldCheck, Trophy, BadgeCheck } from 'lucide-react';
-import { motion } from 'motion/react';
+import React, { useRef } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { BadgeCheck, ArrowRight } from 'lucide-react';
 
 const certs = [
   {
-    title: 'Oracle Certified Associate',
-    subtitle: 'Java SE 8 Programmer',
-    date: '2023',
-    icon: Award,
-    color: 'text-orange-500',
-    gradient: 'from-orange-500 to-red-500',
-    bg: 'bg-orange-50',
-    border: 'border-orange-100',
-    glow: 'group-hover:shadow-[0_0_30px_rgba(249,115,22,0.2)]'
+    title: 'AWS Certified Cloud Practitioner',
+    issuer: 'AWS',
+    date: '2024',
+    colSpan: 'md:col-span-2 lg:col-span-2',
+    iconSvg: (
+      <svg className="w-6 h-6 text-jb-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+        <path d="M12 12l8-4.5" />
+        <path d="M12 12v9" />
+        <path d="M12 12L4 7.5" />
+      </svg>
+    ),
+    link: '#'
   },
   {
     title: 'Google Associate Android Developer',
-    subtitle: 'Kotlin',
+    issuer: 'GOOGLE',
     date: '2023',
-    icon: Trophy,
-    color: 'text-green-500',
-    gradient: 'from-green-500 to-emerald-500',
-    bg: 'bg-green-50',
-    border: 'border-green-100',
-    glow: 'group-hover:shadow-[0_0_30px_rgba(34,197,94,0.2)]'
+    colSpan: 'md:col-span-1 lg:col-span-1',
+    iconSvg: (
+      <svg className="w-6 h-6 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="4" />
+        <circle cx="12" cy="12" r="4" />
+      </svg>
+    ),
+    link: '#'
   },
   {
-    title: 'AWS Certified Cloud Practitioner',
-    subtitle: 'Foundational Cloud Architecture',
-    date: '2024',
-    icon: ShieldCheck,
-    color: 'text-jb-primary',
-    gradient: 'from-jb-primary to-cyan-500',
-    bg: 'bg-purple-50',
-    border: 'border-purple-100',
-    glow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]'
+    title: 'Oracle Certified Associate (Java SE)',
+    issuer: 'ORACLE',
+    date: '2023',
+    colSpan: 'md:col-span-1 lg:col-span-1',
+    iconSvg: (
+      <svg className="w-6 h-6 text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="8" />
+        <path d="M8 12h8" />
+        <path d="M12 8v8" />
+      </svg>
+    ),
+    link: '#'
   }
 ];
 
 export default function Certifications() {
+  const prefersReducedMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
-    <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full bg-[#FAFAFA]" id="certificacoes">
+    <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full" id="certificacoes">
       <div className="flex items-center justify-between mb-16 cursor-default">
-        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase text-center w-full md:text-left flex items-center justify-center md:justify-start gap-3">
+        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase flex items-center gap-3">
           <BadgeCheck className="w-6 h-6 text-jb-primary" />
           Hall of Fame // Certificações
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {certs.map((cert, idx) => {
-          const Icon = cert.icon;
-          return (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.15 }}
-              whileHover={{ y: -5 }}
-              className={`bg-white/70 backdrop-blur-md border border-white/60 rounded-3xl p-8 relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-2 transition-all duration-500 flex flex-col group cursor-default ${cert.glow}`}
-            >
-              {/* Diffuse glow background */}
-              <div className={`absolute -inset-10 bg-gradient-to-br ${cert.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500 blur-2xl z-0`}></div>
-              {/* Inner inset ring */}
-              <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-slate-200/50 pointer-events-none group-hover:ring-slate-300/50 transition-colors z-30"></div>
+      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {certs.map((cert, idx) => (
+          <motion.div
+            key={idx}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
+            whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : idx * 0.15, ease: "easeOut" }}
+            className={`relative group bg-white ring-1 ring-gray-100/50 shadow-sm rounded-3xl p-8 pt-10 flex flex-col hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-jb-primary/50 transition-all duration-300 ${cert.colSpan}`}
+          >
+            {/* Header Glow pretending to be an IDE header */}
+            <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-jb-primary/5 to-transparent rounded-t-3xl pointer-events-none transition-opacity duration-500 group-hover:opacity-100 opacity-50"></div>
 
-              {/* Animated top gradient accent */}
-              <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${cert.gradient} z-20`}></div>
-              
-              <div className={`w-14 h-14 rounded-2xl ${cert.bg} border ${cert.border} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 z-10 relative`}>
-                <Icon className={`w-7 h-7 ${cert.color}`} />
-              </div>
-              
-              <h3 className="text-xl font-bold text-slate-800 mb-1 leading-tight z-10 relative">{cert.title}</h3>
-              <p className="text-[15px] font-medium text-slate-500 mb-8 z-10 relative">{cert.subtitle}</p>
-              
-              <div className="mt-auto flex justify-between items-center z-10 relative">
-                 <span className="font-mono text-[10px] font-bold text-slate-500 bg-white shadow-sm px-3 py-1.5 rounded-lg border border-slate-100 group-hover:border-slate-300 transition-colors uppercase tracking-wider">
-                   {cert.date}
-                 </span>
-                 
-                 <div className={`w-8 h-8 rounded-full ${cert.bg} border ${cert.border} flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:rotate-12`}>
-                    <Award className={`w-4 h-4 ${cert.color}`} />
-                 </div>
-              </div>
-            </motion.div>
-          );
-        })}
+            <div className="flex-1 relative z-10">
+               {/* Squircle Emblem */}
+               <div className="w-14 h-14 rounded-[16px] bg-white ring-1 ring-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.03)] flex items-center justify-center mb-8">
+                  {cert.iconSvg}
+               </div>
+
+               <h3 className="text-xl font-sans font-semibold text-slate-800 mb-4 leading-tight group-hover:text-jb-primary transition-colors">
+                  {cert.title}
+               </h3>
+               
+               <div className="font-mono text-sm text-slate-500 tracking-wide break-words">
+                  ISSUER: {cert.issuer} <br className="lg:hidden" /><span className="hidden lg:inline text-slate-300 mx-1">//</span> DATE: {cert.date}
+               </div>
+            </div>
+
+            <div className="mt-10 relative z-10">
+               <a href={cert.link} className="inline-flex items-center text-sm font-bold text-slate-500 hover:text-jb-primary transition-colors group/link focus:outline-none">
+                 Ver Credencial
+                 <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/link:translate-x-1" />
+               </a>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
