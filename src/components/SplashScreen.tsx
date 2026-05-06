@@ -14,58 +14,37 @@ const BOOT_LOGS = [
   "> INITIATING BOOT SEQUENCE..."
 ];
 
-// Sub-component to isolate frequent re-renders for the log
-const TelemetryLog = () => {
-  const [logIndex, setLogIndex] = useState(0);
-
-  useEffect(() => {
-    const duration = 2800; // Finish log sequence right before exit
-    const interval = setInterval(() => {
-      setLogIndex(prev => Math.min(prev + 1, BOOT_LOGS.length - 1));
-    }, duration / BOOT_LOGS.length);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="absolute bottom-6 left-6 font-mono text-[10px] text-slate-400 uppercase tracking-widest z-10 whitespace-pre">
-      {BOOT_LOGS[logIndex]}
-    </div>
-  );
-};
-
-// Sub-component to isolate frequent re-renders for the percentage
-const ProgressCounter = () => {
-    const [progress, setProgress] = useState(0);
-    const requestRef = useRef<number>();
-    
-    useEffect(() => {
-        const startTime = Date.now();
-        const duration = 2800;
-        
-        const update = () => {
-            const elapsed = Date.now() - startTime;
-            const p = Math.min((elapsed / duration) * 100, 100);
-            setProgress(Math.floor(p));
-            if (p < 100) {
-                requestRef.current = requestAnimationFrame(update);
-            }
-        };
-        requestRef.current = requestAnimationFrame(update);
-
-        return () => {
-            if (requestRef.current) cancelAnimationFrame(requestRef.current);
-        };
-    }, []);
-    
-    return (
-        <div className="font-mono text-xs text-slate-400 mt-4 tracking-widest">
-            {progress}%
-        </div>
-    );
-};
-
 export default function SplashScreen({ isLoading }: { isLoading: boolean }) {
+  const [progress, setProgress] = useState(0);
+  const [currentLog, setCurrentLog] = useState(BOOT_LOGS[0]);
+  const requestRef = useRef<number>();
+  
+  useEffect(() => {
+    if (!isLoading) return;
+    
+    const startTime = Date.now();
+    const duration = 2800; // Total duration in ms
+    
+    const update = () => {
+      const elapsed = Date.now() - startTime;
+      const p = Math.min((elapsed / duration) * 100, 100);
+      setProgress(p);
+
+      // Sync log with progress milestones
+      const logIndex = Math.min(Math.floor((p / 100) * BOOT_LOGS.length), BOOT_LOGS.length - 1);
+      setCurrentLog(BOOT_LOGS[logIndex]);
+
+      if (p < 100) {
+        requestRef.current = requestAnimationFrame(update);
+      }
+    };
+    requestRef.current = requestAnimationFrame(update);
+
+    return () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+  }, [isLoading]);
+
   return (
     <AnimatePresence>
       {isLoading && (
@@ -75,57 +54,111 @@ export default function SplashScreen({ isLoading }: { isLoading: boolean }) {
           exit={{ 
             y: "-100%",
             transition: {
-              delay: 0.1, // Minimal delay
+              delay: 0.1,
               duration: 0.4,
-              ease: "circIn" // Snappy exit
+              ease: [0.76, 0, 0.24, 1]
             }
           }}
         >
-          {/* Phase 1: Contents fade out and move up quickly */}
+          {/* Subtle Grain Overlay */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-50 contrast-150" />
+          
           <motion.div
             className="absolute inset-0 flex items-center justify-center"
             exit={{ 
                 opacity: 0, 
-                y: -15, 
-                transition: { duration: 0.2, ease: "easeOut" } 
+                scale: 1.05,
+                filter: "blur(10px)",
+                transition: { duration: 0.3, ease: "easeIn" } 
             }}
           >
-            {/* Telemetry Top Left */}
-            <div className="absolute top-6 left-6 font-mono text-[10px] text-slate-400 uppercase tracking-widest z-10">
-              BUILD_ENV // ANDROID_SDK_34
+            {/* Top Info */}
+            <div className="absolute top-8 left-8 flex flex-col gap-1 z-10">
+              <div className="font-mono text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
+                BUILD_ENV // ANDROID_SDK_34
+              </div>
+              <div className="font-mono text-[10px] text-jb-primary/60 uppercase tracking-[0.2em]">
+                {progress === 100 ? "READY" : "BOOTING_UP"}
+              </div>
             </div>
 
-            <TelemetryLog />
+            {/* Bottom Log */}
+            <div className="absolute bottom-8 left-8 font-mono text-[10px] text-slate-400 uppercase tracking-widest z-10">
+              {currentLog}
+            </div>
 
-            {/* Center Focus (SVG Line Art) */}
+            {/* Center Content */}
             <div className="relative flex flex-col items-center justify-center z-10">
-               {/* The abstract logo / <> */}
-               <svg viewBox="0 0 100 100" className="relative z-10 w-24 h-24 md:w-32 md:h-32 mb-2">
-                  <motion.path
-                     d="M 30,20 L 10,50 L 30,80 M 70,20 L 90,50 L 70,80 M 60,10 L 40,90"
-                     fill="none"
-                     stroke="#7F52FF"
-                     strokeWidth="2"
-                     strokeLinecap="round"
-                     strokeLinejoin="round"
-                     initial={{ pathLength: 0 }}
-                     animate={{ pathLength: 1 }}
-                     transition={{ duration: 2.5, ease: "easeInOut" }}
-                  />
-               </svg>
+                {/* SVG Filling Effect */}
+                <div className="relative w-24 h-24 md:w-32 md:h-32 mb-8">
+                   {/* Background Path (Empty state) */}
+                   <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
+                      <path
+                         d="M 30,20 L 10,50 L 30,80 M 70,20 L 90,50 L 70,80 M 60,10 L 40,90"
+                         fill="none"
+                         stroke="#E2E8F0"
+                         strokeWidth="2.5"
+                         strokeLinecap="round"
+                         strokeLinejoin="round"
+                      />
+                   </svg>
 
-               {/* Minimalist Progress Bar */}
-               <div className="w-48 h-[1px] bg-slate-200 overflow-hidden relative mt-8">
+                   {/* Filling Path (Primary color) */}
+                   <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
+                      <defs>
+                        <clipPath id="fill-clip">
+                          <motion.rect 
+                            x="0" 
+                            width="100" 
+                            initial={{ y: 100, height: 0 }}
+                            animate={{ y: 100 - progress, height: progress }}
+                            transition={{ ease: "linear" }}
+                          />
+                        </clipPath>
+                      </defs>
+                      <path
+                         d="M 30,20 L 10,50 L 30,80 M 70,20 L 90,50 L 70,80 M 60,10 L 40,90"
+                         fill="none"
+                         stroke="#7F52FF"
+                         strokeWidth="3"
+                         strokeLinecap="round"
+                         strokeLinejoin="round"
+                         clipPath="url(#fill-clip)"
+                         className="drop-shadow-[0_0_8px_rgba(127,82,255,0.4)]"
+                      />
+                   </svg>
+
+                   {/* Glow layer */}
                    <motion.div 
-                      className="absolute inset-y-0 left-0 bg-jb-primary w-full"
-                      style={{ originX: 0 }}
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ duration: 2.8, ease: "easeInOut" }}
+                     animate={{ opacity: [0.1, 0.3, 0.1] }}
+                     transition={{ duration: 2, repeat: Infinity }}
+                     className="absolute inset-0 bg-jb-primary/10 blur-3xl rounded-full scale-150 -z-10"
                    />
-               </div>
+                </div>
 
-               <ProgressCounter />
+                {/* Progress Bar Container */}
+                <div className="relative flex flex-col items-center">
+                    <div className="w-56 h-[2px] bg-slate-200/50 overflow-hidden relative rounded-full">
+                        <motion.div 
+                           className="absolute inset-y-0 left-0 bg-jb-primary w-full"
+                           style={{ originX: 0, scaleX: progress / 100 }}
+                        />
+                    </div>
+                    
+                    {/* Percentage Counter */}
+                    <div className="mt-4 flex items-baseline gap-1">
+                        <span className="font-mono text-xl font-black text-slate-900 tracking-tighter">
+                            {Math.floor(progress).toString().padStart(2, '0')}
+                        </span>
+                        <span className="font-mono text-[10px] text-slate-400 font-bold">%</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Corner Decorative Elements */}
+            <div className="absolute top-8 right-8 font-mono text-[10px] text-slate-300">
+               COORD_X: {Math.floor(progress * 1.2)}<br />
+               COORD_Y: {Math.floor(progress * 0.8)}
             </div>
           </motion.div>
         </motion.div>

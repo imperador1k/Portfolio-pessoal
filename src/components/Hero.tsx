@@ -202,11 +202,12 @@ export default function Hero() {
           {true && (
             <motion.div 
               layoutId="ide-window"
-              className={`flex w-full lg:w-[60%] max-w-[840px] shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
-                ${heroState === 'success' ? 'opacity-40 lg:opacity-50 scale-[0.98]' : 'opacity-100 scale-100'}`}
+              className={`flex w-full lg:w-[60%] max-w-[840px] shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform
+                ${heroState === 'success' ? 'opacity-70 lg:opacity-50 scale-100' : 'opacity-100 scale-100'}`}
+              style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
             >
-              {/* Fake IDE UI - JetBrains Fleet Light mode */}
-              <div className="rounded-xl bg-white/60 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden flex flex-col font-mono text-[11px] sm:text-[13px] h-[400px] sm:h-[520px] w-full relative">
+                {/* Fake IDE UI - JetBrains Fleet Light mode */}
+                <div className="rounded-xl bg-white/95 sm:bg-white/60 sm:backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden flex flex-col font-mono text-[11px] sm:text-[13px] h-[400px] sm:h-[520px] w-full relative">
                 {/* IDE Header with Tabs */}
                 <div className="bg-[#E8E8E8]/70 border-b border-gray-300/50 flex flex-col justify-end relative shrink-0 pt-3">
                   <div className="flex gap-2 absolute top-4 left-3 z-20 w-16 mb-2.5">
@@ -300,7 +301,7 @@ export default function Hero() {
                   {/* Code Area with per-line layout & Minimap */}
                   <div className="flex flex-1 relative overflow-hidden bg-transparent">
                     {/* Code Container */}
-                    <div className="flex-1 min-w-max flex flex-col py-4 overflow-auto no-scrollbar">
+                    <div className="flex-1 min-w-0 flex flex-col py-4 overflow-x-auto overflow-y-hidden custom-scrollbar">
                           <AnimatePresence mode="wait">
                             <motion.div 
                               key={activeTab} 
@@ -326,7 +327,7 @@ export default function Hero() {
                                       {i + 1}
                                     </div>
                                     {/* Code Content */}
-                                    <div className="flex-1 pl-4 whitespace-pre text-[12px] leading-[1.8] font-medium" style={{ paddingLeft: `${line.indent * 0.5 + 1}rem` }}>
+                                    <div className="flex-1 pl-4 whitespace-pre text-[13px] sm:text-[12px] leading-[1.8] font-semibold sm:font-medium min-w-max pr-10" style={{ paddingLeft: `${line.indent * 0.5 + 1}rem` }}>
                                       {line.nodes.map((node, j) => (
                                         <span key={j} className={node.color}>{node.text}</span>
                                       ))}

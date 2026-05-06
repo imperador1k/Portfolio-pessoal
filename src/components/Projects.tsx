@@ -43,7 +43,8 @@ export default function Projects() {
       <div className="flex items-center justify-between mb-16 cursor-default">
         <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-jb-primary animate-pulse"></span>
-          04 // Projetos em Destaque
+          04 // Repositories <span className="text-jb-primary not-italic">/</span> <br />
+          <span className="text-slate-500 font-mono italic normal-case font-medium text-2xl sm:text-4xl">Production-Ready Solutions</span>
         </h2>
       </div>
 

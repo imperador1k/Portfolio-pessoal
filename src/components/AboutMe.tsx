@@ -238,8 +238,8 @@ export default function AboutMe() {
           01 // LIFESTYLE
         </span>
         <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase mb-6">
-          Beyond the <br />
-          <span className="text-slate-300">Terminal</span>
+          Life.kt <span className="text-jb-primary not-italic">/</span> <br />
+          <span className="text-slate-500 font-mono italic normal-case font-medium text-3xl sm:text-4xl">Lifestyle & Creative Gear</span>
         </h2>
         <p className="max-w-2xl text-slate-500 font-medium leading-relaxed">
           Quando não estou a otimizar loops ou a desenhar interfaces, estou a construir a minha melhor versão fora do código. 

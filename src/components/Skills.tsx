@@ -178,8 +178,8 @@ export default function Skills() {
             02 // TECH STACK
           </span>
           <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase text-center md:text-left">
-            Main <br />
-            <span className="text-slate-300">Toolbox</span>
+            Stack.json <span className="text-jb-primary not-italic">/</span> <br />
+            <span className="text-slate-500 font-mono italic normal-case font-medium text-2xl sm:text-4xl">Engineered for Performance</span>
           </h2>
         </div>
         
@@ -227,8 +227,8 @@ export default function Skills() {
             03 // CHANGELOG
           </span>
           <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase">
-            Personal <br />
-            <span className="text-slate-300">Timeline</span>
+            Changelog.md <span className="text-jb-primary not-italic">/</span> <br />
+            <span className="text-slate-500 font-mono italic normal-case font-medium text-2xl sm:text-4xl">Journey & Milestones</span>
           </h2>
         </div>
 
