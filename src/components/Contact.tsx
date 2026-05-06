@@ -117,7 +117,7 @@ export default function Contact() {
             <div className="max-w-sm">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-jb-primary/10 text-jb-primary rounded-full text-[10px] font-mono font-bold uppercase tracking-widest mb-6">
                     <Terminal className="w-3 h-3" />
-                    Connect_Sequence
+                    06 // Connect_Sequence
                 </div>
                 
                 <h2 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-6 leading-[1.1]">

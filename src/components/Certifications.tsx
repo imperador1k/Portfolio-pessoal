@@ -56,7 +56,7 @@ export default function Certifications() {
       <div className="flex items-center justify-between mb-16 cursor-default">
         <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase flex items-center gap-3">
           <BadgeCheck className="w-6 h-6 text-jb-primary" />
-          Hall of Fame // Certificações
+          05 // Certificações // Hall of Fame
         </h2>
       </div>
 

@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Certifications from './components/Certifications';
+import AboutMe from './components/AboutMe';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import MouseGradient from './components/MouseGradient';
@@ -40,6 +41,7 @@ export default function App() {
         <Navbar />
         <main className="flex-1 flex flex-col relative z-0">
             <Hero />
+            <AboutMe />
             <Skills />
             <Projects />
             <Certifications />

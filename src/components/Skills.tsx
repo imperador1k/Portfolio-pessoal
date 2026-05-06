@@ -171,11 +171,11 @@ export default function Skills() {
   
   return (
     <section className="px-5 sm:px-6 py-32 lg:px-10 max-w-6xl mx-auto w-full relative z-10" id="skills">
-      {/* 01 // Tech Stack Section */}
+      {/* 02 // Tech Stack Section */}
       <div className="mb-40">
         <div className="flex flex-col mb-12">
           <span className="text-jb-primary font-mono text-sm font-bold tracking-tighter mb-4 text-center md:text-left">
-            01 // TECH STACK
+            02 // TECH STACK
           </span>
           <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase text-center md:text-left">
             Main <br />
@@ -220,11 +220,11 @@ export default function Skills() {
         </div>
       </div>
 
-      {/* 02 // Experience Section */}
+      {/* 03 // Experience Section */}
       <div className="relative">
         <div className="flex flex-col mb-20">
           <span className="text-jb-primary font-mono text-sm font-bold tracking-tighter mb-4">
-            02 // CHANGELOG
+            03 // CHANGELOG
           </span>
           <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase">
             Personal <br />

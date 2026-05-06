@@ -152,7 +152,7 @@ export default function Hero() {
   return (
     <section 
       className="px-5 sm:px-6 pt-32 pb-20 lg:pt-48 lg:pb-32 lg:px-10 relative overflow-hidden cursor-pointer w-full flex flex-col justify-center min-h-[100svh]" 
-      id="sobre"
+      id="home"
     >
       {/* Background Blur Effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-cyan-500/5 blur-[100px] rounded-full -z-10 translate-y-20 mx-auto w-3/4 max-w-3xl pointer-events-none"></div>
