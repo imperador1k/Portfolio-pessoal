@@ -1,31 +1,88 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Download, LayoutGrid, Menu, Bell, ChevronDown, ChevronRight, FileText, Check, RefreshCw, Folder } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { KotlinIcon, AndroidIcon, ReactIcon } from './Icons';
 
 type HeroState = 'typing' | 'building' | 'success';
 
-const CODE_LINES = [
-  { nodes: [{ text: "data class ", color: "text-purple-600 font-medium" }, { text: "Developer", color: "text-slate-900 font-semibold" }, { text: "(", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "name", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ", ", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "role", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ")", color: "text-slate-600" }], indent: 0 },
-  { nodes: [{ text: "val ", color: "text-purple-600 font-medium" }, { text: "miguel ", color: "text-blue-600 font-semibold" }, { text: "= ", color: "text-slate-600" }, { text: "Developer", color: "text-slate-900 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "\"Miguel\"", color: "text-green-600" }, { text: ", ", color: "text-slate-600" }, { text: "\"Android Engineer\"", color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 0 },
-  { nodes: [], indent: 0 },
-  { nodes: [{ text: "@Composable", color: "text-amber-600 font-medium" }], indent: 0 },
-  { nodes: [{ text: "fun ", color: "text-purple-600 font-medium" }, { text: "PortfolioScreen", color: "text-amber-500 font-semibold" }, { text: "() {", color: "text-slate-600" }], indent: 0 },
-  { nodes: [{ text: "if ", color: "text-purple-600 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "miguel", color: "text-blue-600 font-semibold" }, { text: ".", color: "text-slate-600" }, { text: "isReady", color: "text-purple-600 font-medium" }, { text: ") {", color: "text-slate-600" }], indent: 4 },
-  { nodes: [{ text: "ShowHero", color: "text-cyan-600 border-b border-cyan-100" }, { text: "(", color: "text-slate-600" }, { text: "title = ", color: "text-cyan-600" }, { text: "\"Construindo software limpo\"", color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 8 },
-  { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
-  { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
-];
+type TabName = 'HeroContent.kt' | 'MainActivity.kt' | 'Theme.tsx' | 'Styles.css';
+
+const FILE_SYSTEM: Record<TabName, { icon: React.ReactNode, path: string[], code: {nodes: {text: string, color: string}[], indent: number}[] }> = {
+  'HeroContent.kt': {
+    icon: <KotlinIcon className="w-3.5 h-3.5 text-purple-500" />,
+    path: ['src', 'main', 'kotlin', 'HeroContent.kt'],
+    code: [
+      { nodes: [{ text: "data class ", color: "text-purple-600 font-medium" }, { text: "Developer", color: "text-slate-900 font-semibold" }, { text: "(", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "name", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ", ", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "role", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ")", color: "text-slate-600" }], indent: 0 },
+      { nodes: [{ text: "val ", color: "text-purple-600 font-medium" }, { text: "miguel ", color: "text-blue-600 font-semibold" }, { text: "= ", color: "text-slate-600" }, { text: "Developer", color: "text-slate-900 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "\"Miguel\"", color: "text-green-600" }, { text: ", ", color: "text-slate-600" }, { text: "\"Android Engineer\"", color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 0 },
+      { nodes: [], indent: 0 },
+      { nodes: [{ text: "@Composable", color: "text-amber-600 font-medium" }], indent: 0 },
+      { nodes: [{ text: "fun ", color: "text-purple-600 font-medium" }, { text: "PortfolioScreen", color: "text-amber-500 font-semibold" }, { text: "() {", color: "text-slate-600" }], indent: 0 },
+      { nodes: [{ text: "if ", color: "text-purple-600 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "miguel", color: "text-blue-600 font-semibold" }, { text: ".", color: "text-slate-600" }, { text: "isReady", color: "text-purple-600 font-medium" }, { text: ") {", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "ShowHero", color: "text-cyan-600 border-b border-cyan-100" }, { text: "(", color: "text-slate-600" }, { text: "title = ", color: "text-cyan-600" }, { text: "\"Construindo software limpo\"", color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 8 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
+    ]
+  },
+  'MainActivity.kt': {
+    icon: <KotlinIcon className="w-3.5 h-3.5 text-purple-500" />,
+    path: ['src', 'main', 'kotlin', 'MainActivity.kt'],
+    code: [
+      { nodes: [{ text: "class ", color: "text-purple-600 font-medium" }, { text: "MainActivity", color: "text-amber-500 font-semibold" }, { text: " : ", color: "text-slate-600" }, { text: "ComponentActivity", color: "text-slate-900 font-medium" }, { text: "() {", color: "text-slate-600" }], indent: 0 },
+      { nodes: [{ text: "override fun ", color: "text-purple-600 font-medium" }, { text: "onCreate", color: "text-blue-600 font-semibold" }, { text: "(savedInstanceState: ", color: "text-slate-600" }, { text: "Bundle?", color: "text-slate-900 font-medium" }, { text: ") {", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "super", color: "text-blue-600 font-medium" }, { text: ".", color: "text-slate-600" }, { text: "onCreate", color: "text-blue-600" }, { text: "(savedInstanceState)", color: "text-slate-600" }], indent: 8 },
+      { nodes: [{ text: "setContent", color: "text-cyan-600" }, { text: " {", color: "text-slate-600" }], indent: 8 },
+      { nodes: [{ text: "PortfolioTheme", color: "text-amber-500" }, { text: " {", color: "text-slate-600" }], indent: 12 },
+      { nodes: [{ text: "PortfolioScreen", color: "text-cyan-600" }, { text: "()", color: "text-slate-600" }], indent: 16 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 12 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 8 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
+    ]
+  },
+  'Theme.tsx': {
+    icon: <ReactIcon className="w-3.5 h-3.5 text-cyan-500" />,
+    path: ['src', 'theme', 'Theme.tsx'],
+    code: [
+      { nodes: [{ text: "export const ", color: "text-purple-600 font-medium" }, { text: "Theme", color: "text-blue-600 font-semibold" }, { text: " = {", color: "text-slate-600" }], indent: 0 },
+      { nodes: [{ text: "colors", color: "text-slate-900 font-medium" }, { text: ": {", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "primary", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#7F52FF'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
+      { nodes: [{ text: "background", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#19191C'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
+      { nodes: [{ text: "surface", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#232326'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
+      { nodes: [{ text: "text", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#FFFFFF'", color: "text-green-600" }], indent: 8 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "};", color: "text-slate-600" }], indent: 0 }
+    ]
+  },
+  'Styles.css': {
+    icon: <span className="text-blue-400 text-xs font-black">#</span>,
+    path: ['src', 'styles', 'Styles.css'],
+    code: [
+      { nodes: [{ text: ":root", color: "text-amber-600 font-medium" }, { text: " {", color: "text-slate-600" }], indent: 0 },
+      { nodes: [{ text: "--jb-primary", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "#7F52FF", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "--radius-md", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "12px", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "--spacing-safe", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "24px", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 },
+      { nodes: [], indent: 0 },
+      { nodes: [{ text: ".debug-mode", color: "text-amber-500 font-medium" }, { text: " * {", color: "text-slate-600" }], indent: 0 },
+      { nodes: [{ text: "outline", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "1px dashed ", color: "text-green-600" }, { text: "rgba", color: "text-blue-600" }, { text: "(255,0,0,0.3);", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "background", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "rgba", color: "text-blue-600" }, { text: "(0,255,0,0.05);", color: "text-slate-600" }], indent: 4 },
+      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
+    ]
+  }
+};
 
 export default function Hero() {
   const [heroState, setHeroState] = useState<HeroState>('typing');
+  const [activeTab, setActiveTab] = useState<TabName>('HeroContent.kt');
   const [visibleLines, setVisibleLines] = useState<number>(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const activeFile = FILE_SYSTEM[activeTab];
 
   const skipToSuccess = useCallback(() => {
     setHeroState(prev => {
       if (prev !== 'success') {
-        setVisibleLines(CODE_LINES.length);
+        setVisibleLines(FILE_SYSTEM['HeroContent.kt'].code.length);
         return 'success';
       }
       return prev;
@@ -55,17 +112,24 @@ export default function Hero() {
     
     const typingInterval = setInterval(() => {
       setVisibleLines(prev => {
-        if (prev >= CODE_LINES.length) {
+        if (prev >= FILE_SYSTEM['HeroContent.kt'].code.length) {
           clearInterval(typingInterval);
           setTimeout(() => setHeroState('building'), 300); // Pause before building
-          return CODE_LINES.length;
+          return FILE_SYSTEM['HeroContent.kt'].code.length;
         }
         return prev + 1;
       });
-    }, 250); // ~2.5s total time
+    }, 150); // Speed up typing slightly
     
     return () => clearInterval(typingInterval);
   }, [heroState]);
+
+  // When switching tabs in success state, immediately show all lines
+  useEffect(() => {
+    if (heroState === 'success') {
+      setVisibleLines(activeFile.code.length);
+    }
+  }, [activeTab, heroState, activeFile]);
 
   // Phase 2: Building
   useEffect(() => {
@@ -88,7 +152,27 @@ export default function Hero() {
       <div className="absolute top-1/2 left-[10%] w-64 h-64 bg-cyan-400 rounded-full mix-blend-multiply blur-[80px] opacity-40 animate-[pulse_6s_ease-in-out_infinite] -translate-y-1/2 pointer-events-none"></div>
       <div className="absolute top-1/3 right-[10%] w-64 h-64 bg-purple-400 rounded-full mix-blend-multiply blur-[80px] opacity-40 animate-[pulse_4s_ease-in-out_infinite] -translate-y-1/2 pointer-events-none"></div>
 
-      <div className="mx-auto max-w-7xl w-full flex flex-col-reverse lg:flex-row items-center justify-center gap-8 lg:gap-16 min-h-[85vh] relative z-10">
+      {/* Main Title Section */}
+      <div className="mx-auto max-w-7xl w-full flex flex-col items-center text-center mb-16 relative z-20">
+        <motion.h1 
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.6 }}
+           className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-slate-900 tracking-tight font-sans mb-6"
+        >
+          Miguel <span className="text-purple-600 font-light">//</span> <span className="block sm:inline mt-2 sm:mt-0">Engenheiro Mobile</span>
+        </motion.h1>
+        <motion.p 
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.6, delay: 0.1 }}
+           className="text-lg md:text-xl text-slate-500 max-w-2xl font-medium"
+        >
+          Explora a minha arquitetura. <span className="text-slate-700 font-semibold">Clica nas abas do código</span> para veres a interface a reagir em tempo real no dispositivo.
+        </motion.p>
+      </div>
+
+      <div className="mx-auto max-w-7xl w-full flex flex-col-reverse lg:flex-row items-center justify-center gap-8 lg:gap-16 min-h-[70vh] relative z-10">
         
         {/* === LEFT COLUMN: IDE WINDOW (Hidden on mobile) === */}
         <AnimatePresence mode="popLayout">
@@ -108,104 +192,130 @@ export default function Hero() {
                     <div className="w-[11px] h-[11px] rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
                   </div>
                   
-                  <div className="flex items-center pl-[5rem] w-full gap-0 shadow-none z-10 pt-1">
-                    {/* Active Tab */}
-                    <div className="flex items-center justify-center gap-2 bg-white/95 border border-gray-200/60 border-b-0 rounded-t-[5px] px-4 h-8 relative z-10 shadow-sm before:absolute before:top-0 before:inset-x-0 before:h-[2px] before:bg-blue-500 before:rounded-t-[5px]">
-                      <KotlinIcon className="w-3.5 h-3.5" />
-                      <span className="text-slate-700 text-[11px] font-semibold font-sans">HeroContent.kt</span>
-                      <span className="text-gray-400 hover:text-gray-600 text-[10px] ml-1 cursor-pointer">×</span>
-                    </div>
-                    {/* Inactive Tabs */}
-                    <div className="flex items-center justify-center gap-2 px-4 h-8 bg-transparent relative z-0 hover:bg-black/5 rounded-t-[5px] cursor-default transition-colors">
-                      <ReactIcon className="w-3.5 h-3.5 text-cyan-500" />
-                      <span className="text-gray-500 text-[11px] font-medium font-sans">Theme.tsx</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 px-4 h-8 bg-transparent relative z-0 hover:bg-black/5 rounded-t-[5px] cursor-default transition-colors">
-                      <span className="text-blue-400 text-xs font-black">#</span>
-                      <span className="text-gray-500 text-[11px] font-medium font-sans">Styles.css</span>
-                    </div>
+                  <div className="flex items-center pl-[5rem] w-full gap-0 shadow-none z-10 pt-1 overflow-x-auto no-scrollbar">
+                    {(Object.keys(FILE_SYSTEM) as TabName[]).map(tabName => {
+                      const isActive = activeTab === tabName;
+                      return (
+                        <div 
+                           key={tabName}
+                           onClick={(e) => { e.stopPropagation(); if(heroState === 'success') setActiveTab(tabName); }}
+                           className={`flex items-center justify-center gap-2 px-4 h-8 relative cursor-pointer transition-colors ${
+                              isActive 
+                                ? 'bg-white/95 border border-gray-200/60 border-b-0 rounded-t-[5px] z-10 shadow-sm before:absolute before:top-0 before:inset-x-0 before:h-[2px] before:bg-purple-500 before:rounded-t-[5px]'
+                                : 'bg-transparent z-0 hover:bg-black/5 rounded-t-[5px] text-gray-500'
+                           }`}
+                        >
+                           {FILE_SYSTEM[tabName].icon}
+                           <span className={`${isActive ? 'text-slate-700 font-semibold' : 'text-gray-500 font-medium'} text-[11px] font-sans flex-shrink-0`}>{tabName}</span>
+                           {isActive && <span className="text-gray-400 hover:text-gray-600 text-[10px] ml-1 flex-shrink-0">×</span>}
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
 
                 {/* Breadcrumbs */}
-                <div className="h-6 bg-white/90 border-b border-gray-200/60 px-4 flex items-center text-[10px] text-gray-500 font-sans gap-1 shrink-0">
-                   <span className="hover:text-gray-700 cursor-pointer">src</span>
-                   <ChevronRight className="w-3 h-3" />
-                   <span className="hover:text-gray-700 cursor-pointer">main</span>
-                   <ChevronRight className="w-3 h-3" />
-                   <span className="hover:text-gray-700 cursor-pointer">kotlin</span>
-                   <ChevronRight className="w-3 h-3" />
-                   <span className="text-gray-700">HeroContent.kt</span>
+                <div className="h-6 bg-white/90 border-b border-gray-200/60 px-4 flex items-center text-[10px] text-gray-500 font-sans gap-1 shrink-0 overflow-x-auto no-scrollbar">
+                   {activeFile.path.map((segment, idx) => (
+                      <React.Fragment key={idx}>
+                         {idx > 0 && <ChevronRight className="w-3 h-3 flex-shrink-0" />}
+                         <span className={`${idx === activeFile.path.length - 1 ? 'text-gray-700 font-semibold' : 'hover:text-gray-700 cursor-pointer'} flex-shrink-0`}>
+                            {segment}
+                         </span>
+                      </React.Fragment>
+                   ))}
                 </div>
                 
                 {/* Body Area */}
                 <div className="flex flex-1 overflow-hidden pb-6">
                   {/* File Explorer (Sidebar) */}
-                  <div className="w-48 bg-[#F5F5F5]/80 border-r border-gray-200/50 flex flex-col py-2 px-1 text-gray-600 text-[11px] font-sans shrink-0">
-                    <div className="flex items-center gap-1.5 py-[3px] px-1 rounded hover:bg-gray-200/50 cursor-pointer">
-                      <ChevronDown className="w-3 h-3 text-gray-400" />
-                      <span className="text-blue-400 text-xs shrink-0 font-bold">src</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 py-[3px] px-1 ml-3 rounded hover:bg-gray-200/50 cursor-pointer">
-                      <ChevronDown className="w-3 h-3 text-gray-400" />
-                      <span className="text-blue-400 text-xs shrink-0 font-bold">main</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 py-[3px] px-1 ml-6 rounded hover:bg-gray-200/50 cursor-pointer">
-                      <ChevronDown className="w-3 h-3 text-gray-400" />
-                      <span className="text-blue-400 text-xs shrink-0 font-bold">kotlin</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 py-[3px] px-1 ml-9 rounded hover:bg-gray-200/50 cursor-pointer">
-                      <KotlinIcon className="w-3 h-3 shrink-0 text-gray-500" />
-                      MainActivity.kt
-                    </div>
-                    <div className="flex items-center gap-1.5 py-[3px] px-1 ml-9 rounded bg-[#2979ff]/10 text-blue-700 font-medium cursor-pointer">
-                      <KotlinIcon className="w-3 h-3 shrink-0" />
-                      HeroContent.kt
-                    </div>
-                    <div className="flex items-center gap-1.5 py-[3px] px-1 ml-6 rounded hover:bg-gray-200/50 cursor-pointer mt-1">
-                      <ChevronRight className="w-3 h-3 text-gray-400" />
-                      <span className="text-blue-400 text-xs shrink-0 font-bold">res</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 py-[3px] px-1 ml-3 rounded hover:bg-gray-200/50 cursor-pointer mt-1">
-                      <ChevronRight className="w-3 h-3 text-gray-400" />
-                      <span className="text-gray-400 text-xs shrink-0 font-bold font-mono">.idea</span>
-                    </div>
+                  <div className="w-48 bg-[#F5F5F5]/80 border-r border-gray-200/50 flex flex-col py-2 px-1 text-gray-600 text-[11px] font-sans shrink-0 overflow-y-auto no-scrollbar">
+                     <div className="flex items-center gap-1.5 py-[3px] px-1 rounded hover:bg-gray-200/50 cursor-pointer">
+                        <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                        <span className="text-blue-400 text-xs shrink-0 font-bold">src</span>
+                     </div>
+                     <div className="flex flex-col ml-3">
+                        {/* main/kotlin folder */}
+                        <div className="flex items-center gap-1.5 py-[3px] px-1 rounded hover:bg-gray-200/50 cursor-pointer">
+                           <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                           <span className="text-blue-400 text-xs shrink-0 font-bold">main/kotlin</span>
+                        </div>
+                        <div className="flex flex-col ml-3">
+                           {['MainActivity.kt', 'HeroContent.kt'].map(file => (
+                              <div key={file} onClick={(e) => { e.stopPropagation(); if(heroState === 'success') setActiveTab(file as TabName); }} className={`flex items-center gap-1.5 py-[3px] px-1 rounded cursor-pointer ${activeTab === file ? 'bg-[#2979ff]/10 text-blue-700 font-medium' : 'hover:bg-gray-200/50'}`}>
+                                 <KotlinIcon className={`w-3 h-3 shrink-0 ${activeTab !== file ? 'text-gray-500' : ''}`} />
+                                 {file}
+                              </div>
+                           ))}
+                        </div>
+
+                        {/* theme/styles folders just for show */}
+                        <div className="flex items-center gap-1.5 py-[3px] px-1 rounded hover:bg-gray-200/50 cursor-pointer mt-1">
+                           <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                           <span className="text-blue-400 text-xs shrink-0 font-bold">theme</span>
+                        </div>
+                        <div className="flex flex-col ml-3">
+                           <div onClick={(e) => { e.stopPropagation(); if(heroState === 'success') setActiveTab('Theme.tsx'); }} className={`flex items-center gap-1.5 py-[3px] px-1 rounded cursor-pointer ${activeTab === 'Theme.tsx' ? 'bg-[#2979ff]/10 text-blue-700 font-medium' : 'hover:bg-gray-200/50'}`}>
+                              <ReactIcon className={`w-3 h-3 shrink-0 ${activeTab !== 'Theme.tsx' ? 'text-cyan-600' : 'text-gray-500'}`} />
+                              Theme.tsx
+                           </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 py-[3px] px-1 rounded hover:bg-gray-200/50 cursor-pointer mt-1">
+                           <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                           <span className="text-blue-400 text-xs shrink-0 font-bold">styles</span>
+                        </div>
+                        <div className="flex flex-col ml-3">
+                           <div onClick={(e) => { e.stopPropagation(); if(heroState === 'success') setActiveTab('Styles.css'); }} className={`flex items-center gap-1.5 py-[3px] px-1 rounded cursor-pointer ${activeTab === 'Styles.css' ? 'bg-[#2979ff]/10 text-blue-700 font-medium' : 'hover:bg-gray-200/50'}`}>
+                              <span className={`text-xs font-black shrink-0 ${activeTab === 'Styles.css' ? 'text-blue-700' : 'text-blue-400'}`}>#</span>
+                              Styles.css
+                           </div>
+                        </div>
+                     </div>
                   </div>
 
                   {/* Code Area with per-line layout & Minimap */}
                   <div className="flex flex-1 relative overflow-hidden bg-transparent">
                     {/* Code Container */}
                     <div className="flex-1 min-w-max flex flex-col py-4 overflow-auto no-scrollbar">
-                          {CODE_LINES.map((line, i) => {
-                            const isTypingLine = heroState === 'typing' && i === visibleLines - 1;
-                            const isVisible = i < visibleLines;
-                            return (
-                              <motion.div 
-                                key={i} 
-                                className={`flex items-center w-full px-2 ${isTypingLine ? 'bg-blue-50/50' : ''}`}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: isVisible ? 1 : 0 }}
-                                transition={{ duration: 0.1 }}
-                              >
-                                {/* Line Number */}
-                                <div className="w-8 shrink-0 text-right pr-3 text-gray-400 text-[11px] select-none border-r border-slate-200/50 relative">
-                                  {isTypingLine && (
-                                    <span className="absolute -left-1 top-1/2 -translate-y-1/2 text-[8px] text-[#27C93F]">▶</span>
-                                  )}
-                                  {i + 1}
-                                </div>
-                                {/* Code Content */}
-                                <div className="flex-1 pl-4 whitespace-pre text-[12px] leading-[1.8] font-medium" style={{ paddingLeft: `${line.indent * 0.5 + 1}rem` }}>
-                                  {line.nodes.map((node, j) => (
-                                    <span key={j} className={node.color}>{node.text}</span>
-                                  ))}
-                                  {isTypingLine && (
-                                    <motion.span animate={{opacity: [1,0]}} transition={{repeat: Infinity}} className="inline-block w-1.5 h-3.5 bg-gray-500 translate-y-0.5 ml-0.5"/>
-                                  )}
-                                </div>
-                              </motion.div>
-                            );
-                          })}
+                          <AnimatePresence mode="wait">
+                            <motion.div 
+                              key={activeTab} 
+                              initial={{ opacity: 0, y: 5 }} 
+                              animate={{ opacity: 1, y: 0 }} 
+                              exit={{ opacity: 0, y: -5 }} 
+                              transition={{ duration: 0.2 }}
+                              className="w-full flex-col flex"
+                            >
+                              {activeFile.code.map((line, i) => {
+                                const isTypingLine = heroState === 'typing' && i === visibleLines - 1;
+                                const isVisible = i < visibleLines || heroState === 'success';
+                                return isVisible ? (
+                                  <div 
+                                    key={i} 
+                                    className={`flex items-center w-full px-2 ${isTypingLine ? 'bg-blue-50/50' : 'hover:bg-gray-100/30'}`}
+                                  >
+                                    {/* Line Number */}
+                                    <div className="w-8 shrink-0 text-right pr-3 text-gray-400 text-[11px] select-none border-r border-slate-200/50 relative">
+                                      {isTypingLine && (
+                                        <span className="absolute -left-1 top-1/2 -translate-y-1/2 text-[8px] text-[#27C93F]">▶</span>
+                                      )}
+                                      {i + 1}
+                                    </div>
+                                    {/* Code Content */}
+                                    <div className="flex-1 pl-4 whitespace-pre text-[12px] leading-[1.8] font-medium" style={{ paddingLeft: `${line.indent * 0.5 + 1}rem` }}>
+                                      {line.nodes.map((node, j) => (
+                                        <span key={j} className={node.color}>{node.text}</span>
+                                      ))}
+                                      {isTypingLine && (
+                                        <motion.span animate={{opacity: [1,0]}} transition={{repeat: Infinity}} className="inline-block w-1.5 h-3.5 bg-gray-500 translate-y-0.5 ml-0.5"/>
+                                      )}
+                                    </div>
+                                  </div>
+                                ) : null;
+                              })}
+                            </motion.div>
+                          </AnimatePresence>
                           {heroState === 'typing' && visibleLines === 0 && (
                             <div className="flex items-center w-full px-2 bg-blue-50/50">
                                 <div className="w-8 shrink-0 text-right pr-3 text-gray-400 text-[11px] select-none border-r border-slate-200/50 relative">
@@ -220,15 +330,16 @@ export default function Hero() {
                     </div>
                     {/* Minimap */}
                     <div className="w-10 bg-transparent shrink-0 border-l border-white/20 p-2 flex flex-col gap-[3px] items-end pt-5 hidden sm:flex pointer-events-none">
-                       {CODE_LINES.map((_, i) => {
-                         const widths = [30, 24, 0, 12, 18, 16, 24, 4, 4];
+                       {activeFile.code.map((line, i) => {
+                         const widths = [30, 24, 0, 12, 18, 16, 24, 4, 4, 15, 20, 8];
+                         const hash = activeTab.length + i;
                          return (
                            <motion.div 
-                             key={`mini-${i}`} 
+                             key={`mini-${i}-${activeTab}`} 
                              className="h-[3px] bg-gray-300/60 rounded-sm"
-                             style={{ width: `${widths[i % widths.length]}px` }}
+                             style={{ width: `${widths[hash % widths.length]}px` }}
                              initial={{ opacity: 0.2 }}
-                             animate={{ opacity: i < visibleLines ? 1 : 0.2 }}
+                             animate={{ opacity: i < visibleLines || heroState === 'success' ? 1 : 0.2 }}
                            />
                          );
                        })}
@@ -304,8 +415,8 @@ export default function Hero() {
               {/* Inner screen bounds to clip content but let physical buttons escape */}
               <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden flex flex-col items-center justify-start inner-shadow z-10 w-full h-full bg-[#0E131F]">
                 
-                {/* Background changes to white in success state */}
-                <div className={`absolute inset-0 transition-colors duration-700 ease-in-out pointer-events-none z-0 ${heroState === 'success' ? 'bg-slate-50' : 'bg-transparent'}`}></div>
+                {/* Background changes dynamically */}
+                <div className={`absolute inset-0 transition-colors duration-700 ease-in-out pointer-events-none z-0 ${heroState === 'success' ? (activeTab === 'Theme.tsx' ? 'bg-[#19191C]' : 'bg-slate-50') : 'bg-transparent'}`}></div>
 
                 {/* Emulator Notch */}
                 <div className="absolute top-0 inset-x-0 h-6 bg-slate-900 rounded-b-[18px] w-32 mx-auto z-40 flex items-center justify-center shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
@@ -331,18 +442,18 @@ export default function Hero() {
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="w-full h-14 bg-white shadow-sm flex justify-between items-end px-5 pb-3 z-30 shrink-0 relative"
+                    className={`w-full h-14 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C] border-b border-white/5' : 'bg-white shadow-sm'} flex justify-between items-end px-5 pb-3 z-30 shrink-0 relative transition-colors duration-500`}
                   >
                      <motion.button 
                        whileTap={{ scale: 0.9 }} 
                        onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }} 
-                       className="relative z-50 p-1 -ml-1 rounded-full hover:bg-slate-100"
+                       className={`relative z-50 p-1 -ml-1 rounded-full ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}
                      >
-                       <Menu className="w-5 h-5 text-slate-800" />
+                       <Menu className="w-5 h-5" />
                      </motion.button>
-                     <span className="text-[13px] font-bold text-slate-900 font-sans tracking-tight pt-2">Miguel</span>
-                     <motion.button whileTap={{ scale: 0.9 }} className="p-1 -mr-1 rounded-full hover:bg-slate-100">
-                        <Bell className="w-5 h-5 text-slate-800" />
+                     <span className={`text-[13px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-sans tracking-tight pt-2 transition-colors`}>Miguel</span>
+                     <motion.button whileTap={{ scale: 0.9 }} className={`p-1 -mr-1 rounded-full ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}>
+                        <Bell className="w-5 h-5" />
                      </motion.button>
                   </motion.div>
                 ) : (
@@ -391,7 +502,7 @@ export default function Hero() {
                 </AnimatePresence>
 
                 {/* Emulator Contents - Dynamic container */}
-                <div className={`flex-1 w-full relative flex flex-col justify-start items-center overflow-y-auto no-scrollbar z-10 ${heroState === 'success' ? 'px-4 pt-5 pb-24 space-y-6' : 'pt-10 pb-6 px-5'}`}>
+                <div className={`flex-1 w-full relative flex flex-col justify-start items-center overflow-y-auto no-scrollbar z-10 ${heroState === 'success' ? 'px-4 pt-5 pb-24 space-y-6' : 'pt-10 pb-6 px-5'} ${activeTab === 'Styles.css' && heroState === 'success' ? 'debug-mode' : ''}`}>
                   <AnimatePresence mode="popLayout">
                     
                     {/* Phase 1 & 2: Terminal Log Wait & Build */}
@@ -443,8 +554,8 @@ export default function Hero() {
                           initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.25 }}
                           className="font-sans flex flex-col gap-1 mb-4"
                         >
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-[2px] shadow-sm">
-                             <div className="w-full h-full bg-white rounded-full flex items-center justify-center font-mono text-sm font-black text-slate-800">
+                          <div className={`w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-[2px] shadow-sm`}>
+                             <div className={`w-full h-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] text-white' : 'bg-white text-slate-800'} rounded-full flex items-center justify-center font-mono text-sm font-black transition-colors`}>
                                {`</>`}
                              </div>
                           </div>
@@ -452,10 +563,10 @@ export default function Hero() {
                         
                         <motion.h1 
                           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-                          className="text-[24px] font-extrabold tracking-tight leading-[1.1] mb-3 text-slate-900 font-sans w-full text-left"
+                          className={`text-[24px] font-extrabold tracking-tight leading-[1.1] mb-3 ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-sans w-full text-left transition-colors`}
                         >
                           Construindo software <br />
-                          <span className="text-slate-900 pt-0.5 block">limpo e eficiente.</span>
+                          <span className={`${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} pt-0.5 block transition-colors`}>limpo e eficiente.</span>
                         </motion.h1>
                         
                         {/* Tech Pills */}
@@ -473,28 +584,28 @@ export default function Hero() {
                           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
                           className="grid grid-cols-2 gap-3 w-full mb-4"
                         >
-                          <div className="bg-white border border-slate-100 rounded-xl p-3.5 shadow-sm flex flex-col gap-2">
+                          <div className={`${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10' : 'bg-white border-slate-100'} border rounded-xl p-3.5 shadow-sm flex flex-col gap-2 transition-colors`}>
                              <div className="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
                              </div>
-                             <span className="text-[11px] font-bold text-slate-800 leading-tight">Mobile<br/>First</span>
+                             <span className={`text-[11px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} leading-tight transition-colors`}>Mobile<br/>First</span>
                           </div>
                           
-                          <div className="bg-white border border-slate-100 rounded-xl p-3.5 shadow-sm flex flex-col gap-2">
+                          <div className={`${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10' : 'bg-white border-slate-100'} border rounded-xl p-3.5 shadow-sm flex flex-col gap-2 transition-colors`}>
                              <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                              </div>
-                             <span className="text-[11px] font-bold text-slate-800 leading-tight">Clean<br/>Architecture</span>
+                             <span className={`text-[11px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} leading-tight transition-colors`}>Clean<br/>Architecture</span>
                           </div>
                         </motion.div>
 
                         {/* Filler Content for scroll effect */}
                         <motion.div 
                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-                           className="w-full bg-white border border-slate-100 rounded-xl p-4 shadow-sm"
+                           className={`w-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10' : 'bg-white border-slate-100'} border rounded-xl p-4 shadow-sm transition-colors`}
                         >
-                           <h3 className="text-xs font-bold text-slate-800 mb-2">Sobre Mim</h3>
-                           <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                           <h3 className={`text-xs font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} mb-2 transition-colors`}>Sobre Mim</h3>
+                           <p className={`text-[11px] ${activeTab === 'Theme.tsx' ? 'text-gray-300' : 'text-slate-500'} leading-relaxed font-medium transition-colors`}>
                              Apanhado pelo design de interfaces e arquiteturas nativas. Acredito que o bom software não é apenas funcional, mas também uma excelente experiência.
                            </p>
                         </motion.div>
@@ -508,14 +619,14 @@ export default function Hero() {
                 {heroState === 'success' && (
                   <motion.div 
                     initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}
-                    className="absolute bottom-0 inset-x-0 bg-white/90 backdrop-blur-md border-t border-slate-200/50 p-4 pb-6 flex gap-2.5 z-40"
+                    className={`absolute bottom-0 inset-x-0 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C]/90 border-white/10' : 'bg-white/90 border-slate-200/50'} backdrop-blur-md border-t p-4 pb-6 flex gap-2.5 z-40 transition-colors duration-500`}
                   >
                      <motion.div
                         className="flex-grow w-[70%]"
                         whileTap={{ scale: 0.97 }}
                         onClick={(e) => { e.stopPropagation(); document.getElementById('projetos')?.scrollIntoView({behavior: 'smooth'}) }}
                      >
-                         <button className="w-full flex items-center justify-center bg-slate-900 text-white rounded-xl font-bold text-sm h-12 shadow-md hover:bg-slate-800 transition-colors pointer-events-none relative overflow-hidden group">
+                         <button className={`w-full flex items-center justify-center ${activeTab === 'Theme.tsx' ? 'bg-purple-600 hover:bg-purple-500' : 'bg-slate-900 hover:bg-slate-800'} text-white rounded-xl font-bold text-sm h-12 shadow-md transition-colors pointer-events-none relative overflow-hidden group`}>
                             Ver Projetos
                             <span className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-[0] transition-transform duration-300 rounded-xl pointer-events-none"></span>
                          </button>
@@ -524,10 +635,10 @@ export default function Hero() {
                         href="/cv.pdf"
                         whileTap={{ scale: 0.97 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-[30%] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-xl font-bold text-sm h-12 shadow-sm hover:bg-slate-50 transition-colors overflow-hidden relative group"
+                        className={`w-[30%] flex items-center justify-center ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/10 text-white hover:bg-white/5' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'} border rounded-xl font-bold text-sm h-12 shadow-sm transition-colors overflow-hidden relative group`}
                      >
                         CV
-                        <span className="absolute inset-x-0 bottom-0 h-0.5 bg-slate-200 translate-y-full group-hover:translate-y-0 transition-transform"></span>
+                        <span className={`absolute inset-x-0 bottom-0 h-0.5 ${activeTab === 'Theme.tsx' ? 'bg-white/20' : 'bg-slate-200'} translate-y-full group-hover:translate-y-0 transition-transform`}></span>
                      </motion.a>
                   </motion.div>
                 )}

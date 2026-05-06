@@ -74,3 +74,16 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.debug-mode * {
+  outline: 1px dashed rgba(127, 82, 255, 0.4);
+  background: rgba(127, 82, 255, 0.05);
+}
