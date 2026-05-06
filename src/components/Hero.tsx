@@ -101,14 +101,16 @@ export default function Hero() {
               {/* Fake IDE UI - JetBrains Fleet Light mode */}
               <div className="rounded-xl bg-white/60 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden flex flex-col font-mono text-[13px] h-[480px] w-full">
                 {/* IDE Header */}
-                <div className="h-11 bg-white/40 border-b border-white/30 flex items-center px-4 relative shrink-0">
-                  <div className="flex gap-2 relative z-10 w-20">
-                    <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
-                    <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
-                    <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
+                <div className="h-10 bg-[#E8E8E8]/70 border-b border-gray-300/50 flex items-end px-3 relative shrink-0">
+                  <div className="flex gap-2 relative z-10 w-20 mb-3 ml-1">
+                    <div className="w-[11px] h-[11px] rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
+                    <div className="w-[11px] h-[11px] rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
+                    <div className="w-[11px] h-[11px] rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
                   </div>
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <span className="text-gray-600 text-xs font-semibold font-sans">HeroProfile.kt</span>
+                  {/* Active Tab */}
+                  <div className="flex items-center justify-center gap-2 bg-white/90 border border-gray-200/60 border-b-0 rounded-t-lg px-4 h-8 relative shadow-sm z-10 ml-4 before:absolute before:top-0 before:inset-x-0 before:h-[2px] before:bg-gradient-to-r before:from-purple-500 before:to-cyan-400 before:rounded-t-lg">
+                    <span className="text-slate-700 text-xs font-semibold font-sans">HeroProfile.kt</span>
+                    <span className="text-gray-400 text-[10px]">×</span>
                   </div>
                 </div>
                 
@@ -130,58 +132,95 @@ export default function Hero() {
                     </div>
                   </div>
 
-                  {/* Line Numbers + Code */}
-                  <div className="flex flex-1 overflow-x-auto bg-transparent">
-                    <div className="w-12 border-r border-transparent flex flex-col items-end py-4 pr-3 text-gray-300 text-xs select-none shrink-0 border-r-slate-200/50">
-                      {Array.from({ length: 15 }).map((_, i) => (
-                        <div key={i} className="leading-[1.9]">{i + 1}</div>
-                      ))}
-                    </div>
-                    
-                    {/* Coding Area */}
-                    <div className="flex-1 p-4 bg-transparent min-w-max">
-                          {CODE_LINES.map((line, i) => (
-                            <motion.div 
-                              key={i} 
-                              className="whitespace-pre leading-[1.9]"
-                              style={{ paddingLeft: `${line.indent * 0.5}rem` }}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: i < visibleLines ? 1 : 0 }}
-                              transition={{ duration: 0.1 }}
-                            >
-                              {line.nodes.map((node, j) => (
-                                <span key={j} className={node.color}>{node.text}</span>
-                              ))}
-                              {heroState === 'typing' && i === visibleLines - 1 && (
-                                <motion.span animate={{opacity: [1,0]}} transition={{repeat: Infinity}} className="inline-block w-1.5 h-4 bg-gray-400 translate-y-0.5 ml-0.5"/>
-                              )}
-                            </motion.div>
-                          ))}
+                  {/* Code Area with per-line layout & Minimap */}
+                  <div className="flex flex-1 relative overflow-hidden bg-transparent">
+                    {/* Code Container */}
+                    <div className="flex-1 min-w-max flex flex-col py-4 overflow-auto no-scrollbar">
+                          {CODE_LINES.map((line, i) => {
+                            const isTypingLine = heroState === 'typing' && i === visibleLines - 1;
+                            const isVisible = i < visibleLines;
+                            return (
+                              <motion.div 
+                                key={i} 
+                                className={`flex items-center w-full px-2 ${isTypingLine ? 'bg-blue-50/50' : ''}`}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: isVisible ? 1 : 0 }}
+                                transition={{ duration: 0.1 }}
+                              >
+                                {/* Line Number */}
+                                <div className="w-8 shrink-0 text-right pr-3 text-gray-400 text-[11px] select-none border-r border-slate-200/50 relative">
+                                  {isTypingLine && (
+                                    <span className="absolute -left-1 top-1/2 -translate-y-1/2 text-[8px] text-[#27C93F]">▶</span>
+                                  )}
+                                  {i + 1}
+                                </div>
+                                {/* Code Content */}
+                                <div className="flex-1 pl-4 whitespace-pre text-[12px] leading-[1.8] font-medium" style={{ paddingLeft: `${line.indent * 0.5 + 1}rem` }}>
+                                  {line.nodes.map((node, j) => (
+                                    <span key={j} className={node.color}>{node.text}</span>
+                                  ))}
+                                  {isTypingLine && (
+                                    <motion.span animate={{opacity: [1,0]}} transition={{repeat: Infinity}} className="inline-block w-1.5 h-3.5 bg-gray-500 translate-y-0.5 ml-0.5"/>
+                                  )}
+                                </div>
+                              </motion.div>
+                            );
+                          })}
                           {heroState === 'typing' && visibleLines === 0 && (
-                            <motion.span animate={{opacity: [1,0]}} transition={{repeat: Infinity}} className="inline-block w-1.5 h-4 bg-gray-400 translate-y-0.5 ml-0.5"/>
+                            <div className="flex items-center w-full px-2 bg-blue-50/50">
+                                <div className="w-8 shrink-0 text-right pr-3 text-gray-400 text-[11px] select-none border-r border-slate-200/50 relative">
+                                    <span className="absolute -left-1 top-1/2 -translate-y-1/2 text-[8px] text-[#27C93F]">▶</span>
+                                    1
+                                </div>
+                                <div className="flex-1 pl-4 whitespace-pre text-[12px] leading-[1.8]">
+                                    <motion.span animate={{opacity: [1,0]}} transition={{repeat: Infinity}} className="inline-block w-1.5 h-3.5 bg-gray-500 translate-y-0.5 ml-0.5"/>
+                                </div>
+                            </div>
                           )}
+                    </div>
+                    {/* Minimap */}
+                    <div className="w-10 bg-transparent shrink-0 border-l border-white/20 p-2 flex flex-col gap-[3px] items-end pt-5 hidden sm:flex pointer-events-none">
+                       {CODE_LINES.map((_, i) => {
+                         const widths = [12, 18, 30, 48, 40, 36, 16, 4, 4, 4];
+                         return (
+                           <motion.div 
+                             key={`mini-${i}`} 
+                             className="h-[3px] bg-gray-300/60 rounded-sm"
+                             style={{ width: `${widths[i % widths.length]}px` }}
+                             initial={{ opacity: 0.2 }}
+                             animate={{ opacity: i < visibleLines ? 1 : 0.2 }}
+                           />
+                         );
+                       })}
                     </div>
                   </div>
                 </div>
 
-                {/* Terminal Bottom */}
-                <div className="h-12 bg-gray-100/50 border-t border-gray-200/50 p-2 px-4 flex flex-col justify-center text-[11px] font-mono shrink-0 relative overflow-hidden">
-                  {heroState === 'building' && (
-                     <motion.div className="flex flex-col gap-0.5 text-gray-500" initial={{opacity:0}} animate={{opacity:1}}>
-                        <span>{'>'} Task :app:compileDebugKotlin <span className="text-gray-400 pl-2">EXECUTING</span></span>
-                        <span>{'>'} Task :app:assembleDebug <span className="text-gray-400 pl-2">EXECUTING</span></span>
-                     </motion.div>
-                  )}
-                  {heroState === 'success' && (
-                     <motion.div className="flex flex-col gap-0.5 text-[#27C93F]" initial={{opacity:0}} animate={{opacity:1}}>
-                        <span className="font-semibold">BUILD SUCCESSFUL in 1s. 23 actionable tasks...</span>
-                     </motion.div>
-                  )}
-                  {heroState === 'typing' && (
-                     <div className="text-gray-400">
-                        <span>Terminal: Ready</span>
-                     </div>
-                  )}
+                {/* Animated Terminal Bottom */}
+                <div className="h-16 bg-gray-50/90 backdrop-blur-sm border-t border-gray-200/50 p-2 px-4 flex flex-col justify-start text-[10px] font-mono shrink-0 relative overflow-hidden">
+                  <AnimatePresence mode="popLayout">
+                    {heroState === 'typing' && (
+                       <motion.div key="typing" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="flex flex-col gap-0.5 text-gray-400 mt-1">
+                          <motion.span animate={{opacity: [0.5, 1, 0.5]}} transition={{repeat: Infinity, duration: 1.5}}>Terminal: Waiting for changes...</motion.span>
+                       </motion.div>
+                    )}
+                    {heroState === 'building' && (
+                       <motion.div key="building" className="flex flex-col text-gray-600 gap-0.5 relative pt-1" initial={{opacity:0}} animate={{opacity:1}}>
+                          <motion.div animate={{y: [0, -32]}} transition={{duration: 2, ease: "linear"}} className="flex flex-col gap-0.5">
+                            <div><span className="text-blue-500">{'>'}</span> Resolving dependencies...</div>
+                            <div><span className="text-blue-500">{'>'}</span> Compiling Kotlin...</div>
+                            <div><span className="text-blue-500">{'>'}</span> Task :app:compileDebugKotlin <span className="text-orange-400 font-bold ml-1">EXECUTING</span></div>
+                            <div><span className="text-blue-500">{'>'}</span> Task :app:assembleDebug <span className="text-orange-400 font-bold ml-1">EXECUTING</span></div>
+                            <div className="text-gray-400 font-sans mt-0.5">17 warnings found</div>
+                          </motion.div>
+                       </motion.div>
+                    )}
+                    {heroState === 'success' && (
+                       <motion.div key="success" className="flex flex-col gap-0.5 text-[#27C93F] mt-1" initial={{opacity:0}} animate={{opacity:1}}>
+                          <span className="font-semibold text-[11px]">BUILD SUCCESSFUL in 1s. 23 actionable tasks.</span>
+                       </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </motion.div>
@@ -200,39 +239,53 @@ export default function Hero() {
               transition={{ type: "spring", stiffness: 80, damping: 20 }}
             >
               {/* Inner screen bounds to clip content but let physical buttons escape */}
-              <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden flex flex-col items-center justify-start inner-shadow z-10 w-full h-full">
+              <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden flex flex-col items-center justify-start inner-shadow z-10 w-full h-full bg-[#0E131F]">
                 
+                {/* Background changes to white in success state */}
                 <div className={`absolute inset-0 transition-colors duration-700 ease-in-out pointer-events-none z-0 ${heroState === 'success' ? 'bg-slate-50' : 'bg-transparent'}`}></div>
 
-                {/* Emulador Notch */}
-                <div className="absolute top-0 inset-x-0 h-6 bg-slate-900 rounded-b-[18px] w-32 mx-auto z-40 flex items-center justify-center pointer-events-none shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+                {/* Emulator Notch */}
+                <div className="absolute top-0 inset-x-0 h-6 bg-slate-900 rounded-b-[18px] w-32 mx-auto z-40 flex items-center justify-center shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
                    <div className="w-[10px] h-[10px] rounded-full bg-[#0E131F] border border-slate-700 relative overflow-hidden flex items-center justify-center">
                       <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
                    </div>
                 </div>
 
-                {/* Flash Effect na fase de success */}
+                {/* Flash Effect on success */}
                 {heroState === 'success' && (
                   <motion.div 
                     key="flash-effect"
-                    className="absolute inset-0 border-[6px] border-[#3DDC84] z-50 rounded-[2rem] pointer-events-none mix-blend-screen"
+                    className="absolute inset-0 bg-white z-50 rounded-[2.5rem] pointer-events-none"
                     initial={{ opacity: 1 }}
                     animate={{ opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                   />
                 )}
 
-                {/* Android Status Bar */}
-                <div className={`w-full flex justify-between items-center px-6 pt-2 pb-1 text-[10px] font-semibold absolute top-0 left-0 z-30 transition-colors duration-500 pointer-events-none ${heroState === 'success' ? 'text-slate-800' : 'text-slate-400'}`}>
-                   <span>12:00</span>
-                   <div className="flex gap-1.5 items-center">
-                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21L15.6 16.2C14.6 15.4 13.4 15 12 15C10.6 15 9.4 15.4 8.4 16.2L12 21ZM12 3C7.95 3 4.21 4.34 1.2 6.6L3 9C5.5 7.12 8.62 6 12 6C15.38 6 18.5 7.12 21 9L22.8 6.6C19.79 4.34 16.05 3 12 3Z"/></svg>
-                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2H10V4H8.33C7.6 4 7 4.6 7 5.33V20.67C7 21.4 7.6 22 8.33 22H15.67C16.4 22 17 21.4 17 20.67V5.33C17 4.6 16.4 4 15.67 4Z"/></svg>
-                   </div>
-                </div>
+                {/* Android Top App Bar / Status Bar */}
+                {heroState === 'success' ? (
+                  <motion.div 
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="w-full h-14 bg-white shadow-sm flex justify-between items-end px-5 pb-3 z-30 shrink-0 relative"
+                  >
+                     <svg className="w-5 h-5 text-slate-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                     <span className="text-[13px] font-bold text-slate-900 font-sans tracking-tight pt-2">Miguel</span>
+                     <svg className="w-5 h-5 text-slate-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </motion.div>
+                ) : (
+                  <div className="w-full flex justify-between items-center px-6 pt-2 pb-1 text-[10px] font-semibold absolute top-0 left-0 z-30 text-slate-400 pointer-events-none">
+                     <span>12:00</span>
+                     <div className="flex gap-1.5 items-center">
+                       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21L15.6 16.2C14.6 15.4 13.4 15 12 15C10.6 15 9.4 15.4 8.4 16.2L12 21ZM12 3C7.95 3 4.21 4.34 1.2 6.6L3 9C5.5 7.12 8.62 6 12 6C15.38 6 18.5 7.12 21 9L22.8 6.6C19.79 4.34 16.05 3 12 3Z"/></svg>
+                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2H10V4H8.33C7.6 4 7 4.6 7 5.33V20.67C7 21.4 7.6 22 8.33 22H15.67C16.4 22 17 21.4 17 20.67V5.33C17 4.6 16.4 4 15.67 4Z"/></svg>
+                     </div>
+                  </div>
+                )}
 
-                {/* Emulador Contents */}
-                <div className="flex-1 w-full relative pt-10 pb-6 px-5 flex flex-col justify-start items-center overflow-y-auto no-scrollbar z-10">
+                {/* Emulator Contents - Dynamic container */}
+                <div className={`flex-1 w-full relative flex flex-col justify-start items-center overflow-y-auto no-scrollbar z-10 ${heroState === 'success' ? 'px-4 pt-5 pb-24 space-y-6' : 'pt-10 pb-6 px-5'}`}>
                   <AnimatePresence mode="popLayout">
                     
                     {/* Phase 1 & 2: Terminal Log Wait & Build */}
@@ -270,87 +323,108 @@ export default function Hero() {
                       </motion.div>
                     )}
 
-                    {/* Phase 3: The UAU Moment Content */}
+                    {/* Phase 3: The UAU Moment Content (Native App Experience) */}
                     {heroState === 'success' && (
                       <motion.div 
                         key="emu-success"
-                        className="w-full flex flex-col items-center justify-start h-full pt-4 px-1"
-                        initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        transition={{ delay: 0.15, duration: 0.6, ease: "easeOut" }}
+                        className="w-full flex flex-col items-start justify-start"
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ delay: 0.15, duration: 0.5, ease: "easeOut" }}
                       >
                         {/* Avatar/Tag */}
                         <motion.div 
-                          initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
-                          className="self-start mb-6 font-sans flex flex-col gap-1"
+                          initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.25 }}
+                          className="font-sans flex flex-col gap-1 mb-4"
                         >
-                          <div className="flex items-center gap-3">
-                             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-[2px] shadow-sm">
-                               <div className="w-full h-full bg-white rounded-full flex items-center justify-center font-mono text-[11px] font-black text-slate-800">
-                                 {`</>`}
-                               </div>
-                             </div>
-                             <div className="flex flex-col">
-                               <span className="text-xs font-bold text-slate-900 leading-tight">Miguel</span>
-                               <span className="text-[10px] font-bold text-purple-600 leading-tight">Engenheiro de Software</span>
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 via-pink-500 to-cyan-400 p-[2px] shadow-sm">
+                             <div className="w-full h-full bg-white rounded-full flex items-center justify-center font-mono text-sm font-black text-slate-800">
+                               {`</>`}
                              </div>
                           </div>
                         </motion.div>
                         
                         <motion.h1 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                          className="text-[26px] font-extrabold tracking-tight leading-[1.05] mb-4 text-slate-900 font-sans w-full text-left"
+                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+                          className="text-[24px] font-extrabold tracking-tight leading-[1.1] mb-3 text-slate-900 font-sans w-full text-left"
                         >
                           Construindo software <br />
-                          <span className="text-slate-900 pt-1 block">limpo e eficiente.</span>
+                          <span className="text-slate-900 pt-0.5 block">limpo e eficiente.</span>
                         </motion.h1>
-                        
-                        <motion.p 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-                          className="text-[13px] text-slate-500 mb-6 w-full text-left font-sans leading-relaxed"
-                        >
-                          Focado em criar experiências mobile incríveis com Kotlin, Android Nativo e Arquiteturas Escaláveis.
-                        </motion.p>
                         
                         {/* Tech Pills */}
                         <motion.div 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}
-                          className="flex gap-2 flex-wrap mb-8 w-full"
+                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                          className="flex gap-2 flex-wrap mb-5 w-full"
                         >
-                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 text-[10px] font-bold rounded-md flex items-center gap-1.5">Kotlin</span>
-                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 text-[10px] font-bold rounded-md flex items-center gap-1.5">Android</span>
-                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 text-[10px] font-bold rounded-md flex items-center gap-1.5">React</span>
+                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 border border-purple-100 text-[10px] font-bold rounded-lg flex items-center shadow-sm">Kotlin</span>
+                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 border border-purple-100 text-[10px] font-bold rounded-lg flex items-center shadow-sm">Android</span>
+                          <span className="px-2.5 py-1.5 bg-purple-50 text-purple-700 border border-purple-100 text-[10px] font-bold rounded-lg flex items-center shadow-sm">React</span>
                         </motion.div>
 
+                        {/* Bento Box Stats */}
                         <motion.div 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
-                          className="flex flex-col w-full gap-3 mt-auto font-sans pb-4"
+                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
+                          className="grid grid-cols-2 gap-3 w-full mb-4"
                         >
-                          <motion.a
-                            href="#projetos"
-                            whileTap={{ scale: 0.97 }}
-                            onClick={(e) => e.stopPropagation()} // Prevent skip trigger on interaction
-                            className="flex w-full items-center justify-center px-6 py-4 bg-slate-900 text-white rounded-xl font-semibold text-sm hover:bg-slate-800 transition-colors shadow-xl"
-                          >
-                            Ver Projetos
-                          </motion.a>
-                          <motion.a
-                            href="/cv.pdf"
-                            whileTap={{ scale: 0.97 }}
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex w-full items-center justify-center gap-2 px-6 py-4 bg-white border border-slate-200 text-slate-700 rounded-xl font-semibold text-sm hover:bg-slate-50 transition-colors shadow-sm"
-                          >
-                            <Download className="h-4 w-4" />
-                            Download CV
-                          </motion.a>
+                          <div className="bg-white border border-slate-100 rounded-xl p-3.5 shadow-sm flex flex-col gap-2">
+                             <div className="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
+                               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                             </div>
+                             <span className="text-[11px] font-bold text-slate-800 leading-tight">Mobile<br/>First</span>
+                          </div>
+                          
+                          <div className="bg-white border border-slate-100 rounded-xl p-3.5 shadow-sm flex flex-col gap-2">
+                             <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
+                               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                             </div>
+                             <span className="text-[11px] font-bold text-slate-800 leading-tight">Clean<br/>Architecture</span>
+                          </div>
                         </motion.div>
+
+                        {/* Filler Content for scroll effect */}
+                        <motion.div 
+                           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+                           className="w-full bg-white border border-slate-100 rounded-xl p-4 shadow-sm"
+                        >
+                           <h3 className="text-xs font-bold text-slate-800 mb-2">Sobre Mim</h3>
+                           <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                             Apanhado pelo design de interfaces e arquiteturas nativas. Acredito que o bom software não é apenas funcional, mas também uma excelente experiência.
+                           </p>
+                        </motion.div>
+
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                {/* Emulador Home Indicator */}
-                <div className="absolute bottom-2 inset-x-0 mx-auto w-24 h-1.5 bg-slate-300 rounded-full z-40 pointer-events-none"></div>
+                {/* Sticky Bottom Action Bar during success */}
+                {heroState === 'success' && (
+                  <motion.div 
+                    initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}
+                    className="absolute bottom-0 inset-x-0 bg-white/90 backdrop-blur-md border-t border-slate-200/50 p-4 pb-6 flex gap-2.5 z-40"
+                  >
+                     <motion.a
+                        href="#projetos"
+                        whileTap={{ scale: 0.97 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex-grow flex items-center justify-center bg-slate-900 text-white rounded-xl font-bold text-sm h-12 shadow-md hover:bg-slate-800 transition-colors"
+                     >
+                        Ver Projetos
+                     </motion.a>
+                     <motion.a
+                        href="/cv.pdf"
+                        whileTap={{ scale: 0.97 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-[30%] flex items-center justify-center bg-white border border-slate-200 text-slate-700 rounded-xl font-bold text-sm h-12 shadow-sm hover:bg-slate-50 transition-colors"
+                     >
+                        CV
+                     </motion.a>
+                  </motion.div>
+                )}
+
+                {/* Emulador Home Indicator (always bottom) */}
+                <div className="absolute bottom-2 inset-x-0 mx-auto w-24 h-1.5 bg-slate-300 rounded-full z-50 pointer-events-none drop-shadow-sm"></div>
 
               </div>
 
