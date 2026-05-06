@@ -1,15 +1,41 @@
 import { motion, useInView, useScroll, useSpring, useTransform } from 'motion/react';
 import React, { useRef } from 'react';
-import { KotlinIcon, AndroidIcon, JavaIcon, ReactIcon, ViteIcon, PostgresIcon, DockerIcon } from './Icons';
+import { 
+  KotlinIcon, AndroidIcon, JavaIcon, ReactIcon, ViteIcon, PostgresIcon, 
+  TailwindIcon, VSCodeIcon, GitIcon, IntelliJIcon, JetpackComposeIcon, AndroidStudioIcon 
+} from './Icons';
 
-const skills = [
-  { name: 'Kotlin', icon: KotlinIcon, hoverColor: 'group-hover:text-[#7F52FF]' },
-  { name: 'Android', icon: AndroidIcon, hoverColor: 'group-hover:text-[#3DDC84]' },
-  { name: 'Java', icon: JavaIcon, hoverColor: 'group-hover:text-[#f89820]' },
-  { name: 'React', icon: ReactIcon, hoverColor: 'group-hover:text-[#61DAFB]' },
-  { name: 'Vite', icon: ViteIcon, hoverColor: 'group-hover:text-[#646CFF]' },
-  { name: 'PostgreSQL', icon: PostgresIcon, hoverColor: 'group-hover:text-[#336791]' },
-  { name: 'Docker', icon: DockerIcon, hoverColor: 'group-hover:text-[#2496ED]' },
+const skillCategories = [
+  {
+    id: 'mobile',
+    title: 'ECOSSISTEMA MOBILE',
+    items: [
+      { name: 'Kotlin', icon: KotlinIcon, hoverColor: 'group-hover:text-[#7F52FF]', hoverBg: 'group-hover:bg-[#7F52FF]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#7F52FF]/30' },
+      { name: 'Jetpack Compose', icon: JetpackComposeIcon, hoverColor: 'group-hover:text-[#4285F4]', hoverBg: 'group-hover:bg-[#4285F4]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#4285F4]/30' },
+      { name: 'Android SDK', icon: AndroidIcon, hoverColor: 'group-hover:text-[#3DDC84]', hoverBg: 'group-hover:bg-[#3DDC84]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#3DDC84]/30' },
+      { name: 'Java', icon: JavaIcon, hoverColor: 'group-hover:text-[#f89820]', hoverBg: 'group-hover:bg-[#f89820]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#f89820]/30' },
+    ]
+  },
+  {
+    id: 'tools',
+    title: 'FERRAMENTAS & IDES',
+    items: [
+      { name: 'Android Studio', icon: AndroidStudioIcon, hoverColor: 'group-hover:text-[#3DDC84]', hoverBg: 'group-hover:bg-[#3DDC84]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#3DDC84]/30' },
+      { name: 'IntelliJ IDEA', icon: IntelliJIcon, hoverColor: 'group-hover:text-[#FE2857]', hoverBg: 'group-hover:bg-[#FE2857]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#FE2857]/30' },
+      { name: 'VS Code', icon: VSCodeIcon, hoverColor: 'group-hover:text-[#007ACC]', hoverBg: 'group-hover:bg-[#007ACC]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#007ACC]/30' },
+      { name: 'Git / GitHub', icon: GitIcon, hoverColor: 'group-hover:text-[#F05032]', hoverBg: 'group-hover:bg-[#F05032]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#F05032]/30' },
+    ]
+  },
+  {
+    id: 'web',
+    title: 'WEB & BACKEND',
+    items: [
+      { name: 'React', icon: ReactIcon, hoverColor: 'group-hover:text-[#61DAFB]', hoverBg: 'group-hover:bg-[#61DAFB]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#61DAFB]/30' },
+      { name: 'Vite', icon: ViteIcon, hoverColor: 'group-hover:text-[#646CFF]', hoverBg: 'group-hover:bg-[#646CFF]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#646CFF]/30' },
+      { name: 'Tailwind CSS', icon: TailwindIcon, hoverColor: 'group-hover:text-[#06B6D4]', hoverBg: 'group-hover:bg-[#06B6D4]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#06B6D4]/30' },
+      { name: 'PostgreSQL', icon: PostgresIcon, hoverColor: 'group-hover:text-[#336791]', hoverBg: 'group-hover:bg-[#336791]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#336791]/30' },
+    ]
+  }
 ];
 
 const timeline = [
@@ -158,25 +184,40 @@ export default function Skills() {
           01 // Tech Stack
         </h2>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
-          {skills.map((skill, index) => {
-            const Icon = skill.icon;
-            return (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                key={skill.name}
-                className={`group flex items-center gap-4 bg-white p-4 rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] transition-all duration-300 relative overflow-hidden cursor-default`}
-              >
-                <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-100 group-hover:bg-white group-hover:border-transparent group-hover:shadow-[0_4px_10px_rgba(0,0,0,0.05)] transition-all duration-300 z-10">
-                  <Icon className={`w-6 h-6 text-slate-400 transition-colors duration-300 ${skill.hoverColor}`} />
-                </div>
-                <span className="font-bold text-slate-600 group-hover:text-jb-dark transition-colors duration-300 z-10">{skill.name}</span>
-              </motion.div>
-            );
-          })}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {skillCategories.map((category, catIndex) => (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: catIndex * 0.15, ease: "easeOut" }}
+              key={category.id}
+              className="bg-white/80 backdrop-blur-sm border border-slate-100 rounded-2xl p-5 sm:p-6 shadow-sm"
+            >
+              <span className="text-xs sm:text-sm font-mono text-slate-500 mb-6 block font-bold tracking-tight">
+                /// {category.title}
+              </span>
+              
+              <div className="flex flex-wrap gap-3">
+                {category.items.map((skill) => {
+                  const Icon = skill.icon;
+                  return (
+                    <div
+                      key={skill.name}
+                      className={`group flex items-center gap-2.5 bg-slate-50 border border-slate-100 px-4 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden cursor-default ${skill.hoverBg} ${skill.hoverRing}`}
+                    >
+                      <div className="flex items-center justify-center transition-all duration-300 z-10 shrink-0">
+                        <Icon className={`w-5 h-5 text-slate-400 transition-colors duration-300 ${skill.hoverColor}`} />
+                      </div>
+                      <span className="font-medium text-sm text-slate-700 group-hover:text-slate-900 transition-colors duration-300 z-10 font-sans tracking-tight">
+                        {skill.name}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
 
