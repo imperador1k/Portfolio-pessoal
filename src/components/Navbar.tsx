@@ -1,77 +1,187 @@
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect, useRef } from 'react';
+import { Github, Linkedin, Download } from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
 
 const navLinks = [
-  { name: 'Sobre', href: '#sobre' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Projetos', href: '#projetos' },
-  { name: 'Certificações', href: '#certificacoes' },
-  { name: 'Contactos', href: '#contactos' },
+  { name: 'Sobre', href: '#sobre', id: 'sobre' },
+  { name: 'Skills', href: '#skills', id: 'skills' },
+  { name: 'Projetos', href: '#projetos', id: 'projetos' },
+  { name: 'Contactos', href: '#contactos', id: 'contactos' },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (isOpen) return; // Prevent hiding when mobile menu is open
+    const previous = scrollY.getPrevious() ?? 0;
+    if (latest > previous && latest > 100) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" });
+    
+    document.querySelectorAll('section[id]').forEach((section) => observer.observe(section));
+    
+    return () => observer.disconnect();
+  }, []);
+
+  const menuVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    },
+    exit: { opacity: 0, transition: { staggerChildren: 0.05, staggerDirection: -1 } }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+    exit: { opacity: 0, y: -10, transition: { duration: 0.2 } }
+  };
 
   return (
-    <nav className="h-16 flex items-center justify-between px-6 lg:px-10 border-b border-slate-200/50 bg-white/70 backdrop-blur-xl sticky top-0 z-50 shadow-[0_4px_30px_rgba(0,0,0,0.02)]">
-      <div className="font-mono font-bold text-base md:text-lg text-slate-800 cursor-default">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-jb-primary to-cyan-500">Miguel</span> <span className="hidden sm:inline-block text-slate-400 font-medium">// Engenharia Informática</span>
-      </div>
-
-      <div className="hidden md:flex gap-8 text-[13px] font-bold text-slate-500 font-mono tracking-wide uppercase">
-        {navLinks.map((item) => (
-          <a
-            key={item.name}
-            href={item.href}
-            className="relative group transition-colors focus:outline-none hover:text-slate-900"
-          >
-            <span>{item.name}</span>
-            <span className="absolute -bottom-1.5 left-0 w-0 h-[2px] rounded-full bg-gradient-to-r from-jb-primary to-cyan-500 group-hover:w-full transition-all duration-300 ease-out"></span>
+    <>
+      <motion.header
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: "-150%" }
+        }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className="fixed z-50 left-0 right-0 top-0 md:top-6 sm:px-6 pointer-events-none flex justify-center"
+      >
+        <div className={`pointer-events-auto bg-white/70 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.03)] border-b border-gray-100/50 md:border md:rounded-full w-full md:w-auto flex items-center justify-between px-5 py-3 md:py-3.5 gap-8 lg:gap-16 transition-all duration-300 ${isOpen ? 'bg-transparent border-transparent shadow-none backdrop-blur-none' : ''}`}>
+          
+          {/* Logo (Terminal Aesthetic) */}
+          <a href="#" className="font-mono font-bold text-[17px] text-slate-800 flex items-center gap-0.5 z-50">
+            <span className="text-jb-primary font-medium">~/</span>
+            miguel
+            <span className="text-jb-primary font-medium w-3 md:w-auto">_</span>
           </a>
-        ))}
-      </div>
 
-      {/* Mobile menu trigger */}
-      <div className="flex md:hidden">
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-slate-700 hover:text-jb-primary transition-colors"
-        >
-          <span className="sr-only">Toggle main menu</span>
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
+          {/* Desktop Navigation (Sliding Pill) */}
+          <ul className="hidden md:flex items-center relative z-50">
+            {navLinks.map((item, index) => {
+              const isActive = activeSection === item.id;
+              return (
+                <li
+                  key={item.name} 
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="relative px-4 py-2"
+                >
+                  {hoveredIndex === index && (
+                    <motion.div
+                      layoutId="navHover"
+                      className="absolute inset-0 bg-slate-100 rounded-full cursor-pointer"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                    />
+                  )}
+                  <a 
+                    href={item.href}
+                    className={`relative z-10 font-sans text-[14px] transition-colors duration-300 ${isActive ? 'text-jb-primary font-semibold' : 'text-slate-600 font-medium hover:text-slate-900'}`}
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+
+          {/* Call to Action & Hamburger */}
+          <div className="flex items-center gap-4 z-50">
+            <a href="#contactos" className="hidden sm:flex items-center justify-center px-6 py-2.5 relative rounded-full group outline-none overflow-hidden hover:scale-[1.02] active:scale-[0.98] transition-transform">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-jb-primary to-cyan-500 opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-[1.5px] rounded-full bg-white group-hover:bg-jb-primary/10 transition-colors duration-300"></div>
+              <span className="relative font-bold text-jb-primary text-[13px] tracking-wide">Vamos Falar</span>
+            </a>
+
+            {/* Mobile Hamburger to X */}
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className="md:hidden relative flex flex-col justify-center items-center w-8 h-8 focus:outline-none z-50 -mr-1"
+              aria-label="Toggle Menu"
+            >
+              <motion.span 
+                animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 0 : -6 }} 
+                className="absolute w-6 h-[2.5px] bg-slate-800 rounded-full origin-center" 
+                transition={{ duration: 0.3 }}
+              />
+              <motion.span 
+                animate={{ opacity: isOpen ? 0 : 1 }} 
+                className="absolute w-6 h-[2.5px] bg-slate-800 rounded-full"
+                transition={{ duration: 0.3 }}
+              />
+              <motion.span 
+                animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? 0 : 6 }} 
+                className="absolute w-6 h-[2.5px] bg-slate-800 rounded-full origin-center"
+                transition={{ duration: 0.3 }}
+              />
+            </button>
+          </div>
+        </div>
+      </motion.header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-            className="absolute top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white/95 backdrop-blur-3xl overflow-hidden flex flex-col md:hidden z-40"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={menuVariants}
+            className="fixed inset-0 bg-white/95 backdrop-blur-xl z-40 flex flex-col pt-24 px-8 pb-10 overflow-y-auto md:hidden"
           >
-            <div className="px-6 py-6 flex flex-col gap-5 font-mono text-base font-bold text-slate-700 h-full justify-center">
+            <div className="flex flex-col gap-6 mt-8">
               {navLinks.map((item, i) => (
                 <motion.a
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  variants={itemVariants}
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="block py-4 border-b border-slate-100/50 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-jb-primary hover:to-cyan-500 transition-all uppercase tracking-wider"
+                  className="text-3xl font-bold text-slate-800 flex items-center gap-4"
                 >
-                  <span className="text-jb-primary mr-3 text-xs opacity-50">0{i+1}</span>
+                  <span className="text-jb-primary/50 text-sm font-mono mt-1">0{i+1}</span>
                   {item.name}
                 </motion.a>
               ))}
             </div>
+
+            <motion.div variants={itemVariants} className="mt-auto pt-16 flex flex-col gap-5">
+              <div className="flex gap-4">
+                <a href="#" className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
+                  <Github className="w-5 h-5" />
+                </a>
+                <a href="#" className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+              
+              <a href="#" className="w-full flex items-center justify-center gap-2.5 py-4 bg-jb-secondary/10 border border-jb-primary/20 text-jb-primary font-bold rounded-2xl active:bg-jb-primary/20 transition-colors">
+                <Download className="w-5 h-5" />
+                <span>Download CV</span>
+              </a>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 }

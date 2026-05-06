@@ -1,211 +1,343 @@
-import { ArrowRight, ChevronRight, FileCode2, LayoutGrid, Terminal } from 'lucide-react';
-import { motion } from 'motion/react';
+import { useState, useEffect, useCallback } from 'react';
+import { ArrowRight, Download, Terminal, ChevronRight, LayoutGrid, FileCode2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { KotlinIcon, AndroidIcon } from './Icons';
 
+type HeroState = 'typing' | 'building' | 'success';
+
+const CODE_LINES = [
+  { text: "@Composable", color: "text-[#CC7832]", indent: 0 },
+  { text: "fun HeroProfile() {", color: "text-[#FFC66D]", indent: 0 },
+  { text: "Column(modifier = Modifier.fillMaxSize()) {", color: "text-slate-800", indent: 4 },
+  { text: "Text(text = \"Construindo software\", style = Typography.h1)", color: "text-slate-800", indent: 8 },
+  { text: "Text(text = \"limpo e eficiente.\", color = JetBrainsPrimary)", color: "text-[#407A8B]", indent: 8 },
+  { text: "Button(onClick = { openPortfolio() }) {", color: "text-slate-800", indent: 8 },
+  { text: "Text(\"Ver Projetos\")", color: "text-[#6A8759]", indent: 12 },
+  { text: "}", color: "text-slate-800", indent: 8 },
+  { text: "}", color: "text-slate-800", indent: 4 },
+  { text: "}", color: "text-slate-800", indent: 0 }
+];
+
 export default function Hero() {
+  const [heroState, setHeroState] = useState<HeroState>('typing');
+  const [visibleLines, setVisibleLines] = useState<number>(0);
+
+  const skipToSuccess = useCallback(() => {
+    setHeroState(prev => {
+      if (prev !== 'success') {
+        setVisibleLines(CODE_LINES.length);
+        return 'success';
+      }
+      return prev;
+    });
+  }, []);
+
+  // Globally allow skipping the animation with any click or scroll
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      skipToSuccess();
+    };
+
+    window.addEventListener('scroll', handleUserInteraction, { once: true, passive: true });
+    window.addEventListener('click', handleUserInteraction, { once: true, passive: true });
+    window.addEventListener('touchstart', handleUserInteraction, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleUserInteraction);
+      window.removeEventListener('click', handleUserInteraction);
+      window.removeEventListener('touchstart', handleUserInteraction);
+    };
+  }, [skipToSuccess]);
+
+  // Phase 1: Typing code
+  useEffect(() => {
+    if (heroState !== 'typing') return;
+    
+    const typingInterval = setInterval(() => {
+      setVisibleLines(prev => {
+        if (prev >= CODE_LINES.length) {
+          clearInterval(typingInterval);
+          setTimeout(() => setHeroState('building'), 300); // Small pause before building
+          return CODE_LINES.length;
+        }
+        return prev + 1;
+      });
+    }, 250); // ~2.5s total time
+    
+    return () => clearInterval(typingInterval);
+  }, [heroState]);
+
+  // Phase 2: Building
+  useEffect(() => {
+    if (heroState !== 'building') return;
+    const buildTimer = setTimeout(() => {
+      setHeroState('success');
+    }, 1500); // 1.5s build time before UAU moment
+    return () => clearTimeout(buildTimer);
+  }, [heroState]);
+
   return (
-    <section className="px-5 sm:px-6 py-20 lg:py-24 lg:px-10 relative overflow-hidden" id="sobre">
-      <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+    <section 
+      className="px-5 sm:px-6 pt-32 pb-20 lg:pt-48 lg:pb-24 lg:px-10 relative overflow-hidden min-h-[90vh] flex flex-col justify-center cursor-pointer" 
+      id="sobre"
+    >
+      {/* Background Blur Effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 blur-[100px] rounded-full -z-10 translate-y-20 mx-auto w-3/4 max-w-3xl"></div>
+      
+      <div className="mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
         
-        {/* Left Column: Text Content */}
-        <div className="lg:col-span-5 text-center lg:text-left">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-100 text-jb-primary font-mono text-xs font-bold mb-6">
-              <span className="w-2 h-2 rounded-full bg-jb-primary animate-pulse"></span>
-              KOTLIN & MOBILE DEVELOPER
-            </div>
-            <h1 className="text-5xl font-extrabold tracking-tight leading-[1.05] mb-6 sm:text-6xl md:text-7xl text-jb-dark">
-              Construindo software <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-jb-primary via-pink-500 to-cyan-500">limpo e eficiente.</span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-slate-500 mb-10 lg:mx-0 leading-relaxed font-normal">
-              Estudante de Engenharia Informática em Portugal. Focado em ecossistemas Mobile e Backend corporativos. Arquiteturas escaláveis, código tipado e pragmatismo visual.
-            </p>
-
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
-              <motion.a
-                whileTap={{ scale: 0.95 }}
-                href="#projetos"
-                className="group flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-jb-primary to-pink-500 text-white rounded-xl font-bold text-sm shadow-[0_4px_14px_0_rgba(127,82,255,0.39)] hover:shadow-[0_6px_20px_rgba(127,82,255,0.23)] transition-all"
-              >
-                Explorar Projetos
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </motion.a>
-              <motion.a
-                whileTap={{ scale: 0.95 }}
-                href="#contactos"
-                className="flex w-full sm:w-auto items-center justify-center gap-2 px-8 py-3.5 bg-white backdrop-blur-md border border-slate-200 text-jb-dark rounded-xl font-bold text-sm hover:bg-slate-50 transition-colors shadow-[0_2px_10px_rgb(0,0,0,0.02)]"
-              >
-                <Terminal className="h-4 w-4 text-slate-500" />
-                Contactar
-              </motion.a>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Right Column: Complex IDE Mockup (Light Mode) */}
-        <div className="lg:col-span-7 relative w-full perspective-1000 hidden lg:block">
-          <motion.div 
-            initial={{ opacity: 0, x: 40, rotateY: 5 }}
-            animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
-            className="relative transform-gpu"
-          >
-            {/* Massive diffuse light for IDE */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 blur-[80px] rounded-[40px] -z-10 translate-y-8"></div>
-            
-            <div className="rounded-2xl border border-slate-200/60 bg-white/60 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.05)] flex flex-col overflow-hidden max-h-[500px] relative">
-              {/* Inner ring for glassmorphism */}
-              <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/50 pointer-events-none z-50"></div>
-              
-              {/* IDE Header */}
-              <div className="h-10 border-b border-slate-100 bg-slate-50/80 backdrop-blur-sm flex items-center justify-between px-4">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
+        {/* === LEFT COLUMN: IDE WINDOW === */}
+        {/* Visible always on typing/building, partially hidden on desktop success, fully hidden on mobile success */}
+        <AnimatePresence mode="popLayout">
+          {(heroState !== 'success' || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
+            <motion.div 
+              layoutId="ide-window"
+              className={`lg:col-span-7 flex flex-col w-full mx-auto max-w-lg lg:max-w-none ${heroState === 'success' ? 'hidden lg:flex opacity-60 scale-95 origin-left' : 'flex'}`}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: heroState === 'success' ? 0.4 : 1, y: 0, scale: heroState === 'success' ? 0.90 : 1 }}
+              exit={{ opacity: 0, y: -40, scale: 0.9, filter: "blur(10px)" }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            >
+              {/* Fake IDE UI */}
+              <div className="rounded-2xl border border-slate-200 shadow-2xl bg-white/80 backdrop-blur-md overflow-hidden flex flex-col font-mono text-sm h-[400px] sm:h-[450px]">
+                {/* IDE Header */}
+                <div className="h-10 border-b border-slate-200 bg-slate-50/80 flex items-center px-4 justify-between transition-colors">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-[#FF5F56] shadow-sm"></div>
+                    <div className="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-sm"></div>
+                    <div className="w-3 h-3 rounded-full bg-[#27C93F] shadow-sm"></div>
+                  </div>
+                  <div className="text-slate-400 text-xs font-semibold flex items-center gap-1.5 font-sans">
+                    <LayoutGrid className="w-3 h-3" />
+                    <span>HeroProfile.kt</span>
+                  </div>
+                  <div className="w-10"></div>
                 </div>
-                <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500 font-medium cursor-default">
-                  <LayoutGrid className="w-3 h-3" />
-                  <span>app-core</span>
-                  <ChevronRight className="w-3 h-3 text-slate-300" />
-                  <span>src</span>
-                  <ChevronRight className="w-3 h-3 text-slate-300" />
-                  <span>MainActivity.kt</span>
-                </div>
-                <div></div>
-              </div>
-
-              <div className="flex flex-1 overflow-hidden">
-                {/* IDE Sidebar */}
-                <div className="w-48 border-r border-slate-100 bg-slate-50/50 p-2 hidden sm:block overflow-y-auto">
-                  <div className="text-[10px] font-bold text-slate-400 mb-2 mt-1 uppercase tracking-wider pl-2">Project</div>
-                  <div className="space-y-1 text-xs font-mono text-slate-600">
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded cursor-pointer hover:bg-slate-100/50">
-                      <ChevronRight className="w-3 h-3 rotate-90" />
-                      <span className="font-semibold text-slate-700">app</span>
-                    </div>
-                    <div className="pl-4 space-y-0.5">
-                      <div className="flex items-center gap-1.5 px-2 py-1 bg-purple-50/50 text-jb-primary font-medium rounded cursor-default border border-purple-100/50">
-                        <FileCode2 className="w-3.5 h-3.5 text-jb-primary" />
-                        MainActivity.kt
-                      </div>
-                      <div className="flex items-center gap-1.5 px-2 py-1 hover:bg-slate-100/50 rounded cursor-pointer">
-                        <FileCode2 className="w-3.5 h-3.5 text-slate-400" />
-                        AppModule.kt
-                      </div>
-                      <div className="flex items-center gap-1.5 px-2 py-1 hover:bg-slate-100/50 rounded cursor-pointer">
-                        <FileCode2 className="w-3.5 h-3.5 text-slate-400" />
-                        ApiService.kt
-                      </div>
-                    </div>
+                
+                {/* Coding Area */}
+                <div className="flex p-4 flex-1 overflow-auto bg-white/60">
+                  <div className="text-slate-300 select-none text-right pr-4 tracking-tighter leading-[1.7] flex flex-col">
+                    {CODE_LINES.map((_, i) => <span key={i}>{i + 1}</span>)}
+                  </div>
+                  <div className="flex-1 leading-[1.7] overflow-x-auto pb-4">
+                    {CODE_LINES.map((line, i) => (
+                      <motion.div 
+                        key={i}
+                        className={`${line.color} whitespace-pre`}
+                        style={{ paddingLeft: `${line.indent * 0.5}rem` }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: i < visibleLines ? 1 : 0 }}
+                        transition={{ duration: 0.1 }}
+                      >
+                        {line.text}
+                      </motion.div>
+                    ))}
+                    {heroState === 'typing' && visibleLines < CODE_LINES.length && (
+                      <motion.span 
+                        animate={{ opacity: [1, 0] }} 
+                        transition={{ repeat: Infinity, duration: 0.8 }}
+                        className="inline-block w-2h-4 bg-slate-400 ml-1 translate-y-1"
+                      >
+                        |
+                      </motion.span>
+                    )}
                   </div>
                 </div>
 
-                {/* IDE Code Area */}
-                <div className="flex-1 bg-jb-bg p-0 font-mono text-[13px] overflow-hidden flex flex-col">
-                   <div className="flex-1 overflow-y-auto w-full p-4">
-                     <table className="w-full text-left border-spacing-0">
-                       <tbody className="text-slate-800 leading-relaxed tabular-nums">
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">1</td><td><span className="text-[#CC7832]">package</span> <span className="text-slate-800">com.miguel.portfolio</span></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">2</td><td></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">3</td><td><span className="text-[#CC7832]">import</span> <span className="text-slate-800">android.os.Bundle</span></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">4</td><td><span className="text-[#CC7832]">import</span> <span className="text-slate-800">androidx.activity.ComponentActivity</span></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">5</td><td><span className="text-[#CC7832]">import</span> <span className="text-slate-800">androidx.activity.compose.setContent</span></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">6</td><td></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">7</td><td><span className="text-[#CC7832]">@AndroidEntryPoint</span></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">8</td><td><span className="text-[#CC7832]">class</span> <span className="text-[#407A8B]">MainActivity</span> : <span className="text-[#407A8B]">ComponentActivity</span>() {'{'}</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">9</td><td className="pl-4"><span className="text-[#CC7832]">override fun</span> <span className="text-[#FFC66D]">onCreate</span>(savedInstanceState: <span className="text-[#407A8B]">Bundle</span>?) {'{'}</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">10</td><td className="pl-8"><span className="text-[#CC7832]">super</span>.onCreate(savedInstanceState)</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">11</td><td className="pl-8">setContent {'{'}</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">12</td><td className="pl-12"><span className="text-[#407A8B]">PortfolioTheme</span> {'{'}</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">13</td><td className="pl-16"><span className="text-slate-500 italic">// Initialize scalable UI</span></td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">14</td><td className="pl-16"><span className="text-[#407A8B]">MainAppNavigation</span>()</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">15</td><td className="pl-12">{'}'}</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">16</td><td className="pl-8">{'}'}</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">17</td><td className="pl-4">{'}'}</td></tr>
-                         <tr><td className="w-8 text-slate-300 select-none text-right pr-4">18</td><td>{'}'}</td></tr>
-                       </tbody>
-                     </table>
-                   </div>
-
-                   {/* Terminal area with Telemetry */}
-                   <div className="h-40 border-t border-slate-200/60 bg-white/80 backdrop-blur-md p-3 flex flex-col font-mono text-[10px] sm:text-xs text-slate-500 relative">
-                     <div className="flex justify-between items-center mb-2 pb-1 text-slate-400 font-bold cursor-default border-b border-slate-100">
-                        <div className="flex gap-4">
-                          <span className="text-jb-dark border-b-2 border-jb-primary px-1 pb-1">BuildOutput</span>
-                          <span className="pb-1 hover:text-slate-600 transition-colors">Telemetry</span>
-                          <span className="pb-1 hover:text-slate-600 transition-colors">Logcat</span>
+                {/* Bottom Terminal Tab */}
+                <div className="h-28 border-t border-slate-200 bg-slate-50 p-3 text-xs overflow-hidden flex flex-col z-10 transition-colors">
+                  <div className="flex justify-between items-center mb-2 pb-1 border-b border-slate-200">
+                    <div className="font-bold text-jb-dark flex items-center gap-2">
+                       <Terminal className="w-3.5 h-3.5" /> Output
+                    </div>
+                  </div>
+                  <div className="flex-1 flex flex-col justify-center space-y-1 overflow-hidden font-mono text-[11px] sm:text-xs">
+                    {heroState === 'typing' && (
+                      <span className="text-slate-400 animate-pulse">Waiting for code changes...</span>
+                    )}
+                    {heroState === 'building' && (
+                      <>
+                        <div><span className="text-jb-primary font-bold">INFO:</span> Executing tasks: [:app:assembleDebug]</div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="w-full max-w-[200px] h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                             <motion.div 
+                               className="h-full bg-[#3DDC84]"
+                               initial={{ width: "0%" }}
+                               animate={{ width: "100%" }}
+                               transition={{ duration: 1.4, ease: "linear" }}
+                             />
+                          </div>
+                          <span className="text-slate-500 text-[10px]">Compiling Kotlin...</span>
                         </div>
-                        <div className="flex gap-3 text-[9px] items-center text-slate-400">
-                           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></div> CPU: 12%</span>
-                           <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-jb-primary"></div> RAM: 1.2GB</span>
-                        </div>
-                     </div>
-                     <div className="flex-1 overflow-y-auto space-y-1 relative z-10 text-xs">
-                        <div className="flex items-center gap-2">
-                          <span className="text-green-600 font-bold">INFO:</span> 
-                          <span>Daemon started resolving dependencies...</span>
-                          <motion.div className="w-16 h-1 bg-slate-100 rounded-full overflow-hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                             <motion.div className="h-full bg-green-400" initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 1.5, repeat: Infinity }} />
-                          </motion.div>
-                        </div>
-                        <div><span className="text-blue-600 font-bold">Executing</span> tasks: [:app:assembleDebug]</div>
-                        <div className="flex justify-between max-w-sm">
-                           <span><span className="text-[#7F52FF]">{'>'}</span> Task :app:compileDebugKotlin</span>
-                           <span className="text-slate-400">451ms</span>
-                        </div>
-                        <div className="flex justify-between max-w-sm">
-                           <span><span className="text-[#7F52FF]">{'>'}</span> Task :app:packageDebug</span>
-                           <span className="text-slate-400">120ms</span>
-                        </div>
-                        <div className="text-jb-dark font-bold mt-1">BUILD SUCCESSFUL in 1s 874ms</div>
-                     </div>
-                     
-                     {/* Data flow lines background */}
-                     <svg className="absolute right-0 bottom-0 w-32 h-32 opacity-10 pointer-events-none" viewBox="0 0 100 100">
-                        <motion.path 
-                           d="M 100 100 Q 50 50 100 0" 
-                           fill="none" stroke="#7F52FF" strokeWidth="2" 
-                           initial={{ strokeDasharray: "0 100" }}
-                           animate={{ strokeDasharray: "100 100", strokeDashoffset: [100, 0] }}
-                           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        />
-                        <motion.path 
-                           d="M 80 100 Q 30 50 80 0" 
-                           fill="none" stroke="#06b6d4" strokeWidth="1" 
-                           initial={{ strokeDasharray: "0 100" }}
-                           animate={{ strokeDasharray: "100 100", strokeDashoffset: [100, 0] }}
-                           transition={{ duration: 2.5, repeat: Infinity, ease: "linear", delay: 0.5 }}
-                        />
-                     </svg>
-                   </div>
+                      </>
+                    )}
+                    {heroState === 'success' && (
+                      <div className="text-[#3DDC84] font-bold">BUILD SUCCESSFUL in 1s 512ms</div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            {/* Floating elements to add life */}
-            <motion.div 
-              animate={{ y: [0, -10, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute -right-6 top-20 w-12 h-12 bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 flex items-center justify-center p-2 text-[#7F52FF]"
-            >
-               <KotlinIcon />
             </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* === RIGHT COLUMN: ANDROID EMULATOR === */}
+        {/* Hidden on mobile until success */}
+        <AnimatePresence mode="popLayout">
+           {(heroState === 'success' || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
             <motion.div 
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-              className="absolute -left-6 bottom-32 w-12 h-12 bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 flex items-center justify-center p-2 text-[#3DDC84]"
+              layoutId="emulator-window"
+              className={`border-[8px] border-slate-800 rounded-[2.5rem] bg-white relative overflow-hidden shadow-2xl mx-auto w-full max-w-[340px] sm:max-w-[360px] lg:max-w-md aspect-[9/19] flex flex-col transform-gpu z-20 items-center justify-start
+                ${heroState === 'success' ? 'col-span-1 lg:col-span-5' : 'hidden lg:flex lg:col-span-4 lg:col-start-9 scale-90 opacity-80'}`}
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: heroState === 'success' ? 1 : 0.95 }}
+              transition={{ type: "spring", stiffness: 80, damping: 20, delay: heroState === 'success' ? 0.1 : 0 }}
             >
-               <AndroidIcon />
+              {/* Emulador Notch */}
+              <div className="absolute top-0 inset-x-0 h-6 bg-slate-800 rounded-b-2xl w-32 mx-auto z-40 flex items-center justify-center pointer-events-none">
+                <div className="w-10 h-1.5 rounded-full bg-slate-900 absolute top-2"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-900 absolute top-2 right-6"></div>
+              </div>
+
+              {/* Flash Effect na fase de success */}
+              {heroState === 'success' && (
+                <motion.div 
+                  key="flash-effect"
+                  className="absolute inset-0 border-[6px] border-[#3DDC84] z-50 rounded-[2rem] pointer-events-none mix-blend-screen"
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+              )}
+
+              {/* StatusBar Fake */}
+              <div className="w-full flex justify-between items-center px-6 py-2 text-[10px] font-medium text-slate-400 absolute top-0 left-0 bg-white/80 backdrop-blur-md z-30">
+                 <span>12:00</span>
+                 <div className="flex gap-1">
+                   <div className="w-3 h-2.5 border-[1.5px] border-slate-400 rounded-sm"></div>
+                 </div>
+              </div>
+
+              {/* Emulador Contents */}
+              <div className="flex-1 w-full relative pt-12 pb-6 px-6 flex flex-col justify-center items-center text-center overflow-y-auto">
+                <AnimatePresence mode="popLayout">
+                  {/* Phase 1: Terminal Log Wait */}
+                  {heroState === 'typing' && (
+                    <motion.div 
+                      key="emu-typing"
+                      exit={{ opacity: 0, y: -20 }}
+                      className="text-slate-400 font-mono text-xs flex flex-col items-center gap-3"
+                    >
+                      <AndroidIcon className="w-10 h-10 opacity-20 grayscale" />
+                      <motion.span animate={{ opacity: [1, 0.3] }} transition={{ repeat: Infinity }}>
+                        {'>'} Waiting for code...
+                      </motion.span>
+                    </motion.div>
+                  )}
+                  
+                  {/* Phase 2: Building Emulator Screen */}
+                  {heroState === 'building' && (
+                    <motion.div 
+                      key="emu-building"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                      className="text-slate-600 font-mono text-xs flex flex-col items-center gap-4 w-full"
+                    >
+                      <AndroidIcon className="w-12 h-12 text-[#3DDC84] animate-bounce" />
+                      <div className="w-3/4 text-center text-slate-500 mb-2">Gradle Build Running...</div>
+                      <div className="w-full max-w-[120px] h-1 bg-slate-100 rounded-full overflow-hidden">
+                        <motion.div 
+                           className="h-full bg-slate-400"
+                           initial={{ x: "-100%" }}
+                           animate={{ x: "100%" }}
+                           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Phase 3: The UAU Moment Content */}
+                  {heroState === 'success' && (
+                    <motion.div 
+                      key="emu-success"
+                      className="w-full flex flex-col items-center justify-center h-full"
+                      initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+                      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                      transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.15 }}
+                    >
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 border border-purple-100 text-jb-primary font-mono text-[9px] sm:text-[10px] font-bold mb-5"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#3DDC84] animate-pulse"></span>
+                        MOBILE DEVELOPER
+                      </motion.div>
+                      
+                      <motion.h1 
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                        className="text-[26px] sm:text-3xl font-extrabold tracking-tight leading-[1.05] mb-4 text-jb-dark font-sans"
+                      >
+                        Construindo software <br />
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-jb-primary via-pink-500 to-cyan-500 pt-1 block">limpo e eficiente.</span>
+                      </motion.h1>
+                      
+                      <motion.p 
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+                        className="text-xs sm:text-sm text-slate-500 mb-8 leading-relaxed font-normal px-2"
+                      >
+                        Estudante de Engenharia Informática focado em Kotlin, Android Nativo e Arquiteturas Escaláveis.
+                      </motion.p>
+
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
+                        className="flex flex-col w-full gap-3 mt-auto"
+                      >
+                        <motion.a
+                          whileTap={{ scale: 0.95 }}
+                          href="#projetos"
+                          onClick={(e) => e.stopPropagation()} // Prevent skip trigger on interaction
+                          className="group flex w-full items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-jb-primary to-pink-500 text-white rounded-[14px] font-bold text-sm shadow-[0_4px_14px_0_rgba(127,82,255,0.39)] hover:shadow-[0_6px_20px_rgba(127,82,255,0.23)] transition-all font-sans"
+                        >
+                          Ver Projetos
+                          <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </motion.a>
+                        <motion.a
+                          whileTap={{ scale: 0.95 }}
+                          href="/cv.pdf"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex w-full items-center justify-center gap-2 px-6 py-3.5 bg-white border border-slate-200 text-jb-dark rounded-[14px] font-bold text-sm hover:bg-slate-50 transition-colors shadow-sm font-sans"
+                        >
+                          <Download className="h-4 w-4 text-slate-500" />
+                          Download CV
+                        </motion.a>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Emulador Home Indicator */}
+              <div className="absolute bottom-2 inset-x-0 mx-auto w-24 h-1 bg-slate-300 rounded-full z-40"></div>
             </motion.div>
-          </motion.div>
-        </div>
+           )}
+        </AnimatePresence>
+        
       </div>
+      
+      {/* Skip Hint (Visible only during typing/building) */}
+      <AnimatePresence>
+        {heroState !== 'success' && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="absolute bottom-6 left-0 right-0 mx-auto text-center text-[10px] text-slate-400 font-mono tracking-widest uppercase z-10 pointer-events-none"
+          >
+            A processar... Clique para saltar a Animação
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
