@@ -1,117 +1,138 @@
-import { Github, Linkedin, Mail, ArrowUp, Terminal } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowUp, MapPin, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
 
+const navLinks = [
+  { label: 'Home', href: '#home' },
+  { label: 'Sobre', href: '#sobre' },
+  { label: 'Timeline', href: '#timeline' },
+  { label: 'Hall of Fame', href: '#certificacoes' },
+  { label: 'Tech Stack', href: '#skills' },
+  { label: 'GitHub', href: '#github' },
+  { label: 'LinkedIn', href: '#contactos' },
+];
+
+const codeStream = [
+  'console.log("Pushing boundaries");',
+  'git push origin main --force',
+  'npm run elite:build',
+  'docker-compose up -d --scale career=max',
+  'await quality_check({ strict: true });',
+  'deploying --to=global_market',
+  'system.health_check() // 100% OK',
+  'performance.mark("legendary");',
+  'git commit -m "feat: ship it"',
+];
+
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <footer className="relative border-t border-slate-100 bg-white overflow-hidden pt-16 pb-8" id="footer">
-      {/* Background Code Stream - Refined */}
-      <div className="absolute inset-x-0 top-0 h-32 opacity-[0.03] overflow-hidden pointer-events-none flex whitespace-nowrap items-center select-none border-b border-slate-200">
-        <motion.div 
-          animate={{ x: ["0%", "-50%"] }} 
-          transition={{ repeat: Infinity, duration: 80, ease: "linear" }}
-          className="font-mono text-[10px] flex gap-12 tracking-widest uppercase"
+    <footer className="relative overflow-hidden border-t border-slate-100" id="footer">
+
+      {/* ── Decorative Ambient Orbs ─────────────────────────── */}
+      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-violet-500/10 blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-20 right-0 w-[400px] h-[400px] rounded-full bg-orange-400/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-cyan-400/5 blur-[100px] pointer-events-none" />
+
+      {/* ── Scrolling Code Stream ───────────────────────────── */}
+      <div className="absolute inset-x-0 top-0 h-12 overflow-hidden pointer-events-none flex items-center select-none">
+        <motion.div
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ repeat: Infinity, duration: 40, ease: 'linear' }}
+          className="flex gap-12 whitespace-nowrap font-mono text-[10px] font-bold tracking-[0.25em] uppercase text-slate-400"
         >
-          <span>console.log("Building the future");</span>
-          <span>export const app = new Framework();</span>
-          <span>npm run build --production</span>
-          <span>docker build -t app:latest .</span>
-          <span>git commit -m "Initial commit"</span>
-          <span>system.reboot()</span>
-          <span>await quality_check()</span>
-          <span>deploy --to=production</span>
+          {/* Duplicated for seamless loop */}
+          {[...codeStream, ...codeStream].map((cmd, i) => (
+            <span key={i} className="flex items-center gap-3">
+              <span className="text-[#FC4C02]">›</span>
+              {cmd}
+            </span>
+          ))}
         </motion.div>
       </div>
 
-      <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Brand Column */}
-          <div className="lg:col-span-2">
-            <a href="#" className="font-mono font-bold text-[20px] text-slate-800 flex items-center gap-0.5 mb-6 group">
-              <span className="text-jb-primary">~/</span>
-              miguel
-              <span className="text-jb-primary w-2.5 h-5 bg-jb-primary/20 translate-y-1 ml-0.5"></span>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-24 pb-12">
+        {/* ── Links & Info Grid ───────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+
+          {/* Brand */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <a href="#home" className="inline-flex items-center gap-2 font-mono font-bold text-xl text-slate-900 mb-4 group">
+              <span className="text-[#FC4C02]">&gt;_</span>
+              <span>miguel</span>
             </a>
-            <p className="text-slate-500 text-sm max-w-xs leading-relaxed font-medium">
-              Engenheiro de Software focado em criar experiências mobile nativas e interfaces de alta performance.
+            <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
+              Kotlin · Android · React Native · TypeScript · Node.js
             </p>
-            
-            {/* Status Pill */}
-            <div className="mt-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-[11px] font-bold text-emerald-600 uppercase tracking-wider">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              Disponível para Projetos
+            <div className="flex items-center gap-2 mt-4 text-slate-400 text-sm">
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Portugal 🇵🇹</span>
             </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation */}
           <div>
-            <h4 className="font-mono text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Navegação</h4>
-            <ul className="space-y-4">
-              {['Sobre', 'Skills', 'Projetos', 'Contactos'].map((item) => (
-                <li key={item}>
-                  <a href={`#${item.toLowerCase()}`} className="text-sm font-semibold text-slate-600 hover:text-jb-primary transition-colors">
-                    {item}
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Explorar</h4>
+            <ul className="space-y-3">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="text-sm font-semibold text-slate-500 hover:text-[#FC4C02] transition-colors flex items-center gap-2 group"
+                  >
+                    <span className="w-0 group-hover:w-3 h-px bg-[#FC4C02] transition-all duration-300 ease-out" />
+                    {link.label}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Social Links */}
+          {/* Social */}
           <div>
-            <h4 className="font-mono text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Conectar</h4>
-            <ul className="space-y-4">
-              <li>
-                <a href="https://github.com" className="group flex items-center gap-3 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">
-                  <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-slate-100 transition-colors border border-slate-100">
-                    <Github className="w-4 h-4" />
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Conectar</h4>
+            <div className="flex flex-col gap-4">
+              {[
+                { href: 'https://github.com/Imperador1k', icon: Github, label: 'GitHub', color: 'hover:text-slate-900' },
+                { href: 'https://linkedin.com', icon: Linkedin, label: 'LinkedIn', color: 'hover:text-[#0077B5]' },
+                { href: 'mailto:migasmps2005@gmail.com', icon: Mail, label: 'Email Direto', color: 'hover:text-[#FC4C02]' },
+              ].map(({ href, icon: Icon, label, color }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel="noopener noreferrer"
+                  whileHover={{ x: 4 }}
+                  className={`flex items-center gap-3 text-sm font-semibold text-slate-500 ${color} transition-colors group`}
+                >
+                  <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center group-hover:bg-current/10 transition-colors">
+                    <Icon className="w-4 h-4" />
                   </div>
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a href="https://linkedin.com" className="group flex items-center gap-3 text-sm font-semibold text-slate-600 hover:text-[#0077B5] transition-colors">
-                  <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-[#0077B5]/5 transition-colors border border-slate-100">
-                    <Linkedin className="w-4 h-4" />
-                  </div>
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a href="mailto:migasmps2005@gmail.com" className="group flex items-center gap-3 text-sm font-semibold text-slate-600 hover:text-pink-600 transition-colors">
-                  <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-pink-50 transition-colors border border-slate-100">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  Email
-                </a>
-              </li>
-            </ul>
+                  {label}
+                </motion.a>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2 font-mono text-[11px] font-bold text-slate-400">
-            <Terminal className="w-3.5 h-3.5 text-jb-primary" />
-            <span>{new Date().getFullYear()} © MIGUEL // ENGENHEIRO DE SOFTWARE</span>
+        {/* ── Bottom Bar ──────────────────────────────────────── */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-slate-100">
+          <div className="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-400 tracking-widest uppercase">
+            <Zap className="w-3.5 h-3.5 text-[#FC4C02]" />
+            <span>© {new Date().getFullYear()} Miguel Santos — Built with Precision & High Intensity</span>
           </div>
 
           <motion.button
-            whileHover={{ y: -5 }}
-            whileTap={{ scale: 0.9 }}
             onClick={scrollToTop}
-            className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-jb-primary hover:border-jb-primary/30 transition-all shadow-sm"
+            whileHover={{ y: -3, backgroundColor: '#FC4C02', color: '#fff' }}
+            whileTap={{ scale: 0.92 }}
+            className="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 transition-all shadow-sm flex-shrink-0"
             aria-label="Voltar ao topo"
           >
-            <ArrowUp className="w-4 h-4" />
+            <ArrowUp className="w-5 h-5" />
           </motion.button>
         </div>
+
       </div>
     </footer>
   );

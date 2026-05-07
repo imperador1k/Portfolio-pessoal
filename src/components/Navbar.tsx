@@ -3,10 +3,13 @@ import { Github, Linkedin, Download } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
 
 const navLinks = [
-  { name: 'Hero', href: '#home', id: 'home' },
-  { name: 'Lifestyle', href: '#sobre', id: 'sobre' },
+  { name: 'Home', href: '#home', id: 'home' },
+  { name: 'Sobre', href: '#sobre', id: 'sobre' },
+  { name: 'Timeline', href: '#timeline', id: 'timeline' },
+  { name: 'Hall of Fame', href: '#certificacoes', id: 'certificacoes' },
   { name: 'Tech Stack', href: '#skills', id: 'skills' },
-  { name: 'Projetos', href: '#projetos', id: 'projetos' },
+  { name: 'GitHub', href: '#github', id: 'github' },
+  { name: 'LinkedIn', href: '#contactos', id: 'contactos' },
 ];
 
 export default function Navbar() {
@@ -75,7 +78,7 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Navigation (Sliding Pill) */}
-          <ul className={`hidden md:flex items-center gap-2 relative z-50 transition-all duration-500 rounded-full p-1 border ${isScrolled ? 'bg-slate-50/50 border-slate-200/50 backdrop-blur-sm' : 'bg-transparent border-transparent'}`}>
+          <ul className={`hidden md:flex items-center gap-1 relative z-50 transition-all duration-500 rounded-full p-1 border ${isScrolled ? 'bg-slate-50/50 border-slate-200/50 backdrop-blur-sm' : 'bg-transparent border-transparent'}`}>
             {navLinks.map((item, index) => {
               const isActive = activeSection === item.id;
               return (
@@ -83,7 +86,7 @@ export default function Navbar() {
                   key={item.name} 
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className="relative px-6 py-2"
+                  className="relative px-4 py-2"
                 >
                   {hoveredIndex === index && (
                     <motion.div
@@ -94,7 +97,7 @@ export default function Navbar() {
                   )}
                   <a 
                     href={item.href}
-                    className={`relative z-10 font-mono text-[13px] font-bold uppercase tracking-wider transition-colors duration-300 ${isActive ? 'text-jb-primary' : 'text-slate-500 hover:text-slate-900'}`}
+                    className={`relative z-10 font-mono text-[11px] font-bold uppercase tracking-wider transition-colors duration-300 whitespace-nowrap ${isActive ? 'text-jb-primary' : 'text-slate-500 hover:text-slate-900'}`}
                   >
                     {item.name}
                   </a>
@@ -110,7 +113,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3 z-50">
             <a href="#contactos" className="hidden sm:flex items-center justify-center px-6 py-2.5 relative rounded-full group outline-none overflow-hidden transition-all duration-300">
               <div className="absolute inset-0 rounded-full bg-slate-900 group-hover:bg-jb-primary transition-colors duration-300"></div>
-              <span className="relative font-bold text-white text-[13px] tracking-wide">Vamos Falar</span>
+              <span className="relative font-bold text-white text-[13px] tracking-wide">Conectar</span>
             </a>
 
             {/* Mobile Hamburger to X */}
@@ -161,24 +164,14 @@ export default function Navbar() {
                   {item.name}
                 </motion.a>
               ))}
-              {/* Added 'Vamos Falar' to mobile menu */}
-              <motion.a
-                variants={itemVariants}
-                href="#contactos"
-                onClick={() => setIsOpen(false)}
-                className="text-3xl font-bold text-jb-primary flex items-center gap-4"
-              >
-                <span className="text-jb-primary/30 text-sm font-mono mt-1">05</span>
-                Vamos Falar
-              </motion.a>
             </div>
 
             <motion.div variants={itemVariants} className="mt-auto pt-16 flex flex-col gap-5">
               <div className="flex gap-4">
-                <a href="#" className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
+                <a href="#github" onClick={() => setIsOpen(false)} className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
                   <Github className="w-5 h-5" />
                 </a>
-                <a href="#" className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
+                <a href="#contactos" onClick={() => setIsOpen(false)} className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
                   <Linkedin className="w-5 h-5" />
                 </a>
               </div>

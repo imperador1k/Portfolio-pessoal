@@ -232,32 +232,49 @@ export default function AboutMe() {
   };
 
   return (
-    <section className="px-5 sm:px-6 py-32 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="sobre">
-      <div className="flex flex-col mb-16 items-center text-center">
-        <span className="text-jb-primary font-mono text-sm font-bold tracking-tighter mb-4">
-          01 // LIFESTYLE
-        </span>
-        <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase mb-6">
-          Life.kt <span className="text-jb-primary not-italic">/</span> <br />
-          <span className="text-slate-500 font-mono italic normal-case font-medium text-3xl sm:text-4xl">Lifestyle & Creative Gear</span>
-        </h2>
-        <p className="max-w-2xl text-slate-500 font-medium leading-relaxed">
-          Quando não estou a otimizar loops ou a desenhar interfaces, estou a construir a minha melhor versão fora do código. 
-          Clica nos posts para veres mais detalhes.
+    <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="sobre">
+      {/* Section Header */}
+      <div className="mb-16">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="flex items-center gap-3 mb-4"
+        >
+          <span className="px-3 py-1 bg-jb-primary/10 text-jb-primary text-[10px] font-mono font-bold rounded-full tracking-wider uppercase">
+            Lifestyle_Journey
+          </span>
+          <div className="h-[1px] flex-1 bg-gradient-to-r from-jb-primary/20 to-transparent" />
+        </motion.div>
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight"
+        >
+          Beyond <span className="text-slate-400 font-light">the Code</span>
+        </motion.h2>
+        <p className="mt-4 text-lg text-slate-500 max-w-2xl font-light">
+          Explora o que me move fora do terminal. Da disciplina no treino à liberdade na estrada.
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.06)] overflow-hidden">
+      <div className="max-w-7xl mx-auto overflow-hidden">
         {/* Instagram-style Header */}
-        <div className="p-8 lg:p-12 border-b border-slate-100 bg-slate-50/30">
+        <div className="p-8 lg:p-12 border-b border-slate-100 bg-white/5 backdrop-blur-[2px] rounded-[2.5rem] mb-8 border border-slate-200/50 shadow-sm">
           <div className="flex flex-col md:flex-row items-center gap-10">
             {/* Profile Pic with Story Ring */}
             <div 
               className="relative group cursor-pointer"
               onClick={() => setShowStories(true)}
             >
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-[3px] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 transition-transform duration-500 group-hover:scale-105">
-                <div className="w-full h-full rounded-full border-[3px] border-white overflow-hidden bg-slate-200">
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 blur-[2px] opacity-70 group-hover:blur-[4px] transition-all"
+              />
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-[3px] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 relative z-10 transition-transform duration-500 group-hover:scale-105">
+                <div className="w-full h-full rounded-full border-[3px] border-white overflow-hidden bg-slate-200 shadow-inner">
                    <img 
                     src="/icon.png" 
                     alt="Miguel" 
@@ -270,7 +287,13 @@ export default function AboutMe() {
             {/* Profile Info */}
             <div className="flex-1 text-center md:text-left">
               <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight">miguelsantos.pr</h3>
+                <div className="flex items-center gap-1.5">
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight">miguelsantos.pr</h3>
+                  <svg aria-label="Verificado" fill="rgb(0, 149, 246)" height="18" role="img" viewBox="0 0 40 40" width="18">
+                    <title>Verificado</title>
+                    <path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fillRule="evenodd"></path>
+                  </svg>
+                </div>
                 <div className="flex gap-2">
                   <button 
                     onClick={toggleFollow}
@@ -311,34 +334,41 @@ export default function AboutMe() {
                   ☕ Coffee is my compile juice<br />
                   📍 Based in Portugal
                 </p>
-                <a href="https://github.com/imperador1k" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-jb-primary mt-2 inline-flex items-center gap-1 hover:underline">
-                  github.com/imperador1k <ExternalLink className="w-3 h-3" />
-                </a>
+                <div className="flex flex-col gap-1 mt-2">
+                  <a href="https://github.com/imperador1k" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-jb-primary inline-flex items-center gap-1 hover:underline w-fit">
+                    github.com/imperador1k <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <a href="https://www.linkedin.com/in/miguel-sant0s/" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-[#0A66C2] inline-flex items-center gap-1 hover:underline w-fit">
+                    linkedin.com/in/miguel-sant0s <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Stories Highlights (Circle icons) */}
-          <div className="flex gap-6 mt-12 overflow-x-auto no-scrollbar pb-2">
+          <div className="flex gap-8 mt-12 overflow-x-auto no-scrollbar pb-4">
             {[
-              { name: 'Gym', icon: '💪' },
-              { name: 'Setup', icon: '🖥️' },
-              { name: 'Travel', icon: '✈️' },
-              { name: 'Gaming', icon: '🎮' },
-              { name: 'Coffee', icon: '☕' }
+              { name: 'Gym', icon: '💪', color: 'from-orange-400 to-red-500' },
+              { name: 'Setup', icon: '🖥️', color: 'from-blue-400 to-indigo-500' },
+              { name: 'Travel', icon: '✈️', color: 'from-green-400 to-emerald-500' },
+              { name: 'Gaming', icon: '🎮', color: 'from-purple-400 to-pink-500' },
+              { name: 'Coffee', icon: '☕', color: 'from-yellow-400 to-orange-500' }
             ].map((story) => (
-              <div key={story.name} className="flex flex-col items-center gap-2 shrink-0">
-                <div className="w-16 h-16 rounded-full p-0.5 border-2 border-slate-200 bg-white flex items-center justify-center text-2xl hover:border-jb-primary transition-colors cursor-pointer">
-                  {story.icon}
+              <div key={story.name} className="flex flex-col items-center gap-3 shrink-0 group">
+                <div className={`w-16 h-16 rounded-full p-0.5 bg-gradient-to-tr ${story.color} hover:scale-110 transition-transform cursor-pointer shadow-lg`}>
+                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-2xl shadow-inner group-hover:rotate-12 transition-transform">
+                    {story.icon}
+                  </div>
                 </div>
-                <span className="text-[10px] font-bold text-slate-500 font-mono uppercase tracking-tighter">{story.name}</span>
+                <span className="text-[10px] font-bold text-slate-500 font-mono uppercase tracking-widest">{story.name}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Hobby Grid */}
-        <div className="p-2 sm:p-4 grid grid-cols-3 gap-1 sm:gap-4 lg:gap-6">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
           {hobbies.map((post, index) => (
             <motion.div
               key={post.id}
@@ -356,22 +386,31 @@ export default function AboutMe() {
               />
               
               {/* Overlay on Hover */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-6">
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-8">
                 <div 
-                  className="flex items-center gap-2 text-white font-bold"
+                  className="flex flex-col items-center gap-1 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
                   onClick={(e) => toggleLike(post.id, e)}
                 >
-                  <Heart className={`w-5 h-5 ${isLiked(post.id) ? 'fill-red-500 text-red-500' : 'fill-white'}`} />
-                  <span>{getLikesDisplay(post)}</span>
+                  <Heart className={`w-6 h-6 ${isLiked(post.id) ? 'fill-red-500 text-red-500' : 'fill-white'}`} />
+                  <span className="font-bold text-sm">{getLikesDisplay(post)}</span>
                 </div>
-                <div className="flex items-center gap-2 text-white font-bold">
-                  <MessageCircle className="w-5 h-5 fill-white" />
-                  <span>{getCommentCount(post.id)}</span>
+                <div className="flex flex-col items-center gap-1 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+                  <MessageCircle className="w-6 h-6 fill-white" />
+                  <span className="font-bold text-sm">{getCommentCount(post.id)}</span>
                 </div>
                 
                 {/* Tech Tag Overlay */}
-                <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-md px-2 py-1 rounded border border-white/30 text-[10px] text-white font-mono uppercase tracking-tighter">
+                <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded border border-white/20 text-[9px] text-white font-mono uppercase tracking-widest font-bold">
                   {post.tag}
+                </div>
+
+                {/* IG Fidelity Icons (Reels/Carousel) */}
+                <div className="absolute top-4 right-4 text-white drop-shadow-md">
+                   {index % 3 === 0 ? (
+                      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
+                   ) : index % 2 === 0 ? (
+                      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M19 15V5c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2zm-2 0H7V5h10v10zm2 4H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1z"></path></svg>
+                   ) : null}
                 </div>
               </div>
             </motion.div>

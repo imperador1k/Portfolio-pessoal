@@ -1,15 +1,15 @@
 import { Play, TerminalSquare } from 'lucide-react';
 import { motion } from 'motion/react';
-import { NetworkVisual, MicroservicesVisual, NeuralVisual, TerminalVisual } from './ProjectVisuals';
+import { NetworkVisual, MicroservicesVisual, NeuralVisual, TerminalVisual, MobileVisual } from './ProjectVisuals';
 
 const projects = [
   {
-    title: 'Cluster Data Engine',
-    description: 'Sistema de gestão e otimização de recursos académicos. Permite escalar e distribuir processamento de dados geograficamente.',
-    tags: ['React', 'Java', 'Spring Boot', 'PostgreSQL'],
-    demo: '#',
-    github: '#',
-    type: 'network'
+    title: 'Nyro',
+    description: 'Redefinição da experiência de treino outdoor. Uma aplicação Android nativa (Kotlin + Jetpack Compose) desenhada para preencher a lacuna social do Strava através de gamificação profunda e gestão dinâmica de grupos.',
+    tags: ['Android Native', 'Kotlin', 'Jetpack Compose', 'Material 3', 'Social Engineering'],
+    demo: null,
+    github: 'https://github.com/imperador1k/Nyro',
+    type: 'mobile'
   },
   {
     title: 'Task Orchestrator',
@@ -86,6 +86,7 @@ export default function Projects() {
                     className="w-full h-full min-h-[120%] origin-top flex flex-col"
                   >
                     <div className="flex-1 w-full flex">
+                      {project.type === 'mobile' && <MobileVisual />}
                       {project.type === 'network' && <NetworkVisual />}
                       {project.type === 'microservices' && <MicroservicesVisual />}
                       {project.type === 'neural' && <NeuralVisual />}

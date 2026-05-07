@@ -1,103 +1,208 @@
-import React, { useRef } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
-import { BadgeCheck, ArrowRight } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { BadgeCheck, X, Maximize2, ExternalLink, Calendar, Award } from 'lucide-react';
+import { createPortal } from 'react-dom';
 
 const certs = [
   {
-    title: 'AWS Certified Cloud Practitioner',
-    issuer: 'AWS',
-    date: '2024',
+    id: 1,
+    title: 'Técnicas de Programação',
+    issuer: 'NAU / FCCN',
+    date: '2025',
+    image: '/certificado-nau-curso-tecnicas.jpg',
+    colSpan: 'md:col-span-2 lg:col-span-2 lg:row-span-2',
+    tags: ['Best Practices', 'Software Quality', 'Logic']
+  },
+  {
+    id: 2,
+    title: 'Algoritmos e Estruturas de Dados',
+    issuer: 'NAU / FCCN',
+    date: '2025',
+    image: '/certificado-nau-curso-algoritmos.jpg',
     colSpan: 'md:col-span-2 lg:col-span-2',
-    iconSvg: (
-      <svg className="w-6 h-6 text-jb-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
-        <path d="M12 12l8-4.5" />
-        <path d="M12 12v9" />
-        <path d="M12 12L4 7.5" />
-      </svg>
-    ),
-    link: '#'
+    tags: ['Complexity', 'Sorting', 'Efficiency']
   },
   {
-    title: 'Google Associate Android Developer',
-    issuer: 'GOOGLE',
-    date: '2023',
+    id: 3,
+    title: 'Estruturas de Dados',
+    issuer: 'NAU / FCCN',
+    date: '2025',
+    image: '/certificado-nau-curso-estruturas.jpg',
     colSpan: 'md:col-span-1 lg:col-span-1',
-    iconSvg: (
-      <svg className="w-6 h-6 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="4" />
-        <circle cx="12" cy="12" r="4" />
-      </svg>
-    ),
-    link: '#'
+    tags: ['Trees', 'Graphs', 'Memory']
   },
   {
-    title: 'Oracle Certified Associate (Java SE)',
-    issuer: 'ORACLE',
-    date: '2023',
+    id: 4,
+    title: 'Programação Web',
+    issuer: 'NAU / FCCN',
+    date: '2025',
+    image: '/certificado-nau-curso-prog_web.jpg',
     colSpan: 'md:col-span-1 lg:col-span-1',
-    iconSvg: (
-      <svg className="w-6 h-6 text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="8" />
-        <path d="M8 12h8" />
-        <path d="M12 8v8" />
-      </svg>
-    ),
-    link: '#'
+    tags: ['Frontend', 'Backend', 'HTTP']
+  },
+  {
+    id: 5,
+    title: 'Programação Móvel',
+    issuer: 'NAU / FCCN',
+    date: '2025',
+    image: '/certificado-nau-curso-prog_moveis.jpg',
+    colSpan: 'md:col-span-2 lg:col-span-2',
+    tags: ['Android', 'Kotlin', 'Mobile UX']
   }
 ];
 
+function CertificateModal({ cert, onClose }: { cert: typeof certs[0], onClose: () => void }) {
+  return createPortal(
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-10 bg-slate-900/90 backdrop-blur-xl"
+      onClick={onClose}
+    >
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="relative max-w-5xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl"
+        onClick={e => e.stopPropagation()}
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 z-10 p-2 rounded-full bg-black/10 hover:bg-black/20 transition-colors"
+        >
+          <X className="w-6 h-6 text-slate-800" />
+        </button>
+
+        <div className="flex flex-col lg:flex-row h-full max-h-[90vh]">
+          {/* Image Container */}
+          <div className="lg:flex-1 bg-slate-100 flex items-center justify-center overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-100">
+            <img 
+              src={cert.image} 
+              alt={cert.title} 
+              className="max-w-full max-h-full object-contain shadow-lg"
+            />
+          </div>
+
+          {/* Info Sidebar */}
+          <div className="lg:w-80 p-8 flex flex-col bg-white">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-jb-primary/10 flex items-center justify-center">
+                <BadgeCheck className="w-6 h-6 text-jb-primary" />
+              </div>
+              <span className="font-mono text-[10px] font-bold text-jb-primary uppercase tracking-widest">Verified Credential</span>
+            </div>
+
+            <h3 className="text-2xl font-black text-slate-900 leading-tight mb-4">{cert.title}</h3>
+            
+            <div className="space-y-4 mb-8">
+              <div className="flex items-center gap-3 text-slate-500">
+                <Award className="w-4 h-4" />
+                <span className="text-sm font-medium">{cert.issuer}</span>
+              </div>
+              <div className="flex items-center gap-3 text-slate-500">
+                <Calendar className="w-4 h-4" />
+                <span className="text-sm font-medium">{cert.date}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-auto">
+              {cert.tags.map(tag => (
+                <span key={tag} className="px-3 py-1 bg-slate-50 text-slate-600 rounded-full text-[10px] font-bold uppercase tracking-wider border border-slate-100">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <button 
+              onClick={onClose}
+              className="mt-8 w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-slate-800 transition-colors"
+            >
+              Close Viewer
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>,
+    document.body
+  );
+}
+
 export default function Certifications() {
+  const [selectedCert, setSelectedCert] = useState<typeof certs[0] | null>(null);
   const prefersReducedMotion = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="px-5 sm:px-6 py-24 lg:px-10 max-w-7xl mx-auto w-full" id="certificacoes">
-      <div className="flex items-center justify-between mb-16 cursor-default">
-        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase flex items-center gap-3">
-          <BadgeCheck className="w-6 h-6 text-jb-primary" />
-          05 // Verified.java <span className="text-jb-primary not-italic">/</span> <br />
-          <span className="text-slate-500 font-mono italic normal-case font-medium text-2xl sm:text-4xl ml-9">Hall of Fame & Expertise</span>
+    <section className="px-5 sm:px-6 py-32 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="certificacoes">
+      <div className="flex flex-col mb-20 cursor-default">
+        <h2 className="text-2xl font-bold font-mono tracking-tighter text-slate-800 uppercase flex items-center gap-3 mb-4">
+          <BadgeCheck className="w-7 h-7 text-jb-primary" />
+          05 // Verified.java <span className="text-jb-primary not-italic">/</span>
         </h2>
+        <span className="text-slate-500 font-mono italic normal-case font-medium text-3xl sm:text-5xl">Hall of Fame & Expertise</span>
       </div>
 
-      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[280px] gap-6 lg:gap-8">
         {certs.map((cert, idx) => (
           <motion.div
-            key={idx}
+            key={cert.id}
             initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
             whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : idx * 0.15, ease: "easeOut" }}
-            className={`relative group bg-white ring-1 ring-gray-100/50 shadow-sm rounded-3xl p-8 pt-10 flex flex-col hover:-translate-y-1 hover:shadow-xl hover:ring-2 hover:ring-jb-primary/50 transition-all duration-300 ${cert.colSpan}`}
+            transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.215, 0.61, 0.355, 1] }}
+            onClick={() => setSelectedCert(cert)}
+            className={`group relative rounded-[2rem] overflow-hidden cursor-pointer bg-white border border-slate-100 shadow-sm transition-all duration-500 hover:shadow-2xl hover:border-jb-primary/20 ${cert.colSpan}`}
           >
-            {/* Header Glow pretending to be an IDE header */}
-            <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-jb-primary/5 to-transparent rounded-t-3xl pointer-events-none transition-opacity duration-500 group-hover:opacity-100 opacity-50"></div>
-
-            <div className="flex-1 relative z-10">
-               {/* Squircle Emblem */}
-               <div className="w-14 h-14 rounded-[16px] bg-white ring-1 ring-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.03)] flex items-center justify-center mb-8">
-                  {cert.iconSvg}
-               </div>
-
-               <h3 className="text-xl font-sans font-semibold text-slate-800 mb-4 leading-tight group-hover:text-jb-primary transition-colors">
-                  {cert.title}
-               </h3>
-               
-               <div className="font-mono text-sm text-slate-500 tracking-wide break-words">
-                  ISSUER: {cert.issuer} <br className="lg:hidden" /><span className="hidden lg:inline text-slate-300 mx-1">//</span> DATE: {cert.date}
-               </div>
+            {/* Background Image Preview */}
+            <div className="absolute inset-0 z-0">
+              <img 
+                src={cert.image} 
+                alt={cert.title} 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-100 md:opacity-40 group-hover:opacity-100 grayscale-0 md:grayscale group-hover:grayscale-0"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
             </div>
 
-            <div className="mt-10 relative z-10">
-               <a href={cert.link} className="inline-flex items-center text-sm font-bold text-slate-500 hover:text-jb-primary transition-colors group/link focus:outline-none">
-                 Ver Credencial
-                 <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/link:translate-x-1" />
-               </a>
+            {/* Content Overlay */}
+            <div className="absolute inset-0 z-10 p-8 flex flex-col justify-end">
+              <div className="translate-y-0 md:translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-jb-primary/20 backdrop-blur-md flex items-center justify-center border border-white/20">
+                    <Award className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="font-mono text-[10px] font-bold text-white/70 tracking-widest uppercase">{cert.issuer}</span>
+                </div>
+
+                <h3 className="text-xl font-black text-white leading-tight mb-2 pr-8">{cert.title}</h3>
+                
+                <div className="flex items-center justify-between opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                  <span className="text-xs font-mono text-jb-primary font-bold">{cert.date}</span>
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-white uppercase tracking-tighter">
+                    Full View <Maximize2 className="w-3 h-3" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* JetBrains Corner Accent */}
+            <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+                <ExternalLink className="w-5 h-5 text-white" />
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
+
+      <AnimatePresence>
+        {selectedCert && (
+          <CertificateModal 
+            cert={selectedCert} 
+            onClose={() => setSelectedCert(null)} 
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

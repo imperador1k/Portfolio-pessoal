@@ -97,3 +97,63 @@ export const TerminalVisual = () => (
     </div>
   </div>
 );
+export const MobileVisual = () => (
+  <div className="absolute inset-0 bg-[#F8FAFC] flex items-center justify-center overflow-hidden p-6">
+    {/* Stylized Phone Frame */}
+    <motion.div 
+      animate={{ y: [2, -2, 2] }} 
+      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      className="w-[140px] h-[240px] bg-white border-[3px] border-slate-900 rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col pt-4 px-3"
+    >
+      {/* Notch */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-900 rounded-b-xl z-20"></div>
+      
+      {/* Screen Content */}
+      <div className="flex-1 flex flex-col gap-3">
+        {/* Header Profile */}
+        <div className="flex items-center gap-2 mt-4">
+          <div className="w-6 h-6 rounded-full bg-indigo-100 border border-indigo-200"></div>
+          <div className="h-2 w-12 bg-slate-100 rounded"></div>
+        </div>
+
+        {/* Activity Chart Area */}
+        <div className="h-16 w-full bg-indigo-50/50 rounded-xl border border-indigo-100 p-2 flex items-end gap-1 overflow-hidden">
+          {[40, 70, 45, 90, 60, 80, 50].map((h, i) => (
+            <motion.div 
+              key={i}
+              initial={{ height: 0 }}
+              animate={{ height: `${h}%` }}
+              transition={{ delay: i * 0.1, duration: 1 }}
+              className="flex-1 bg-indigo-500 rounded-t-sm"
+            />
+          ))}
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="h-10 bg-slate-50 rounded-lg border border-slate-100 flex flex-col items-center justify-center">
+             <div className="w-4 h-1 bg-emerald-400 rounded-full mb-1"></div>
+             <div className="w-6 h-1 bg-slate-200 rounded-full"></div>
+          </div>
+          <div className="h-10 bg-slate-50 rounded-lg border border-slate-100 flex flex-col items-center justify-center">
+             <div className="w-4 h-1 bg-orange-400 rounded-full mb-1"></div>
+             <div className="w-6 h-1 bg-slate-200 rounded-full"></div>
+          </div>
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="mt-auto mb-2 flex justify-around items-center">
+          <div className="w-4 h-4 rounded-full bg-slate-100"></div>
+          <div className="w-6 h-6 rounded-full bg-jb-primary flex items-center justify-center shadow-lg shadow-jb-primary/30">
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+          </div>
+          <div className="w-4 h-4 rounded-full bg-slate-100"></div>
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Background Decorative Circles */}
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-slate-100 rounded-full z-0"></div>
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-slate-50 rounded-full z-0"></div>
+  </div>
+);

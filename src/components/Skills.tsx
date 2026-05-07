@@ -1,269 +1,408 @@
-import { motion, useInView, useScroll, useSpring, useTransform } from 'motion/react';
-import React, { useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import React, { useState } from 'react';
 import { 
   KotlinIcon, AndroidIcon, JavaIcon, ReactIcon, ViteIcon, PostgresIcon, 
   TailwindIcon, VSCodeIcon, GitIcon, IntelliJIcon, JetpackComposeIcon, AndroidStudioIcon 
 } from './Icons';
+import { 
+  ChevronRight, 
+  ChevronDown, 
+  Folder, 
+  FileCode, 
+  Terminal as TerminalIcon,
+  Search,
+  Layout,
+  Menu,
+  X,
+  Code2
+} from 'lucide-react';
 
 const skillCategories = [
   {
     id: 'mobile',
-    title: 'ECOSSISTEMA MOBILE',
+    title: 'Mobile Ecosystem',
+    folder: 'mobile',
     items: [
-      { name: 'Kotlin', icon: KotlinIcon, hoverColor: 'group-hover:text-[#7F52FF]', hoverBg: 'group-hover:bg-[#7F52FF]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#7F52FF]/30' },
-      { name: 'Jetpack Compose', icon: JetpackComposeIcon, hoverColor: 'group-hover:text-[#4285F4]', hoverBg: 'group-hover:bg-[#4285F4]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#4285F4]/30' },
-      { name: 'Android SDK', icon: AndroidIcon, hoverColor: 'group-hover:text-[#3DDC84]', hoverBg: 'group-hover:bg-[#3DDC84]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#3DDC84]/30' },
-      { name: 'Java', icon: JavaIcon, hoverColor: 'group-hover:text-[#f89820]', hoverBg: 'group-hover:bg-[#f89820]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#f89820]/30' },
-    ]
-  },
-  {
-    id: 'tools',
-    title: 'FERRAMENTAS & IDES',
-    items: [
-      { name: 'Android Studio', icon: AndroidStudioIcon, hoverColor: 'group-hover:text-[#3DDC84]', hoverBg: 'group-hover:bg-[#3DDC84]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#3DDC84]/30' },
-      { name: 'IntelliJ IDEA', icon: IntelliJIcon, hoverColor: 'group-hover:text-[#FE2857]', hoverBg: 'group-hover:bg-[#FE2857]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#FE2857]/30' },
-      { name: 'VS Code', icon: VSCodeIcon, hoverColor: 'group-hover:text-[#007ACC]', hoverBg: 'group-hover:bg-[#007ACC]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#007ACC]/30' },
-      { name: 'Git / GitHub', icon: GitIcon, hoverColor: 'group-hover:text-[#F05032]', hoverBg: 'group-hover:bg-[#F05032]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#F05032]/30' },
+      { name: 'Kotlin', ext: 'kt', icon: KotlinIcon, code: `// Modern Native Android
+class MiguelSantos : Developer() {
+    val skills = listOf("Kotlin", "Coroutines", "KMP")
+    
+    fun buildApp() = compose {
+        Text("Creating high performance apps")
+    }
+}` },
+      { name: 'JetpackCompose', ext: 'kt', icon: JetpackComposeIcon, code: `@Composable
+fun ModernUI() {
+    val state by remember { mutableStateOf(true) }
+    
+    Box(modifier = Modifier.fillMaxSize()) {
+        AnimatedVisibility(visible = state) {
+            Text("Seamless UI Experiences")
+        }
+    }
+}` },
+      { name: 'AndroidSDK', ext: 'java', icon: AndroidIcon, code: `public class AndroidCore extends Activity {
+    @Override
+    protected void onCreate(Bundle saved) {
+        super.onCreate(saved);
+        setContentView(R.layout.activity_main);
+        Log.d("Lifecycle", "App Initialized");
+    }
+}` },
+      { name: 'Java', ext: 'java', icon: JavaIcon, code: `public class LegacyCore {
+    public static void main(String[] args) {
+        System.out.println("The foundation of many systems.");
+    }
+}` },
     ]
   },
   {
     id: 'web',
-    title: 'WEB & BACKEND',
+    title: 'Web & Backend',
+    folder: 'web',
     items: [
-      { name: 'React', icon: ReactIcon, hoverColor: 'group-hover:text-[#61DAFB]', hoverBg: 'group-hover:bg-[#61DAFB]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#61DAFB]/30' },
-      { name: 'Vite', icon: ViteIcon, hoverColor: 'group-hover:text-[#646CFF]', hoverBg: 'group-hover:bg-[#646CFF]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#646CFF]/30' },
-      { name: 'Tailwind CSS', icon: TailwindIcon, hoverColor: 'group-hover:text-[#06B6D4]', hoverBg: 'group-hover:bg-[#06B6D4]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#06B6D4]/30' },
-      { name: 'PostgreSQL', icon: PostgresIcon, hoverColor: 'group-hover:text-[#336791]', hoverBg: 'group-hover:bg-[#336791]/5', hoverRing: 'group-hover:ring-[1px] group-hover:ring-[#336791]/30' },
+      { name: 'React', ext: 'tsx', icon: ReactIcon, code: `import React from 'react';
+
+export const Portfolio = () => {
+  return (
+    <div className="premium-ui">
+       <h1>Engineered with Passion</h1>
+       <p>Building scalable web apps</p>
+    </div>
+  );
+};` },
+      { name: 'Vite', ext: 'config.ts', icon: ViteIcon, code: `import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: { port: 3000 }
+});` },
+      { name: 'Postgres', ext: 'sql', icon: PostgresIcon, code: `-- Database Schema
+SELECT * FROM tech_stack
+WHERE level = 'Advanced'
+AND category IN ('Backend', 'Architecture')
+ORDER BY performance DESC;` },
+      { name: 'Tailwind', ext: 'css', icon: TailwindIcon, code: `/* Modern Styling */
+.card-premium {
+  @apply bg-white/10 backdrop-blur-md 
+         border border-white/20 
+         hover:scale-105 transition-all;
+}` },
+    ]
+  },
+  {
+    id: 'tools',
+    title: 'Dev Tools',
+    folder: 'tools',
+    items: [
+      { name: 'AndroidStudio', ext: 'xml', icon: AndroidStudioIcon, code: `<!-- IDE Config -->
+<component name="ProjectSettings">
+    <option name="optimizeImports" value="true" />
+    <option name="showLineNumbers" value="true" />
+</component>` },
+      { name: 'GitConfig', ext: 'json', icon: GitIcon, code: `{
+  "user": {
+    "name": "Miguel Santos",
+    "status": "Ready to Collaborate",
+    "branch": "production"
+  },
+  "preferences": {
+    "ui": "clean",
+    "performance": "max"
+  }
+}` },
+      { name: 'IntelliJ', ext: 'config', icon: IntelliJIcon, code: `// IDE Configuration
+plugin_manager.enable("AI_Assistance")
+theme.set("JetBrains_Dark_Premium")
+shortcut.add("CTRL+SHIFT+D", "Deploy")` },
+      { name: 'VSCode', ext: 'json', icon: VSCodeIcon, code: `{
+  "editor.fontSize": 14,
+  "editor.fontFamily": "'JetBrains Mono'",
+  "editor.bracketPairColorization.enabled": true
+}` },
     ]
   }
 ];
 
-const timeline = [
-  {
-    version: '> init: root',
-    title: 'Engenharia Informática',
-    organization: 'Licenciatura (A Paixão)',
-    description: 'O ponto de partida. Ingressei na licenciatura em Engenharia Informática por pura paixão pela tecnologia. Aqui construí a fundação teórica e prática em algoritmos e sistemas que sustenta a minha carreira.',
-    image: '/journey.jpg',
-    tags: ['Engenharia', 'Algoritmos', 'Software Architecture', 'CS']
-  },
-  {
-    version: '> commit: initial-web',
-    title: 'Primeiros Passos: O Core',
-    organization: 'Web Fundamentals',
-    description: 'O início da construção: transformar conceitos em realidade através do domínio de HTML, CSS e JavaScript. A base onde aprendi a importância da semântica e do detalhe visual.',
-    image: '/water.png',
-    tags: ['HTML5', 'CSS3', 'JavaScript', 'Logic']
-  },
-  {
-    version: '> upgrade: v2.0',
-    title: 'Evolução Full-Stack',
-    organization: 'React & Node Ecosystem',
-    description: 'Salto tecnológico para o desenvolvimento de aplicações modernas. Domínio do ecossistema React para o front-end e Node.js para back-ends escaláveis e eficientes.',
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=70&w=800&auto=format&fit=crop',
-    tags: ['React', 'Node.js', 'API Design', 'NoSQL']
-  },
-  {
-    version: '> deploy: v2.4',
-    title: 'Digital Solutions for Business',
-    organization: 'B2B Freelance',
-    description: 'Fase dedicada ao desenvolvimento de serviços para o mercado real: pequenos negócios, lojas locais e alojamentos. Foco em resolver problemas de negócio através de interfaces web rápidas e conversivas.',
-    image: '/motorcycle.jpg',
-    tags: ['Business Solutions', 'UX/UI', 'Web Development']
-  },
-  {
-    version: '> stable: current',
-    title: 'Engenharia Mobile & Freelance Solutions',
-    organization: 'Atualidade',
-    description: 'Atualmente focado no desenvolvimento Android nativo com Kotlin, criando experiências móveis fluidas. Em paralelo, mantenho a minha veia empreendedora desenvolvendo sites premium para empresas e negócios que procuram excelência digital. Fora do código, o foco está na corrida e no desporto para manter a alta performance mental.',
-    image: '/natural.jpg',
-    tags: ['Kotlin', 'Android SDK', 'Freelance', 'Running']
-  }
-];
-
-function TimelineItem({ item, index }: { key?: React.Key, item: typeof timeline[0], index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
-
-  return (
-    <div 
-      ref={ref}
-      className="relative pl-12 md:pl-20 pb-20 last:pb-0"
-    >
-      {/* The Node on the line */}
-      <div className="absolute left-[-5px] top-2 z-20">
-        <div className={`w-[10px] h-[10px] rounded-full border-2 transition-all duration-500 ${
-          isInView ? 'bg-jb-primary border-jb-primary scale-125 shadow-[0_0_12px_rgba(127,82,255,0.5)]' : 'bg-white border-slate-300'
-        }`} />
-      </div>
-
-      {/* Date / Version Tag - Left side alignment */}
-      <div className="absolute left-[-120px] top-1 hidden lg:block w-24 text-right">
-        <span className={`font-mono text-[11px] font-bold tracking-tighter transition-colors duration-500 ${isInView ? 'text-jb-primary' : 'text-slate-400'}`}>
-          {item.version}
-        </span>
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <Card item={item} isActive={isInView} index={index} />
-      </motion.div>
-    </div>
-  );
-}
-
-function Card({ item, isActive, index }: { item: typeof timeline[0], isActive: boolean, index: number }) {
-  return (
-    <div className={`group relative transition-all duration-700 ${isActive ? 'translate-x-2' : 'opacity-40'}`}>
-      {/* Background ID Number */}
-      <div className="absolute -top-6 -right-2 text-7xl font-black text-slate-50 font-mono pointer-events-none select-none transition-colors duration-700 group-hover:text-slate-100/50">
-        0{index + 1}
-      </div>
-
-      <div className={`rounded-2xl border transition-all duration-700 overflow-hidden ${
-        isActive 
-          ? 'bg-white border-jb-primary/20 shadow-[0_12px_40px_rgba(0,0,0,0.04)] ring-1 ring-jb-primary/5' 
-          : 'bg-slate-50/50 border-slate-100'
-      }`}>
-        <div className="flex flex-col lg:flex-row">
-          {/* Visual Side */}
-          <div className="lg:w-1/3 relative h-48 lg:h-auto overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
-            <img 
-              src={item.image} 
-              alt={item.title} 
-              className={`w-full h-full object-cover transition-transform duration-1000 ${isActive ? 'scale-105' : 'scale-100 grayscale'}`}
-            />
-          </div>
-
-          {/* Content Side */}
-          <div className="lg:w-2/3 p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="lg:hidden font-mono text-[10px] font-bold text-jb-primary bg-jb-primary/10 px-2 py-0.5 rounded">
-                  {item.version}
-                </span>
-                <span className={`text-[11px] font-mono font-bold uppercase tracking-widest ${isActive ? 'text-jb-primary' : 'text-slate-400'}`}>
-                  {item.organization}
-                </span>
-              </div>
-              
-              <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-3 tracking-tight">
-                {item.title}
-              </h3>
-              
-              <p className="text-slate-600 text-sm sm:text-[15px] leading-relaxed mb-6 font-medium max-w-xl">
-                {item.description}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-2 pt-6 border-t border-slate-100">
-              {item.tags.map((tag) => (
-                <span key={tag} className="px-2.5 py-1 text-[10px] font-mono font-bold rounded bg-slate-900 text-white shadow-sm transition-transform hover:-translate-y-0.5">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Skills() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"]
+  const [openFiles, setOpenFiles] = useState<string[]>(['Kotlin']);
+  const [activeFile, setActiveFile] = useState('Kotlin');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
+    'src': true,
+    'mobile': true,
+    'web': false,
+    'tools': false
   });
-
-  const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 20 });
   
+  const toggleFolder = (folder: string) => {
+    setExpandedFolders(prev => ({ ...prev, [folder]: !prev[folder] }));
+  };
+
+  const handleFileClick = (fileName: string) => {
+    if (!openFiles.includes(fileName)) {
+      setOpenFiles(prev => [...prev, fileName]);
+    }
+    setActiveFile(fileName);
+    if (window.innerWidth < 768) {
+       setIsSidebarOpen(false);
+    }
+  };
+
+  const closeFile = (e: React.MouseEvent, fileName: string) => {
+    e.stopPropagation();
+    const newFiles = openFiles.filter(f => f !== fileName);
+    setOpenFiles(newFiles);
+    if (activeFile === fileName && newFiles.length > 0) {
+      setActiveFile(newFiles[newFiles.length - 1]);
+    } else if (newFiles.length === 0) {
+      setActiveFile('');
+    }
+  };
+
+  const allItems = skillCategories.flatMap(c => c.items);
+  const currentItem = allItems.find(i => i.name === activeFile) || allItems[0];
+
   return (
-    <section className="px-5 sm:px-6 py-32 lg:px-10 max-w-6xl mx-auto w-full relative z-10" id="skills">
-      {/* 02 // Tech Stack Section */}
-      <div className="mb-40">
-        <div className="flex flex-col mb-12">
-          <span className="text-jb-primary font-mono text-sm font-bold tracking-tighter mb-4 text-center md:text-left">
-            02 // TECH STACK
-          </span>
-          <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase text-center md:text-left">
-            Stack.json <span className="text-jb-primary not-italic">/</span> <br />
-            <span className="text-slate-500 font-mono italic normal-case font-medium text-2xl sm:text-4xl">Engineered for Performance</span>
+    <section className="px-4 sm:px-6 py-20 lg:py-32 lg:px-10 max-w-7xl mx-auto w-full relative z-10" id="skills">
+      <div className="mb-0">
+        <div className="flex flex-col mb-12 lg:mb-16 max-w-4xl">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-3 mb-6"
+          >
+            <span className="px-3 py-1 bg-jb-primary/10 text-jb-primary text-[10px] font-mono font-bold rounded-full tracking-widest uppercase shadow-sm">
+              Technical_Workspace
+            </span>
+            <div className="h-px flex-1 bg-linear-to-r from-jb-primary/20 to-transparent" />
+          </motion.div>
+          <h2 className="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter uppercase leading-[0.9]">
+            Stack.ide <span className="text-jb-primary">/</span> <br />
+            <span className="text-slate-500 font-mono italic normal-case font-medium text-xl sm:text-4xl">Engineering & Tools</span>
           </h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {skillCategories.map((category, catIndex) => (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: catIndex * 0.15, ease: "easeOut" }}
-              key={category.id}
-              className="bg-white/80 backdrop-blur-sm border border-slate-100 rounded-2xl p-5 sm:p-6 shadow-sm"
-            >
-              <span className="text-xs sm:text-sm font-mono text-slate-500 mb-6 block font-bold tracking-tight">
-                /// {category.title}
-              </span>
-              
-              <div className="flex flex-wrap gap-3">
-                {category.items.map((skill) => {
-                  const Icon = skill.icon;
-                  return (
-                    <div
-                      key={skill.name}
-                      className={`group flex items-center gap-2.5 bg-slate-50 border border-slate-100 px-4 py-2.5 rounded-xl transition-all duration-300 relative overflow-hidden cursor-default ${skill.hoverBg} ${skill.hoverRing}`}
-                    >
-                      <div className="flex items-center justify-center transition-all duration-300 z-10 shrink-0 group-hover:scale-110">
-                        <Icon className="w-5 h-5 transition-transform duration-300" />
-                      </div>
-                      <span className="font-medium text-sm text-slate-700 group-hover:text-slate-900 transition-colors duration-300 z-10 font-sans tracking-tight">
-                        {skill.name}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-[#0d1117] rounded-2xl shadow-[0_30px_100px_rgba(0,0,0,0.5)] border border-slate-800/50 overflow-hidden flex flex-col h-[600px] lg:h-[700px] relative"
+        >
+          <AnimatePresence>
+             {!isSidebarOpen && (
+                <button 
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="md:hidden absolute bottom-6 right-6 z-50 w-12 h-12 bg-jb-primary text-white rounded-full shadow-lg flex items-center justify-center"
+                >
+                   <Menu className="w-6 h-6" />
+                </button>
+             )}
+          </AnimatePresence>
 
-      {/* 03 // Experience Section */}
-      <div className="relative">
-        <div className="flex flex-col mb-20">
-          <span className="text-jb-primary font-mono text-sm font-bold tracking-tighter mb-4">
-            03 // CHANGELOG
-          </span>
-          <h2 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tighter uppercase">
-            Changelog.md <span className="text-jb-primary not-italic">/</span> <br />
-            <span className="text-slate-500 font-mono italic normal-case font-medium text-2xl sm:text-4xl">Journey & Milestones</span>
-          </h2>
-        </div>
-
-        {/* Professional Timeline Container */}
-        <div ref={containerRef} className="relative max-w-4xl ml-0 lg:ml-32">
-          {/* Main Vertical Track */}
-          <div className="absolute left-0 top-0 bottom-0 w-px bg-slate-100 z-0">
-            <motion.div 
-              style={{ scaleY }}
-              className="absolute top-0 left-0 w-full bg-jb-primary origin-top shadow-[0_0_10px_rgba(127,82,255,0.5)]"
-            />
+          <div className="bg-[#161b22] px-4 py-3 flex items-center justify-between border-b border-slate-800 z-30">
+             <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+             </div>
+             <div className="absolute left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-2 text-slate-500 text-[11px] font-mono">
+                <Layout className="w-3 h-3" />
+                <span>miguel-dev — src/{currentItem?.name}.{currentItem?.ext}</span>
+             </div>
+             <div className="flex items-center gap-3 text-slate-500">
+                <Search className="w-3.5 h-3.5" />
+                <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="hover:text-white transition-colors">
+                   <Menu className="w-4 h-4" />
+                </button>
+             </div>
           </div>
 
-          <div className="space-y-4">
-            {timeline.map((item, index) => (
-              <TimelineItem key={item.title} item={item} index={index} />
-            ))}
+          <div className="flex-1 flex overflow-hidden relative">
+            <AnimatePresence initial={false}>
+               {isSidebarOpen && (
+                  <motion.div 
+                     initial={{ width: 0, opacity: 0 }}
+                     animate={{ width: 260, opacity: 1 }}
+                     exit={{ width: 0, opacity: 0 }}
+                     className="bg-[#0d1117] border-right border-slate-800 flex flex-col absolute md:relative inset-y-0 left-0 z-40 shadow-2xl md:shadow-none h-full"
+                  >
+                     <div className="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center justify-between">
+                        <span>Explorer</span>
+                        <ChevronDown className="w-3 h-3" />
+                     </div>
+                     
+                     <div className="flex-1 overflow-y-auto px-2 py-2 no-scrollbar">
+                        <div className="mb-2">
+                           <button 
+                              onClick={() => toggleFolder('src')}
+                              className="flex items-center gap-2 w-full px-2 py-1.5 text-slate-300 text-xs hover:bg-slate-800/50 rounded transition-colors"
+                           >
+                              <ChevronRight className={`w-3.5 h-3.5 transition-transform ${expandedFolders['src'] ? 'rotate-90' : ''}`} />
+                              <Folder className="w-4 h-4 text-jb-primary/70" />
+                              <span className="font-medium">src</span>
+                           </button>
+                           
+                           {expandedFolders['src'] && (
+                              <div className="ml-4">
+                                 {skillCategories.map((cat) => (
+                                    <div key={cat.id}>
+                                       <button 
+                                          onClick={() => toggleFolder(cat.id)}
+                                          className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-slate-400 hover:bg-slate-800/30 rounded transition-colors"
+                                       >
+                                          <ChevronRight className={`w-3.5 h-3.5 transition-transform ${expandedFolders[cat.id] ? 'rotate-90' : ''}`} />
+                                          <Folder className="w-4 h-4 text-slate-500" />
+                                          <span>{cat.folder}</span>
+                                       </button>
+                                       
+                                       {expandedFolders[cat.id] && (
+                                          <div className="ml-5">
+                                             {cat.items.map(item => (
+                                                <button 
+                                                   key={item.name}
+                                                   onClick={() => handleFileClick(item.name)}
+                                                   className={`flex items-center gap-2 w-full px-2 py-1.5 text-[11px] rounded transition-colors mb-0.5 ${
+                                                      activeFile === item.name ? 'bg-jb-primary/20 text-jb-primary' : 'text-slate-500 hover:text-slate-300'
+                                                   }`}
+                                                >
+                                                   <FileCode className="w-3.5 h-3.5" />
+                                                   <span>{item.name}.{item.ext}</span>
+                                                </button>
+                                             ))}
+                                          </div>
+                                       )}
+                                    </div>
+                                 ))}
+                              </div>
+                           )}
+                        </div>
+                     </div>
+                  </motion.div>
+               )}
+            </AnimatePresence>
+
+            <div className="flex-1 flex flex-col bg-[#0d1117] min-w-0">
+               <div className="flex bg-[#161b22] overflow-x-auto no-scrollbar border-b border-slate-800/50">
+                  {openFiles.map(fileName => {
+                     const item = allItems.find(i => i.name === fileName);
+                     return (
+                        <button
+                           key={fileName}
+                           onClick={() => setActiveFile(fileName)}
+                           className={`flex items-center gap-2 px-4 py-2.5 text-[11px] font-mono border-r border-slate-800 transition-all min-w-[120px] max-w-[180px] shrink-0 ${
+                              activeFile === fileName 
+                              ? 'bg-[#0d1117] text-jb-primary border-t-2 border-t-jb-primary' 
+                              : 'text-slate-500 hover:bg-slate-800/30'
+                           }`}
+                        >
+                           <FileCode className="w-3.5 h-3.5 shrink-0" />
+                           <span className="truncate">{fileName}.{item?.ext}</span>
+                           <X 
+                              onClick={(e) => closeFile(e, fileName)}
+                              className="w-3 h-3 ml-2 hover:text-red-400 transition-colors shrink-0" 
+                           />
+                        </button>
+                     );
+                  })}
+               </div>
+
+               <div className="flex-1 p-4 lg:p-8 font-mono text-[11px] sm:text-[13px] overflow-y-auto no-scrollbar relative bg-[#0d1117]">
+                  {openFiles.length > 0 && currentItem ? (
+                     <>
+                        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-transparent flex flex-col items-center pt-4 sm:pt-8 text-slate-700 pointer-events-none select-none text-[10px] sm:text-[12px] border-r border-slate-800/30">
+                           {Array.from({ length: 30 }).map((_, i) => (
+                              <div key={i} className="h-6 leading-6">{i + 1}</div>
+                           ))}
+                        </div>
+
+                        <AnimatePresence mode="wait">
+                           <motion.div
+                              key={activeFile}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              className="ml-6 sm:ml-12 pl-4"
+                           >
+                              <pre className="text-slate-300 leading-6 whitespace-pre-wrap">
+                                 {currentItem.code.split('\n').map((line, i) => (
+                                    <div key={i} className="flex flex-wrap min-h-[24px]">
+                                       {line.split(' ').map((word, j) => {
+                                          let color = 'text-slate-300';
+                                          const keywords = ['export', 'const', 'import', 'from', 'class', 'fun', 'val', 'private', 'public', 'protected', 'extends', 'override', '@Composable', '@Override'];
+                                          const functions = ['listOf', 'compose', 'Text', 'Activity', 'Box', 'mutableStateOf', 'remember', 'setContentView', 'Log.d'];
+                                          
+                                          if (keywords.includes(word)) color = 'text-purple-400';
+                                          if (functions.some(f => word.startsWith(f))) color = 'text-blue-300';
+                                          if (word.startsWith('"') || word.endsWith('"') || word.startsWith("'")) color = 'text-green-300';
+                                          if (word.startsWith('//') || word.startsWith('/*')) color = 'text-slate-500 italic';
+                                          
+                                          return (
+                                             <span key={j} className={`${color} mr-1.5`}>
+                                                {word}
+                                             </span>
+                                          );
+                                       })}
+                                    </div>
+                                 ))}
+                              </pre>
+
+                              <motion.div 
+                                 initial={{ scale: 0.9, opacity: 0 }}
+                                 animate={{ scale: 1, opacity: 1 }}
+                                 className="mt-8 lg:mt-12 p-4 lg:p-6 rounded-2xl bg-jb-primary/5 border border-jb-primary/20 flex flex-col sm:flex-row items-center gap-4 lg:gap-6 max-w-2xl"
+                              >
+                                 <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-[#161b22] border border-slate-800 flex items-center justify-center shadow-inner shrink-0">
+                                    {React.createElement(currentItem.icon, { className: "w-6 h-6 lg:w-8 lg:h-8" })}
+                                 </div>
+                                 <div className="text-center sm:text-left flex-1 min-w-0">
+                                    <h4 className="text-white font-bold text-base lg:text-lg mb-1">{currentItem.name} Proficiency</h4>
+                                    <div className="flex items-center gap-3">
+                                       <div className="h-1.5 lg:h-2 flex-1 bg-slate-800 rounded-full overflow-hidden">
+                                          <motion.div 
+                                             initial={{ width: 0 }}
+                                             animate={{ width: '92%' }}
+                                             transition={{ duration: 1.5, ease: "easeOut" }}
+                                             className="h-full bg-jb-primary shadow-[0_0_10px_rgba(127,82,255,0.5)]"
+                                          />
+                                       </div>
+                                       <span className="text-jb-primary font-bold text-[10px] lg:text-xs">92%</span>
+                                    </div>
+                                 </div>
+                              </motion.div>
+                           </motion.div>
+                        </AnimatePresence>
+                     </>
+                  ) : (
+                     <div className="h-full flex flex-col items-center justify-center text-slate-600">
+                        <Code2 className="w-12 h-12 mb-4 opacity-20" />
+                        <p className="text-xs">Select a file from the explorer.</p>
+                     </div>
+                  )}
+               </div>
+
+               <div className="h-24 sm:h-32 bg-[#0d1117] border-t border-slate-800 p-4 font-mono text-[9px] sm:text-[11px] overflow-hidden shrink-0">
+                  <div className="flex items-center gap-2 text-slate-500 mb-2 sm:mb-3 border-b border-slate-800 pb-2">
+                     <TerminalIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                     <span className="uppercase tracking-widest font-bold">Terminal — zsh</span>
+                  </div>
+                  <div className="space-y-1 text-slate-400">
+                     <div className="flex gap-2 truncate">
+                        <span className="text-green-400">➜</span>
+                        <span className="text-blue-300">~</span>
+                        <span>miguel-santos --analyze-stack</span>
+                     </div>
+                     <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-slate-500 italic">Build Success in 1.4s</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
