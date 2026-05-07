@@ -6,21 +6,21 @@ import { Heart, MessageCircle, ExternalLink, X, ChevronLeft, ChevronRight, Termi
 const stories = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop",
+    image: "/discipline.jpg",
     caption: "Early morning discipline. 🏋️‍♂️",
-    category: "Ginasio"
+    category: "Discipline"
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop",
-    caption: "Flow state engaged. Building something special. 💻",
-    category: "Coding"
+    image: "/motorcycle.jpg",
+    caption: "Flow state on two wheels. 🏍️",
+    category: "Ride"
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=800&auto=format&fit=crop",
-    caption: "Essential fuel for the grind. ☕",
-    category: "Coffee"
+    image: "/mountain.jpg",
+    caption: "Reaching new heights. 🏔️",
+    category: "Mountain"
   }
 ];
 
@@ -30,60 +30,60 @@ const hobbies = [
     title: "Shape & Discipline",
     category: "Academy",
     description: "Consistent training is the foundation of mental clarity and high performance in engineering.",
-    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop",
+    image: "/discipline.jpg",
     baseLikes: 1200,
     comments: "42",
     tag: "consistent"
   },
   {
     id: 2,
-    title: "Focus State",
-    category: "Setup",
-    description: "A clean, ergonomic workspace is where complex architectures come to life.",
-    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=800&auto=format&fit=crop",
+    title: "Pure Focus",
+    category: "Natural",
+    description: "Finding clarity in simplicity. The best logic often comes when we step away from the screen.",
+    image: "/natural.jpg",
     baseLikes: 856,
     comments: "12",
-    tag: "minimalist"
+    tag: "clarity"
   },
   {
     id: 3,
-    title: "Vibes & Nature",
-    category: "Travel",
-    description: "Disconnecting from the grid to recharge the creative batteries in the wild.",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
-    baseLikes: 2400,
-    comments: "89",
-    tag: "adventure"
+    title: "Road Freedom",
+    category: "Motorcycle",
+    description: "The open road is where I find focus and clear the mind. Two wheels, one purpose.",
+    image: "/motorcycle.jpg",
+    baseLikes: 3100,
+    comments: "156",
+    tag: "adrenaline"
   },
   {
     id: 4,
-    title: "The Perfect Roast",
-    category: "Coffee",
-    description: "Life begins after the first espresso. The ultimate fuel for debugging session.",
-    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop",
-    baseLikes: 3100,
-    comments: "156",
-    tag: "fuel"
+    title: "Vibes & Nature",
+    category: "Travel",
+    description: "Disconnecting from the grid to recharge the creative batteries in the wild.",
+    image: "/mountain.jpg",
+    baseLikes: 2400,
+    comments: "89",
+    tag: "adventure"
   },
   {
     id: 5,
     title: "Capture the Moment",
     category: "Photography",
     description: "Attention to detail isn't just for code; it's about seeing the world through a different lens.",
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800&auto=format&fit=crop",
+    image: "/water.png",
     baseLikes: 942,
     comments: "28",
     tag: "visuals"
   },
   {
     id: 6,
-    title: "Midnight Compile",
-    category: "Coding",
-    description: "The quiet hours are for the most ambitious builds. Pure flow state engineering.",
-    image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=800&auto=format&fit=crop",
+    title: "The Journey Begins",
+    category: "Origins",
+    description: "Where it all started. The first spark of passion for engineering and building digital worlds.",
+    image: "/journey.jpg",
     baseLikes: 5200,
     comments: "999",
-    tag: "passion"
+    tag: "roots"
   }
 ];
 
@@ -259,7 +259,7 @@ export default function AboutMe() {
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-[3px] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 transition-transform duration-500 group-hover:scale-105">
                 <div className="w-full h-full rounded-full border-[3px] border-white overflow-hidden bg-slate-200">
                    <img 
-                    src="/insta.png" 
+                    src="/icon.png" 
                     alt="Miguel" 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                    />

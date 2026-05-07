@@ -40,28 +40,44 @@ const skillCategories = [
 
 const timeline = [
   {
-    version: '> release: v2024.10',
-    title: 'Engenharia Informática',
-    organization: 'Universidade X',
-    description: 'Foco intensivo em estruturas de dados complexas, análise de algoritmos e arquiteturas de software escaláveis para ambientes corporativos.',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=70&w=800&auto=format&fit=crop',
-    tags: ['C', 'Java', 'Data Structures', 'Git']
-  },
-  {
-    version: '> commit: a1b2c3d',
-    title: 'Desenvolvimento Mobile Privado',
-    organization: 'Projetos Independentes',
-    description: 'Criação do zero de aplicações nativas utilitárias em Kotlin, adoção de Clean Architecture e integração profunda com APIs RESTful.',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=70&w=800&auto=format&fit=crop',
-    tags: ['Kotlin', 'Android SDK', 'Clean Code', 'REST']
-  },
-  {
     version: '> init: root',
-    title: 'Iniciação à Arquitetura',
-    organization: 'Autodidata',
-    description: 'Mergulho profundo nos paradigmas de programação orientada a objetos com Java. Construção das bases estruturais para desenvolvimento sólido.',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=70&w=800&auto=format&fit=crop',
-    tags: ['Java', 'OOP', 'Design Patterns']
+    title: 'Engenharia Informática',
+    organization: 'Licenciatura (A Paixão)',
+    description: 'O ponto de partida. Ingressei na licenciatura em Engenharia Informática por pura paixão pela tecnologia. Aqui construí a fundação teórica e prática em algoritmos e sistemas que sustenta a minha carreira.',
+    image: '/journey.jpg',
+    tags: ['Engenharia', 'Algoritmos', 'Software Architecture', 'CS']
+  },
+  {
+    version: '> commit: initial-web',
+    title: 'Primeiros Passos: O Core',
+    organization: 'Web Fundamentals',
+    description: 'O início da construção: transformar conceitos em realidade através do domínio de HTML, CSS e JavaScript. A base onde aprendi a importância da semântica e do detalhe visual.',
+    image: '/water.png',
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'Logic']
+  },
+  {
+    version: '> upgrade: v2.0',
+    title: 'Evolução Full-Stack',
+    organization: 'React & Node Ecosystem',
+    description: 'Salto tecnológico para o desenvolvimento de aplicações modernas. Domínio do ecossistema React para o front-end e Node.js para back-ends escaláveis e eficientes.',
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=70&w=800&auto=format&fit=crop',
+    tags: ['React', 'Node.js', 'API Design', 'NoSQL']
+  },
+  {
+    version: '> deploy: v2.4',
+    title: 'Digital Solutions for Business',
+    organization: 'B2B Freelance',
+    description: 'Fase dedicada ao desenvolvimento de serviços para o mercado real: pequenos negócios, lojas locais e alojamentos. Foco em resolver problemas de negócio através de interfaces web rápidas e conversivas.',
+    image: '/motorcycle.jpg',
+    tags: ['Business Solutions', 'UX/UI', 'Web Development']
+  },
+  {
+    version: '> stable: current',
+    title: 'Engenharia Mobile & Freelance Solutions',
+    organization: 'Atualidade',
+    description: 'Atualmente focado no desenvolvimento Android nativo com Kotlin, criando experiências móveis fluidas. Em paralelo, mantenho a minha veia empreendedora desenvolvendo sites premium para empresas e negócios que procuram excelência digital. Fora do código, o foco está na corrida e no desporto para manter a alta performance mental.',
+    image: '/natural.jpg',
+    tags: ['Kotlin', 'Android SDK', 'Freelance', 'Running']
   }
 ];
 
