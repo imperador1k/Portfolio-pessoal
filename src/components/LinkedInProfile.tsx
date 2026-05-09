@@ -70,14 +70,62 @@ export default function LinkedInProfile() {
     }
     return {};
   });
-  const [message, setMessage] = useState('');
+  
+  // Email Form State
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSending, setIsSending] = useState(false);
+  const [sendStatus, setSendStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  
+  const [message, setMessage] = useState('');
+  const [senderEmail, setSenderEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [subject, setSubject] = useState('');
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+  const handleSendEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      setErrorMessage('Por favor, preencha todos os campos.');
+      setSendStatus('error');
+      return;
+    }
+
+    setIsSending(true);
+    setSendStatus('idle');
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSendStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => {
+          setShowEmailForm(false);
+          setSendStatus('idle');
+        }, 3000);
+      } else {
+        setSendStatus('error');
+        setErrorMessage(data.error || 'Erro ao enviar email.');
+      }
+    } catch (err) {
+      setSendStatus('error');
+      setErrorMessage('Erro de rede ao conectar com o servidor.');
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -97,18 +145,43 @@ export default function LinkedInProfile() {
     localStorage.setItem('linkedin_connected_people', JSON.stringify(connectedPeople));
   }, [connectedPeople]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || !subject.trim()) return;
+    if (!message.trim() || !subject.trim() || !senderEmail.trim()) {
+      alert('Por favor, preencha todos os campos, incluindo o seu email.');
+      return;
+    }
+
     setIsSending(true);
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'LinkedIn Visitor',
+          email: senderEmail,
+          subject: subject,
+          message: message
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSent(true);
+        setMessage('');
+        setSubject('');
+        setSenderEmail('');
+        setAttachments([]);
+        setTimeout(() => setSent(false), 5000);
+      } else {
+        alert('Erro ao enviar: ' + data.error);
+      }
+    } catch (err) {
+      alert('Erro de ligação ao servidor.');
+    } finally {
       setIsSending(false);
-      setSent(true);
-      setMessage('');
-      setSubject('');
-      setAttachments([]);
-      setTimeout(() => setSent(false), 3000);
-    }, 1500);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -291,16 +364,29 @@ export default function LinkedInProfile() {
                 </div>
 
                 <form onSubmit={handleSendMessage} className="space-y-6">
-                   <div className="relative group">
-                      <label className="absolute left-0 -top-3 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">Subject</label>
-                      <input 
-                        type="text" 
-                        required
-                        value={subject}
-                        onChange={(e) => setSubject(e.target.value)}
-                        placeholder="Ex: Opportunity for Collaboration"
-                        className="w-full border-b border-slate-200 py-2 text-sm outline-none focus:border-[#0a66c2] transition-colors placeholder:text-slate-300"
-                      />
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="relative group">
+                        <label className="absolute left-0 -top-3 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">Subject</label>
+                        <input 
+                          type="text" 
+                          required
+                          value={subject}
+                          onChange={(e) => setSubject(e.target.value)}
+                          placeholder="Ex: Opportunity for Collaboration"
+                          className="w-full border-b border-slate-200 py-2 text-sm outline-none focus:border-[#0a66c2] transition-colors placeholder:text-slate-300"
+                        />
+                      </div>
+                      <div className="relative group">
+                        <label className="absolute left-0 -top-3 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">Your Email (Required)</label>
+                        <input 
+                          type="email" 
+                          required
+                          value={senderEmail}
+                          onChange={(e) => setSenderEmail(e.target.value)}
+                          placeholder="Ex: your@email.com"
+                          className="w-full border-b border-slate-200 py-2 text-sm outline-none focus:border-[#0a66c2] transition-colors placeholder:text-slate-300"
+                        />
+                      </div>
                    </div>
 
                    <div className="relative group pt-4">
@@ -498,7 +584,7 @@ export default function LinkedInProfile() {
                            animate={{ opacity: 1, scale: 1, y: 0 }}
                            className="bg-emerald-50 text-emerald-700 p-3 rounded-lg text-xs flex items-center gap-2 border border-emerald-100 shadow-sm"
                         >
-                           <Check className="w-4 h-4" /> Message sent successfully!
+                           <Check className="w-4 h-4" /> Message sent! Check your email.
                         </motion.div>
                      )}
                      
@@ -536,13 +622,21 @@ export default function LinkedInProfile() {
                   </div>
 
                   <form onSubmit={handleSendMessage} className="p-0 border-t border-slate-200 bg-white">
-                     <div className="px-3 py-2 border-b border-slate-100">
+                     <div className="px-3 py-2 border-b border-slate-100 flex gap-2">
                         <input 
                            type="text"
                            value={subject}
                            onChange={(e) => setSubject(e.target.value)}
                            placeholder="Subject"
-                           className="w-full text-[11px] font-bold outline-none bg-transparent placeholder:text-slate-400 text-slate-700"
+                           className="flex-1 text-[11px] font-bold outline-none bg-transparent placeholder:text-slate-400 text-slate-700"
+                        />
+                        <input 
+                           type="email"
+                           required
+                           value={senderEmail}
+                           onChange={(e) => setSenderEmail(e.target.value)}
+                           placeholder="Your Email"
+                           className="w-24 text-[10px] outline-none bg-slate-50 px-2 py-0.5 rounded border border-slate-100 placeholder:text-slate-400 text-slate-700 focus:border-[#0a66c2]/30"
                         />
                      </div>
                      <div className="p-3">
@@ -635,7 +729,13 @@ export default function LinkedInProfile() {
                    </div>
                 </div>
                 <button 
-                  onClick={() => setIsContactModalOpen(false)}
+                  onClick={() => {
+                    if (showEmailForm) {
+                      setShowEmailForm(false);
+                    } else {
+                      setIsContactModalOpen(false);
+                    }
+                  }}
                   className="p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all"
                 >
                   <X className="w-5 h-5" />
@@ -643,10 +743,16 @@ export default function LinkedInProfile() {
               </div>
 
               <div className="p-8 space-y-4">
-                {/* Contact Cards Container */}
-                <div className="grid gap-4">
-                  {[
-                    { 
+                <AnimatePresence mode="wait">
+                  {!showEmailForm ? (
+                    <motion.div 
+                      key="links"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      className="grid gap-4"
+                    >
+                  {[{ 
                       label: 'LinkedIn Profile', 
                       value: 'linkedin.com/in/miguel-sant0s', 
                       link: 'https://linkedin.com/in/miguel-sant0s',
@@ -671,29 +777,130 @@ export default function LinkedInProfile() {
                       bg: 'bg-emerald-50'
                     }
                   ].map((contact, idx) => (
-                    <motion.a
-                      key={idx}
-                      href={contact.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      className="group flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-white hover:border-[#0a66c2]/30 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300"
-                    >
-                      <div className={`p-3 ${contact.bg} ${contact.color} rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
-                         {contact.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{contact.label}</p>
-                        <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-[#0a66c2] transition-colors">{contact.value}</p>
-                      </div>
-                      <div className="text-slate-300 group-hover:text-[#0a66c2] transition-colors">
-                        <ExternalLink className="w-4 h-4" />
-                      </div>
-                    </motion.a>
+                    <React.Fragment key={idx}>
+                      {contact.label === 'Professional Email' ? (
+                        <div
+                          onClick={() => setShowEmailForm(true)}
+                          className="group flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-white hover:border-[#0a66c2]/30 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 cursor-pointer"
+                        >
+                          <div className={`p-3 ${contact.bg} ${contact.color} rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
+                             {contact.icon}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{contact.label}</p>
+                            <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-[#0a66c2] transition-colors">{contact.value}</p>
+                          </div>
+                          <div className="text-slate-300 group-hover:text-[#0a66c2] transition-colors">
+                            <MessageSquare className="w-4 h-4" />
+                          </div>
+                        </div>
+                      ) : (
+                        <motion.a
+                          href={contact.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="group flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-white hover:border-[#0a66c2]/30 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300"
+                        >
+                          <div className={`p-3 ${contact.bg} ${contact.color} rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
+                             {contact.icon}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{contact.label}</p>
+                            <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-[#0a66c2] transition-colors">{contact.value}</p>
+                          </div>
+                          <div className="text-slate-300 group-hover:text-[#0a66c2] transition-colors">
+                            <ExternalLink className="w-4 h-4" />
+                          </div>
+                        </motion.a>
+                      )}
+                    </React.Fragment>
                   ))}
-                </div>
+                    </motion.div>
+                  ) : (
+                    <motion.form 
+                      key="form"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      onSubmit={handleSendEmail}
+                      className="space-y-4"
+                    >
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nome Completo</label>
+                          <input 
+                            type="text" 
+                            required
+                            value={formData.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            disabled={isSending || sendStatus === 'success'}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0a66c2]/50 focus:border-[#0a66c2] transition-all disabled:opacity-50"
+                            placeholder="Ex: João Silva"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Seu Email</label>
+                          <input 
+                            type="email" 
+                            required
+                            value={formData.email}
+                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            disabled={isSending || sendStatus === 'success'}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0a66c2]/50 focus:border-[#0a66c2] transition-all disabled:opacity-50"
+                            placeholder="Ex: joao@empresa.com"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Mensagem</label>
+                          <textarea 
+                            required
+                            rows={3}
+                            value={formData.message}
+                            onChange={(e) => setFormData({...formData, message: e.target.value})}
+                            disabled={isSending || sendStatus === 'success'}
+                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0a66c2]/50 focus:border-[#0a66c2] transition-all resize-none disabled:opacity-50"
+                            placeholder="Olá Miguel, gostava de falar contigo sobre..."
+                          />
+                        </div>
+                      </div>
+
+                      {sendStatus === 'error' && (
+                        <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-lg border border-red-100">
+                          {errorMessage}
+                        </div>
+                      )}
+
+                      {sendStatus === 'success' && (
+                        <div className="p-3 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-lg border border-emerald-100 flex items-center justify-center gap-2">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          Enviada! Verifica o teu email.
+                        </div>
+                      )}
+
+                      <div className="pt-2">
+                        <button 
+                          type="submit"
+                          disabled={isSending || sendStatus === 'success'}
+                          className="w-full py-3 bg-[#0a66c2] text-white rounded-xl font-bold text-sm hover:bg-[#004182] hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                        >
+                          {isSending ? (
+                            <>
+                              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                              Enviando...
+                            </>
+                          ) : sendStatus === 'success' ? (
+                            'Enviado'
+                          ) : (
+                            'Enviar Mensagem Segura'
+                          )}
+                        </button>
+                      </div>
+                    </motion.form>
+                  )}
+                </AnimatePresence>
 
                 <div className="pt-4 pb-2">
                    <p className="text-[11px] text-center text-slate-400 font-medium">

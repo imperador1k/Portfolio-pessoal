@@ -271,6 +271,7 @@ export default function AboutMe() {
               <motion.div 
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                style={{ willChange: "transform" }}
                 className="absolute inset-0 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 blur-[2px] opacity-70 group-hover:blur-[4px] transition-all"
               />
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-[3px] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 relative z-10 transition-transform duration-500 group-hover:scale-105">
@@ -374,15 +375,19 @@ export default function AboutMe() {
               key={post.id}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "100px" }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              style={{ willChange: "transform, opacity" }}
               onClick={() => setSelectedPost(post)}
               className="relative aspect-square group cursor-pointer overflow-hidden rounded-md sm:rounded-xl"
             >
               <img 
                 src={post.image} 
                 alt={post.title} 
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                style={{ willChange: "transform" }}
               />
               
               {/* Overlay on Hover */}

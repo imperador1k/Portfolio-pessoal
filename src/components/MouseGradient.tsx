@@ -14,6 +14,7 @@ export default function MouseGradient() {
           background: 'radial-gradient(circle, rgba(127, 82, 255, 0.5) 0%, transparent 70%)',
           translateX: '-50%',
           translateY: '-50%',
+          willChange: 'transform'
         }}
         animate={{
           scale: isActive ? 1 : 0.8,
@@ -28,6 +29,7 @@ export default function MouseGradient() {
           background: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, transparent 70%)',
           translateX: '-20%',
           translateY: '-80%',
+          willChange: 'transform'
         }}
       />
       <motion.div
@@ -38,6 +40,7 @@ export default function MouseGradient() {
           background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%)',
           translateX: '-80%',
           translateY: '20%',
+          willChange: 'transform'
         }}
       />
     </div>

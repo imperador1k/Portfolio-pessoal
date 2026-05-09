@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Skills from './components/Skills';
@@ -8,22 +9,40 @@ import GithubProfile from './components/GithubProfile';
 import LinkedInProfile from './components/LinkedInProfile';
 import Footer from './components/Footer';
 import MouseGradient from './components/MouseGradient';
+import SplashScreen from './components/SplashScreen';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Sync with SplashScreen duration (2800ms) + small buffer for smooth transition
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
-      <MouseGradient />
-      <Navbar />
-      <main>
-        <Hero />
-        <AboutMe />
-        <CareerMarathon />
-        <Certifications />
-        <Skills />
-        <GithubProfile />
-        <LinkedInProfile />
-      </main>
-      <Footer />
+      <SplashScreen isLoading={isLoading} />
+      
+      {!isLoading && (
+        <div className="animate-in fade-in duration-700">
+          <MouseGradient />
+          <Navbar />
+          <main>
+            <Hero />
+            <AboutMe />
+            <CareerMarathon />
+            <Certifications />
+            <Skills />
+            <GithubProfile />
+            <LinkedInProfile />
+          </main>
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }
