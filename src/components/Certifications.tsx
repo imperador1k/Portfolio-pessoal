@@ -8,7 +8,7 @@ const certs = [
     id: 1,
     title: 'Técnicas de Programação',
     issuer: 'NAU / FCCN',
-    date: '2025',
+    date: '2026',
     image: '/certificado-nau-curso-tecnicas.jpg',
     colSpan: 'md:col-span-2 lg:col-span-2 lg:row-span-2',
     tags: ['Best Practices', 'Software Quality', 'Logic']
@@ -17,7 +17,7 @@ const certs = [
     id: 2,
     title: 'Algoritmos e Estruturas de Dados',
     issuer: 'NAU / FCCN',
-    date: '2025',
+    date: '2026',
     image: '/certificado-nau-curso-algoritmos.jpg',
     colSpan: 'md:col-span-2 lg:col-span-2',
     tags: ['Complexity', 'Sorting', 'Efficiency']

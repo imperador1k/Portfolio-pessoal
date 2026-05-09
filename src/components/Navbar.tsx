@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/
 const navLinks = [
   { name: 'Home', href: '#home', id: 'home' },
   { name: 'Sobre', href: '#sobre', id: 'sobre' },
+  { name: 'CV', href: '#cv', id: 'cv' },
   { name: 'Timeline', href: '#timeline', id: 'timeline' },
   { name: 'Hall of Fame', href: '#certificacoes', id: 'certificacoes' },
   { name: 'Tech Stack', href: '#skills', id: 'skills' },
@@ -31,7 +32,7 @@ export default function Navbar() {
           setActiveSection(entry.target.id);
         }
       });
-    }, { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" });
+    }, { rootMargin: "-40% 0px -40% 0px" });
     
     document.querySelectorAll('section[id], #home').forEach((section) => observer.observe(section));
     
@@ -111,7 +112,7 @@ export default function Navbar() {
 
           {/* Call to Action & Hamburger */}
           <div className="flex items-center gap-3 z-50">
-            <a href="#contactos" className="hidden sm:flex items-center justify-center px-6 py-2.5 relative rounded-full group outline-none overflow-hidden transition-all duration-300">
+            <a href="#linkedin-contact" className="hidden sm:flex items-center justify-center px-6 py-2.5 relative rounded-full group outline-none overflow-hidden transition-all duration-300">
               <div className="absolute inset-0 rounded-full bg-slate-900 group-hover:bg-jb-primary transition-colors duration-300"></div>
               <span className="relative font-bold text-white text-[13px] tracking-wide">Conectar</span>
             </a>
@@ -171,14 +172,18 @@ export default function Navbar() {
                 <a href="#github" onClick={() => setIsOpen(false)} className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
                   <Github className="w-5 h-5" />
                 </a>
-                <a href="#contactos" onClick={() => setIsOpen(false)} className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
+                <a href="#linkedin-contact" onClick={() => setIsOpen(false)} className="flex-1 flex justify-center p-3.5 bg-slate-100 rounded-2xl text-slate-600 hover:text-jb-primary active:bg-slate-200 transition-colors">
                   <Linkedin className="w-5 h-5" />
                 </a>
               </div>
               
-              <a href="#" className="w-full flex items-center justify-center gap-2.5 py-4 bg-jb-secondary/10 border border-jb-primary/20 text-jb-primary font-bold rounded-2xl active:bg-jb-primary/20 transition-colors">
+              <a href="#linkedin-contact" onClick={() => setIsOpen(false)} className="w-full flex items-center justify-center gap-2.5 py-4 bg-slate-900 text-white font-bold rounded-2xl active:scale-95 transition-all">
+                <span>Conectar</span>
+              </a>
+              
+              <a href="#cv" onClick={() => setIsOpen(false)} className="w-full flex items-center justify-center gap-2.5 py-4 bg-jb-secondary/10 border border-jb-primary/20 text-jb-primary font-bold rounded-2xl active:bg-jb-primary/20 transition-colors">
                 <Download className="w-5 h-5" />
-                <span>Download CV</span>
+                <span>Ver CV (Interactive)</span>
               </a>
             </motion.div>
           </motion.div>

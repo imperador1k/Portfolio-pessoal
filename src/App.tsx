@@ -7,6 +7,7 @@ import Certifications from './components/Certifications';
 import AboutMe from './components/AboutMe';
 import GithubProfile from './components/GithubProfile';
 import LinkedInProfile from './components/LinkedInProfile';
+import ResumeView from './components/ResumeView';
 import Footer from './components/Footer';
 import MouseGradient from './components/MouseGradient';
 import SplashScreen from './components/SplashScreen';
@@ -39,6 +40,7 @@ function App() {
             <Skills />
             <GithubProfile />
             <LinkedInProfile />
+            <ResumeView />
           </main>
           <Footer />
         </div>

@@ -145,6 +145,22 @@ export default function LinkedInProfile() {
     localStorage.setItem('linkedin_connected_people', JSON.stringify(connectedPeople));
   }, [connectedPeople]);
 
+  // Auto-open contact modal if URL hash is #linkedin-contact
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#linkedin-contact') {
+        setIsContactModalOpen(true);
+        setShowEmailForm(true);
+        // Clean up hash to avoid re-triggering on manual modal close/open
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    };
+
+    handleHashChange(); // Check on mount
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() || !subject.trim() || !senderEmail.trim()) {
@@ -211,6 +227,7 @@ export default function LinkedInProfile() {
 
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 bg-transparent relative min-h-screen border-t border-slate-200/50" id="contactos">
+      <div id="linkedin-contact" className="absolute top-0 left-0 w-full h-1" />
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
@@ -718,7 +735,7 @@ export default function LinkedInProfile() {
               {/* Decorative Header Background */}
               <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-[#0a66c2] via-[#004182] to-[#0a66c2] opacity-10 blur-3xl -z-10" />
               
-              <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100/50">
+              <div className="flex items-center justify-between px-6 py-4 sm:px-8 sm:py-6 border-b border-slate-100/50">
                 <div className="flex items-center gap-4">
                    <div className="w-12 h-12 rounded-full border-2 border-[#0a66c2] p-0.5 overflow-hidden shadow-sm">
                       <img src="/icon.png" className="w-full h-full rounded-full object-cover" />
@@ -742,7 +759,7 @@ export default function LinkedInProfile() {
                 </button>
               </div>
 
-              <div className="p-8 space-y-4">
+              <div className="p-6 sm:p-8 space-y-4">
                 <AnimatePresence mode="wait">
                   {!showEmailForm ? (
                     <motion.div 

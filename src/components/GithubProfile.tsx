@@ -68,7 +68,7 @@ const achievements = [
 
 const projectsData = [
   {
-    name: 'Nyro Roadmap 2025',
+    name: 'Nyro Roadmap 2026',
     description: 'Product planning, feature prioritization, and engineering milestones for the Nyro ecosystem.',
     status: 'Open',
     updated: '2 days ago',

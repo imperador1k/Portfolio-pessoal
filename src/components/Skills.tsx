@@ -23,35 +23,143 @@ const skillCategories = [
     title: 'Mobile Ecosystem',
     folder: 'mobile',
     items: [
-      { name: 'Kotlin', ext: 'kt', icon: KotlinIcon, code: `// Modern Native Android
-class MiguelSantos : Developer() {
-    val skills = listOf("Kotlin", "Coroutines", "KMP")
-    
-    fun buildApp() = compose {
-        Text("Creating high performance apps")
+      { name: 'Kotlin', ext: 'kt', icon: KotlinIcon, code: `// Modern Native Android Development
+import kotlinx.coroutines.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+
+// Utilizo Kotlin como linguagem principal para Android.
+// A sua sintaxe funcional, safety checks de nullabilidade (Null Safety)
+// e o ecossistema de Coroutines e Flows garantem apps super fluídas
+// e sem os pesadelos típicos de multithreading.
+
+class ProductViewModel(
+    private val repository: ProductRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    init {
+        fetchProducts()
     }
-}` },
-      { name: 'JetpackCompose', ext: 'kt', icon: JetpackComposeIcon, code: `@Composable
-fun ModernUI() {
-    val state by remember { mutableStateOf(true) }
-    
-    Box(modifier = Modifier.fillMaxSize()) {
-        AnimatedVisibility(visible = state) {
-            Text("Seamless UI Experiences")
+
+    private fun fetchProducts() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Async network call
+                val products = repository.getProducts()
+                _uiState.value = UiState.Success(products)
+            } catch (e: Exception) {
+                // Error handling gracefully
+                _uiState.value = UiState.Error(e.message ?: "Unknown error")
+            }
         }
     }
 }` },
-      { name: 'AndroidSDK', ext: 'java', icon: AndroidIcon, code: `public class AndroidCore extends Activity {
-    @Override
-    protected void onCreate(Bundle saved) {
-        super.onCreate(saved);
-        setContentView(R.layout.activity_main);
-        Log.d("Lifecycle", "App Initialized");
+      { name: 'JetpackCompose', ext: 'kt', icon: JetpackComposeIcon, code: `// Declarative UI Toolkit for Android
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+
+// Com o Jetpack Compose mudei o paradigma de criar layouts.
+// Esquece os XLMs dolorosos, agora o state da app dita
+// o que é renderizado de forma automática e reativa.
+
+@Composable
+fun ProductScreen(
+    viewModel: ProductViewModel,
+    onProductClick: (Int) -> Unit
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Store") }) }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            when (val currentState = state) {
+                is UiState.Loading -> CircularProgressIndicator()
+                is UiState.Error -> ErrorMessage(currentState.msg)
+                is UiState.Success -> {
+                    ProductList(
+                        items = currentState.products,
+                        onItemClick = onProductClick
+                    )
+                }
+            }
+        }
     }
 }` },
-      { name: 'Java', ext: 'java', icon: JavaIcon, code: `public class LegacyCore {
+      { name: 'AndroidSDK', ext: 'java', icon: AndroidIcon, code: `// Core Android Foundation
+package com.miguelsantos.core;
+
+import android.app.Application;
+import android.os.StrictMode;
+import android.util.Log;
+
+// O SDK Android é a base onde tudo assenta.
+// Perceber o Lifecycle das activities/fragments,
+// gerir memoria, broadcasts, services e storage local
+// é crítico para nao desenvolver apps que derretem baterias.
+
+public class FoundationApp extends Application {
+    
+    private static final String TAG = "FoundationApp";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        
+        // Setup Crashlytics, DI (Hilt/Dagger), and Analytics
+        initializeDependencyInjection();
+        setupStrictModeForDebugging();
+        
+        Log.i(TAG, "Application initialized. Ready for scale.");
+    }
+    
+    private void setupStrictModeForDebugging() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .build());
+        }
+    }
+}` },
+      { name: 'Java', ext: 'java', icon: JavaIcon, code: `// Enterprise Backend & Legacy Android
+package com.miguelsantos.legacy;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
+// Apesar de Kotlin ser o Rei no Mobile,
+// o Java é a espinha dorsal de muitos sistemas Backend
+// e de aplicações Legacy em manutenção. 
+
+public class JavaArchitecture {
+    
     public static void main(String[] args) {
-        System.out.println("The foundation of many systems.");
+        System.out.println("Processing large datasets with Streams");
+        
+        var processors = List.of(
+            new DataProcessor("Users"),
+            new DataProcessor("Transactions")
+        );
+        
+        // Multi-threading the traditional powerful way
+        var futures = processors.stream()
+            .map(p -> CompletableFuture.supplyAsync(p::process))
+            .collect(Collectors.toList());
+            
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+            .thenRun(() -> System.out.println("All tasks finished!"))
+            .join();
     }
 }` },
     ]
@@ -61,33 +169,142 @@ fun ModernUI() {
     title: 'Web & Backend',
     folder: 'web',
     items: [
-      { name: 'React', ext: 'tsx', icon: ReactIcon, code: `import React from 'react';
+      { name: 'React', ext: 'tsx', icon: ReactIcon, code: `// Frontend Architecture
+import React, { useState, useEffect, useCallback } from 'react';
+import { createRoot } from 'react-dom/client';
 
-export const Portfolio = () => {
+// O React mudou a web moderna.
+// Utilizo muito no freelancing para criar dashboards complexos e
+// landing pages altamente interativas (como esta).
+// Hooks, Contexts, suspense... you name it.
+
+interface DashboardProps {
+  userId: string;
+}
+
+export const ModernDashboard: React.FC<DashboardProps> = ({ userId }) => {
+  const [data, setData] = useState<AppMetrics | null>(null);
+  
+  const fetchMetrics = useCallback(async () => {
+    const res = await api.get('/v1/metrics', { user: userId });
+    setData(res.data);
+  }, [userId]);
+  
+  useEffect(() => {
+    fetchMetrics();
+    // Setting up web-sockets for real-time graphs
+    const ws = new WebSocketClient('/live-stats');
+    ws.onMessage(updateGraphs);
+    
+    return () => ws.shutdown();
+  }, [fetchMetrics]);
+
   return (
-    <div className="premium-ui">
-       <h1>Engineered with Passion</h1>
-       <p>Building scalable web apps</p>
+    <div className="dashboard-grid">
+       <Header current={data?.title} />
+       <MainGraphs metrics={data} />
+       <SidebarNotifications />
     </div>
   );
 };` },
-      { name: 'Vite', ext: 'config.ts', icon: ViteIcon, code: `import { defineConfig } from 'vite';
+      { name: 'Vite', ext: 'config.ts', icon: ViteIcon, code: `// Lightning fast build tooling
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
-export default defineConfig({
-  plugins: [react()],
-  server: { port: 3000 }
+// O Vite retirou-me o medo de dar CTRL+S e ter de esperar!
+// Compila de forma imediata (HMR instantâneo).
+// Utilizo como standard em todas as apps React/TypeScript.
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  return {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+        '@ui': path.resolve(__dirname, './src/components/ui')
+      }
+    },
+    build: {
+      sourcemap: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'motion']
+          }
+        }
+      }
+    },
+    server: { 
+      port: 3000,
+      cors: true
+    }
+  };
 });` },
-      { name: 'Postgres', ext: 'sql', icon: PostgresIcon, code: `-- Database Schema
-SELECT * FROM tech_stack
-WHERE level = 'Advanced'
-AND category IN ('Backend', 'Architecture')
-ORDER BY performance DESC;` },
-      { name: 'Tailwind', ext: 'css', icon: TailwindIcon, code: `/* Modern Styling */
-.card-premium {
-  @apply bg-white/10 backdrop-blur-md 
-         border border-white/20 
-         hover:scale-105 transition-all;
+      { name: 'Postgres', ext: 'sql', icon: PostgresIcon, code: `-- High Performance Relational Database
+-- PostgreSQL: A source of truth robusta.
+-- Utilizo-o para arquitetar base-de-dados para sistemas pesados.
+-- Relacionamentos complexos, JSONB ops e views matarealizadas.
+
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    profile JSONB NOT NULL DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexing JSON properties for fast searches
+CREATE INDEX idx_users_preferences 
+ON users USING GIN (profile->'preferences');
+
+-- Security RLS (Row Level Security)
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can only see their own data"
+ON users FOR SELECT 
+USING (auth.uid() = id);
+
+-- Analytics View
+CREATE OR REPLACE VIEW daily_active_users AS
+SELECT date_trunc('day', last_login) as day, count(DISTINCT id)
+FROM users
+GROUP BY 1 ORDER BY 1 DESC;` },
+      { name: 'Tailwind', ext: 'css', icon: TailwindIcon, code: `/* Utility-first CSS framework */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+ * O Tailwind permite-me estilizar interfaces à velocidade da luz
+ * diretamente no markup (HTML/JSX), garantindo uma library de tokens
+ * sólida (cores, paddings, borders) configuradas globalmente.
+ */
+
+@layer components {
+  /* Componentes complexos abstratos para código React mais limpo */
+  .card-premium {
+    @apply relative overflow-hidden bg-white/10 
+           backdrop-blur-xl border border-white/20 
+           rounded-2xl transition-all duration-500 ease-out;
+  }
+  
+  .card-premium:hover {
+    @apply scale-[1.02] shadow-[0_20px_40px_rgba(0,0,0,0.2)] 
+           border-white/40;
+  }
+
+  /* Custom Glow animations */
+  .animated-glow {
+    @apply absolute -inset-[1px] bg-gradient-to-r 
+           from-blue-500 to-purple-600 rounded-2xl opacity-0 
+           blur-md transition-opacity duration-500;
+  }
+  
+  .group:hover .animated-glow {
+    @apply opacity-50;
+  }
 }` },
     ]
   },
@@ -96,30 +313,92 @@ ORDER BY performance DESC;` },
     title: 'Dev Tools',
     folder: 'tools',
     items: [
-      { name: 'AndroidStudio', ext: 'xml', icon: AndroidStudioIcon, code: `<!-- IDE Config -->
+      { name: 'AndroidStudio', ext: 'xml', icon: AndroidStudioIcon, code: `<!-- IDE Config // Android Studio -->
 <component name="ProjectSettings">
+    <!-- 
+      O meu canivete suíço principal. 
+      Com atalhos refinados, profiling de memória ativo e 
+      tools de inspect UI sempre prontas a debugar Views/Compose.
+    -->
     <option name="optimizeImports" value="true" />
     <option name="showLineNumbers" value="true" />
+    
+    <component name="MemoryProfiler">
+       <option name="captureAllocations" value="true" />
+       <option name="heapDumpFormat" value="HPROF" />
+    </component>
+    
+    <component name="CodeStyleSettings">
+       <option name="RIGHT_MARGIN" value="100" />
+       <option name="KT_FORMATTING" value="canonical" />
+    </component>
 </component>` },
       { name: 'GitConfig', ext: 'json', icon: GitIcon, code: `{
+  "description": "Version Control Mastery",
+  "tools": "Git & GitHub",
+  "usage": "Trabalho diário em equipa",
+  
+  // Utilizo Git para CI/CD pipelines, 
+  // feature branch models, rebase rebases interactivos 
+  // e pull requests.
   "user": {
     "name": "Miguel Santos",
-    "status": "Ready to Collaborate",
-    "branch": "production"
+    "email": "hello@miguelsantos.dev",
+    "signingKey": "GPG_KEY_ID_123"
   },
-  "preferences": {
-    "ui": "clean",
-    "performance": "max"
+  "core": {
+    "editor": "code --wait",
+    "autocrlf": "input"
+  },
+  "alias": {
+    "co": "checkout",
+    "br": "branch",
+    "ci": "commit",
+    "st": "status",
+    "unstage": "reset HEAD --",
+    "last": "log -1 HEAD",
+    "visual": "!gitk"
   }
 }` },
-      { name: 'IntelliJ', ext: 'config', icon: IntelliJIcon, code: `// IDE Configuration
-plugin_manager.enable("AI_Assistance")
-theme.set("JetBrains_Dark_Premium")
-shortcut.add("CTRL+SHIFT+D", "Deploy")` },
+      { name: 'IntelliJ', ext: 'config', icon: IntelliJIcon, code: `// IntelliJ IDEA Configuration
+// O cérebro para Backend Java/Kotlin
+
+plugin_manager.enable("Database_Tools_and_SQL")
+plugin_manager.enable("Docker_Integration")
+plugin_manager.enable("Copilot")
+
+editor.setup {
+  font_family = "Fira Code"
+  line_height = 1.4
+  show_whitespaces = true
+  inlay_hints = true
+}
+
+// Power-user shortcuts
+shortcut.add("CTRL+SHIFT+A", "Search_Everywhere")
+shortcut.add("SHIFT+SHIFT", "Search_Files")
+shortcut.add("ALT+ENTER", "Show_Intentions")
+shortcut.add("CTRL+D", "Duplicate_Line")` },
       { name: 'VSCode', ext: 'json', icon: VSCodeIcon, code: `{
+  "description": "Web Development Hub",
+  "editor": "Visual Studio Code",
+  
+  // Utilizo o VSCode para tudo o que é Web, Node.js e Scripts.
+  // Extremamente customizado para typescript, vite, e react.
+  
   "editor.fontSize": 14,
-  "editor.fontFamily": "'JetBrains Mono'",
-  "editor.bracketPairColorization.enabled": true
+  "editor.fontFamily": "'JetBrains Mono', 'Cascadia Code', monospace",
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  
+  "workbench.colorTheme": "GitHub Dark Dimmed",
+  "workbench.iconTheme": "material-icon-theme",
+  
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "tailwindCSS.emmetCompletions": true
 }` },
     ]
   }
@@ -183,6 +462,10 @@ export default function Skills() {
             Stack.ide <span className="text-jb-primary">/</span> <br />
             <span className="text-slate-500 font-mono italic normal-case font-medium text-xl sm:text-4xl">Engineering & Tools</span>
           </h2>
+          <p className="mt-4 text-slate-600 max-w-2xl text-[15px] sm:text-base leading-relaxed">
+            Aqui podes explorar explorar as tecnologias e ferramentas com as quais trabalho diariamente. 
+            Não é só um design bonito: **abre os ficheiros no explorador abaixo** para leres exemplos reais de código e compreenderes como utilizo cada stack no desenvolvimento de aplicações escaláveis!
+          </p>
         </div>
         
         <motion.div 

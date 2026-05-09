@@ -8,7 +8,7 @@ const navLinks = [
   { label: 'Hall of Fame', href: '#certificacoes' },
   { label: 'Tech Stack', href: '#skills' },
   { label: 'GitHub', href: '#github' },
-  { label: 'LinkedIn', href: '#contactos' },
+  { label: 'LinkedIn', href: '#linkedin-contact' },
 ];
 
 const codeStream = [
