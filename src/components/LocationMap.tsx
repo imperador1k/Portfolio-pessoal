@@ -1,87 +1,181 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ComposableMap,
   Geographies,
   Geography,
-  Marker
+  Marker,
+  ZoomableGroup,
+  Sphere,
+  Graticule
 } from "react-simple-maps";
 import { motion } from "motion/react";
-import { MapPin } from "lucide-react";
+import { MapPin, Plus, Minus, RotateCcw, Globe2, Clock, Map } from "lucide-react";
 
 // Topologia simplificada do mundo
 const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
 
 export default function LocationMap() {
+  // Estado para a Tooltip (nome do país)
+  const [tooltipContent, setTooltipContent] = useState("");
+  
+  // Estado controlado para o Panning/Zoom
+  const initialPosition = { coordinates: [-9.1393, 38.7223] as [number, number], zoom: 3.5 };
+  const [position, setPosition] = useState(initialPosition);
+
+  // Controlos Programáticos do Zoom
+  const handleZoomIn = () => {
+    if (position.zoom >= 12) return;
+    setPosition((pos) => ({ ...pos, zoom: pos.zoom * 1.5 }));
+  };
+
+  const handleZoomOut = () => {
+    if (position.zoom <= 1) return;
+    setPosition((pos) => ({ ...pos, zoom: pos.zoom / 1.5 }));
+  };
+
+  const handleReset = () => {
+    setPosition(initialPosition);
+  };
+
+  const handleMoveEnd = (newPosition: { coordinates: [number, number]; zoom: number }) => {
+    setPosition(newPosition);
+  };
+
   return (
-    <div className="bg-white border border-slate-100 rounded-3xl p-6 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.04)] relative overflow-hidden group">
+    <div className="relative group flex flex-col lg:flex-row gap-8 lg:gap-12 items-center w-full py-12 lg:py-16">
       
-      {/* Cabeçalho do Card */}
-      <div className="mb-6 flex items-center justify-between relative z-10">
-        <h4 className="text-xl font-black text-slate-900 tracking-tighter">The Basecamp</h4>
-        <div className="flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100">
+      {/* Coluna Esquerda: Informação Narrativa & Tags */}
+      <div className="flex-1 w-full space-y-6 z-10 lg:pl-6">
+        <div className="inline-flex items-center gap-2 bg-slate-100/80 backdrop-blur-sm px-3 py-1.5 rounded-full">
            <MapPin className="w-3.5 h-3.5 text-[#FC4C02]" />
-           <span className="text-[10px] font-black text-[#FC4C02] uppercase tracking-widest">Portugal, GMT+1</span>
+           <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Base de Operações</span>
+        </div>
+
+        <div>
+           <h4 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter mb-4 leading-tight">
+              Made in <br/><span className="text-[#FC4C02]">Portugal</span>
+           </h4>
+           <p className="text-slate-600 text-lg leading-relaxed font-medium max-w-lg">
+              Orgulhosamente a viver num país à beira-mar plantado. Mais do que bom clima e excelente gastronomia, Portugal é hoje um <span className="text-slate-900 font-bold">hub tecnológico vibrante</span> onde o talento e a criatividade se encontram.
+           </p>
+        </div>
+
+        {/* Mini stats/badges minimalistas sem fundos pesados */}
+        <div className="flex flex-wrap gap-6 pt-4 border-t border-slate-200/50">
+           <div className="flex items-center gap-3">
+              <div className="bg-slate-100/80 p-2.5 rounded-xl text-slate-600"><Globe2 className="w-5 h-5" /></div>
+              <div>
+                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Localização</p>
+                 <p className="text-sm font-bold text-slate-800">Europa Ocidental</p>
+              </div>
+           </div>
+           <div className="flex items-center gap-3">
+              <div className="bg-slate-100/80 p-2.5 rounded-xl text-slate-600"><Clock className="w-5 h-5" /></div>
+              <div>
+                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Timezone</p>
+                 <p className="text-sm font-bold text-slate-800">Lisboa (GMT+1)</p>
+              </div>
+           </div>
         </div>
       </div>
 
-      <p className="text-slate-500 text-sm font-medium mb-8 relative z-10">
-         Disponível para trabalho remoto global asíncrono. Localizado no fuso horário da Europa Ocidental.
-      </p>
+      {/* Coluna Direita: Container do Mapa Interativo */}
+      <div className="flex-1 w-full relative h-[400px] lg:h-[450px] flex items-center justify-center bg-transparent overflow-visible">
+         {/* Interface Overlay do Mapa (Tooltips) */}
+         <div className="absolute top-4 z-[60] flex justify-center w-full pointer-events-none transition-opacity duration-300">
+           {tooltipContent && (
+             <motion.div 
+               initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
+               className="bg-slate-900/90 backdrop-blur-sm text-white text-[10px] font-bold px-4 py-1.5 rounded-full shadow-lg uppercase tracking-widest"
+             >
+               {tooltipContent}
+             </motion.div>
+           )}
+         </div>
+            
+         {/* Controlos de Botões Flutuantes UI mais leves que o site transpira */}
+         <div className="absolute left-0 bottom-4 z-20 flex flex-col gap-2">
+               <button onClick={handleZoomIn} className="bg-slate-100/50 backdrop-blur-md p-2 text-slate-500 rounded-full hover:bg-slate-200 hover:text-slate-800 transition-all border border-slate-200/50"><Plus className="w-4 h-4" /></button>
+               <button onClick={handleReset} className="bg-slate-100/50 backdrop-blur-md p-2 text-slate-500 rounded-full hover:bg-slate-200 hover:text-slate-800 transition-all border border-slate-200/50"><RotateCcw className="w-3.5 h-3.5" /></button>
+               <button onClick={handleZoomOut} className="bg-slate-100/50 backdrop-blur-md p-2 text-slate-500 rounded-full hover:bg-slate-200 hover:text-slate-800 transition-all border border-slate-200/50"><Minus className="w-4 h-4" /></button>
+         </div>
 
-      {/* Container do Mapa - Centrado na Europa/Portugal */}
-      <div className="-mx-8 -mb-16 mt-4 relative h-[300px] overflow-hidden pointer-events-none select-none flex justify-center items-center">
-         {/* Gradientes para suavizar as bordas */}
-         <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 pointer-events-none" />
-         
+         {/* Bagde de Instrução */}
+         <div className="absolute right-0 bottom-4 z-20 flex items-center gap-1.5 bg-slate-100/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200/50 text-[10px] font-bold text-slate-500 uppercase tracking-widest pointer-events-none">
+            <Map className="w-3 h-3" /> Interativo
+         </div>
+            
          <ComposableMap
             projection="geoOrthographic"
-            projectionConfig={{
-               rotate: [-15, -35, 0], // Foca na Europa/Oceano Atlântico
-               scale: 350 // Zoom equilibrado para o globo
+            width={800} 
+            height={800} 
+            projectionConfig={{ 
+              scale: 300,
+              rotate: [-5, -35, 0] // Centra o globo sobre a península Ibérica
             }}
-            className="w-full h-full opacity-80"
+            className="w-full h-[120%] outline-none cursor-grab active:cursor-grabbing transition-transform"
          >
-            {/* Opcional: Adicionar a cor do oceano, um círculo base */}
-            <circle cx="400" cy="300" r="350" fill="#f8fafc" />
+            <ZoomableGroup 
+               zoom={position.zoom}
+               center={position.coordinates}
+               onMoveEnd={handleMoveEnd}
+               maxZoom={12} 
+               minZoom={1}
+               // O geoOrthographic com limites pode ser mais permissivo, 
+               // pois é uma esfera e queremos conseguir arrastar
+               translateExtent={[[-800, -800], [1600, 1600]]} 
+            >
+               {/* Esfera Oceânica e Grela */}
+               <Sphere stroke="#e2e8f0" strokeWidth={0.5} fill="#f8fafc" id="sphere" />
+               <Graticule stroke="#e2e8f0" strokeWidth={0.5} />
 
-            <Geographies geography={geoUrl}>
-               {({ geographies }) =>
-                  geographies.map((geo) => (
-                     <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        fill="#e2e8f0" // slate-200
-                        stroke="#cbd5e1" // slate-300
-                        strokeWidth={0.5}
-                        style={{
-                           default: { outline: "none" },
-                           hover: { fill: "#cbd5e1", outline: "none" },
-                           pressed: { outline: "none" },
-                        }}
-                     />
-                  ))
-               }
-            </Geographies>
+               <Geographies geography={geoUrl}>
+                  {({ geographies }) =>
+                     geographies.map((geo) => (
+                        <Geography
+                           key={geo.rsmKey}
+                           geography={geo}
+                           onMouseEnter={() => setTooltipContent(geo.properties.name)}
+                           onMouseLeave={() => setTooltipContent("")}
+                           fill="#cbd5e1" // Cor dos países (Slate 300)
+                           stroke="#f8fafc" // Linhas da fronteira (Slate 50)
+                           strokeWidth={0.5}
+                           style={{
+                              default: { outline: "none", transition: "fill 0.2s" },
+                              hover: { fill: "#94a3b8", cursor: "pointer", outline: "none", transition: "fill 0.2s" }, // Slate 400
+                              pressed: { outline: "none" },
+                           }}
+                        />
+                     ))
+                  }
+               </Geographies>
 
-            {/* Marcador de Portugal (Long, Lat) */}
-            <Marker coordinates={[-9.1393, 38.7223]}>
-               <g fill="none" stroke="#FC4C02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" transform="translate(-12, -24)">
-                  <circle cx="12" cy="10" r="3" />
-                  <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" fill="white" />
-                  <circle cx="12" cy="10" r="3" fill="#FC4C02" />
-               </g>
-               
-               {/* Pulsar Animado Laranja */}
-               <motion.circle 
-                  cx="0" 
-                  cy="0" 
-                  r="6" 
-                  fill="#FC4C02" 
-                  opacity="0.3"
-                  animate={{ r: [6, 24], opacity: [0.6, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-               />
-            </Marker>
+               {/* Marcador em PT */}
+               <Marker coordinates={[-9.1393, 38.7223]}>
+                  {/* Legenda Estática "PORTUGAL" sempre visível e inconfundível para leigos */}
+                  <text x="18" y="-12" textAnchor="start" fill="#slate-900" className="text-[14px] font-black pointer-events-none select-none" style={{ fill: '#0f172a', fontWeight: 900, fontFamily: 'sans-serif' }}>
+                     Portugal
+                  </text>
+
+                  <g fill="none" stroke="#FC4C02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" transform="translate(-12, -24)">
+                     <circle cx="12" cy="10" r="3" />
+                     <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" fill="white" />
+                     <circle cx="12" cy="10" r="3" fill="#FC4C02" />
+                  </g>
+                  
+                  {/* Pulsar Animado Extraordinário */}
+                  <motion.circle 
+                     cx="0" cy="0" r="6" fill="#FC4C02" opacity="0.3"
+                     animate={{ r: [6, 28], opacity: [0.8, 0] }}
+                     transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
+                  />
+                  <motion.circle 
+                     cx="0" cy="0" r="6" fill="#FC4C02" opacity="0.5"
+                     animate={{ r: [6, 14], opacity: [0.5, 0] }}
+                     transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
+                  />
+               </Marker>
+            </ZoomableGroup>
          </ComposableMap>
       </div>
     </div>
