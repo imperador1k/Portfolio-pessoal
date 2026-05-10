@@ -5,6 +5,7 @@ import Skills from './components/Skills';
 import CareerMarathon from './components/CareerMarathon';
 import Certifications from './components/Certifications';
 import AboutMe from './components/AboutMe';
+import LocationMap from './components/LocationMap';
 import GithubProfile from './components/GithubProfile';
 import LinkedInProfile from './components/LinkedInProfile';
 import ResumeView from './components/ResumeView';
@@ -35,6 +36,11 @@ function App() {
           <main>
             <Hero />
             <AboutMe />
+            <section className="py-12 bg-white relative z-10">
+              <div className="container mx-auto px-4">
+                <LocationMap />
+              </div>
+            </section>
             <CareerMarathon />
             <Certifications />
             <Skills />
