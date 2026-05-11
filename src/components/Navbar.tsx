@@ -5,12 +5,12 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent, Variants } fro
 const navLinks = [
   { name: 'Home', href: '#home', id: 'home' },
   { name: 'Sobre', href: '#sobre', id: 'sobre' },
-  { name: 'CV', href: '#cv', id: 'cv' },
   { name: 'Timeline', href: '#timeline', id: 'timeline' },
   { name: 'Hall of Fame', href: '#certificacoes', id: 'certificacoes' },
   { name: 'Tech Stack', href: '#skills', id: 'skills' },
   { name: 'GitHub', href: '#github', id: 'github' },
   { name: 'LinkedIn', href: '#contactos', id: 'contactos' },
+  { name: 'CV', href: '#cv', id: 'cv' },
 ];
 
 export default function Navbar() {
@@ -38,6 +38,16 @@ export default function Navbar() {
     
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('nav-open');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.classList.remove('nav-open');
+      document.body.style.overflow = 'unset';
+    }
+  }, [isOpen]);
 
   const menuVariants: Variants = {
     hidden: { opacity: 0 },

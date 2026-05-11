@@ -555,7 +555,7 @@ export default function LinkedInProfile() {
       </div>
 
       {/* Messaging Widget */}
-      <div className="fixed bottom-0 right-4 sm:right-12 z-1000 w-72 sm:w-80 shadow-2xl overflow-hidden rounded-t-xl border border-slate-300 border-b-0">
+      <div className="linkedin-messaging-widget fixed bottom-0 right-4 sm:right-12 z-1000 w-72 sm:w-80 shadow-2xl overflow-hidden rounded-t-xl border border-slate-300 border-b-0 transition-all duration-500">
          <div 
             onClick={() => setIsMessagingOpen(!isMessagingOpen)}
             className="bg-white px-4 py-2 flex items-center justify-between cursor-pointer border-b border-slate-200 hover:bg-slate-50 transition-colors shadow-sm"

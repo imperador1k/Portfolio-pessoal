@@ -59,6 +59,13 @@ body {
   scrollbar-width: none;
 }
 
+/* Hide LinkedIn Messaging Widget when mobile menu is open */
+.nav-open .linkedin-messaging-widget {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
 .debug-mode * {
   outline: 1px dashed rgba(127, 82, 255, 0.4);
   background: rgba(127, 82, 255, 0.05);

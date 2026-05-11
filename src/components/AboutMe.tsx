@@ -95,7 +95,9 @@ export default function AboutMe() {
   const [likedPosts, setLikedPosts] = useState<number[]>([]);
   const [comments, setComments] = useState<Record<number, any[]>>({});
   const [newComment, setNewComment] = useState("");
+  const [showMobileComments, setShowMobileComments] = useState(false);
   const storyProgressRef = useRef<NodeJS.Timeout | null>(null);
+  const commentInputRef = useRef<HTMLInputElement>(null);
 
   // Load persistence on mount
   useEffect(() => {
@@ -534,11 +536,11 @@ export default function AboutMe() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-10 bg-slate-900/95 backdrop-blur-md"
-              onClick={() => setSelectedPost(null)}
+              onClick={() => { setSelectedPost(null); setShowMobileComments(false); }}
             >
               <button 
                 className="absolute top-6 right-6 text-white hover:rotate-90 transition-transform p-2 bg-white/10 rounded-full z-[10001]"
-                onClick={() => setSelectedPost(null)}
+                onClick={() => { setSelectedPost(null); setShowMobileComments(false); }}
               >
                 <X className="w-6 h-6" />
               </button>
@@ -561,9 +563,92 @@ export default function AboutMe() {
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
-                className="max-w-5xl w-full bg-white rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] z-[10000]"
+                className="max-w-5xl w-full bg-white rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] z-[10000] relative"
                 onClick={(e) => e.stopPropagation()}
               >
+                {/* Mobile Comments Drawer (Slide Up) */}
+                <AnimatePresence>
+                  {showMobileComments && (
+                    <motion.div
+                      initial={{ y: "100%" }}
+                      animate={{ y: 0 }}
+                      exit={{ y: "100%" }}
+                      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                      drag="y"
+                      dragConstraints={{ top: 0 }}
+                      dragElastic={0.2}
+                      onDragEnd={(_, info) => {
+                        if (info.offset.y > 100) setShowMobileComments(false);
+                      }}
+                      className="absolute inset-0 z-[10005] bg-white md:hidden flex flex-col"
+                    >
+                      {/* Drawer Handle / Header */}
+                      <div className="p-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
+                        <div className="w-10 h-1 bg-slate-200 rounded-full absolute left-1/2 -translate-x-1/2 top-2" />
+                        <button 
+                          onClick={() => setShowMobileComments(false)}
+                          className="p-1 hover:bg-slate-100 rounded-full transition-colors"
+                        >
+                          <X className="w-5 h-5 text-slate-500" />
+                        </button>
+                        <span className="text-sm font-bold text-slate-900 absolute left-1/2 -translate-x-1/2 pt-1">Comments</span>
+                        <div className="w-7 h-7" /> {/* Spacer to balance flexbox if needed, though using absolute center here */}
+                      </div>
+
+                      {/* Comments Content */}
+                      <div className="flex-1 overflow-y-auto p-4 space-y-6 no-scrollbar">
+                        {/* Original Post Desc */}
+                        <div className="flex gap-3">
+                          <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0">
+                            <img src="/insta.png" className="w-full h-full object-cover" />
+                          </div>
+                          <div className="text-sm">
+                            <span className="font-bold mr-2">miguelsantos.pr</span>
+                            <span className="text-slate-600 leading-relaxed">{selectedPost.description}</span>
+                          </div>
+                        </div>
+
+                        {/* User Comments */}
+                        {(comments[selectedPost.id] || []).map((c) => (
+                          <div key={c.id} className="flex gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 uppercase font-bold text-[10px] text-slate-400 border border-slate-200">
+                              {c.user.substring(0, 2)}
+                            </div>
+                            <div className="text-sm">
+                              <span className="font-bold mr-2">{c.user}</span>
+                              <span className="text-slate-600">{c.text}</span>
+                              <div className="text-[10px] text-slate-400 mt-1 uppercase font-mono">{c.time}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Bottom Input */}
+                      <div className="p-4 border-t border-slate-100 bg-white pb-8">
+                        <div className="flex gap-3 items-center">
+                          <div className="w-8 h-8 rounded-full bg-slate-200 shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase">ME</div>
+                          <input 
+                            autoFocus
+                            type="text" 
+                            placeholder="Add a comment..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && addComment(selectedPost.id)}
+                            className="flex-1 text-sm outline-none placeholder:text-slate-400"
+                          />
+                          <button 
+                            onClick={() => addComment(selectedPost.id)}
+                            disabled={!newComment.trim()}
+                            className="text-jb-primary font-bold text-sm disabled:opacity-30"
+                          >
+                            Post
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* Image Side */}
                 <div 
                   className="flex-1 bg-slate-100 relative group overflow-hidden cursor-pointer h-[400px] md:h-auto"
@@ -644,7 +729,15 @@ export default function AboutMe() {
                       <button onClick={() => toggleLike(selectedPost.id)}>
                         <Heart className={`w-6 h-6 transition-colors ${isLiked(selectedPost.id) ? 'fill-red-500 text-red-500' : 'text-slate-700 hover:text-slate-400'}`} />
                       </button>
-                      <MessageCircle className="w-6 h-6 text-slate-700" />
+                      <button onClick={() => {
+                        if (window.innerWidth < 768) {
+                          setShowMobileComments(true);
+                        } else {
+                          commentInputRef.current?.focus();
+                        }
+                      }}>
+                        <MessageCircle className="w-6 h-6 text-slate-700 hover:text-slate-400 transition-colors" />
+                      </button>
                     </div>
                     <div className="text-sm font-black text-slate-900">
                       {getLikesDisplay(selectedPost)} likes
@@ -665,6 +758,7 @@ export default function AboutMe() {
                     )}
                     <div className="flex gap-3 items-center">
                       <input 
+                        ref={commentInputRef}
                         type="text" 
                         placeholder={commentError ? "Please wait..." : "Add a comment..."}
                         value={newComment}

@@ -42,7 +42,7 @@ export default function LocationMap() {
   };
 
   return (
-    <div className="relative group flex flex-col lg:flex-row gap-8 lg:gap-12 items-center w-full py-12 lg:py-16">
+    <div className="relative group flex flex-col lg:flex-row gap-8 lg:gap-12 items-center w-full max-w-7xl mx-auto p-8 lg:p-12 bg-white/5 backdrop-blur-[2px] rounded-[2.5rem] border border-slate-200/50 shadow-sm mb-12">
       
       {/* Coluna Esquerda: Informação Narrativa & Tags */}
       <div className="flex-1 w-full space-y-6 z-10 lg:pl-6">

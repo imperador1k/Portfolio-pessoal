@@ -36,11 +36,9 @@ function App() {
           <main>
             <Hero />
             <AboutMe />
-            <section className="py-12 bg-white relative z-10">
-              <div className="container mx-auto px-4">
-                <LocationMap />
-              </div>
-            </section>
+            <div className="px-5 sm:px-6 lg:px-10 mb-12">
+              <LocationMap />
+            </div>
             <CareerMarathon />
             <Certifications />
             <Skills />
