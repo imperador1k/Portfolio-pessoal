@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Github, Linkedin, Download } from 'lucide-react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, Variants } from 'motion/react';
 
 const navLinks = [
   { name: 'Home', href: '#home', id: 'home' },
@@ -39,7 +39,7 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  const menuVariants = {
+  const menuVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1, 
@@ -48,7 +48,7 @@ export default function Navbar() {
     exit: { opacity: 0, transition: { staggerChildren: 0.05, staggerDirection: -1 } }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
     exit: { opacity: 0, y: -10, transition: { duration: 0.2 } }
@@ -72,7 +72,7 @@ export default function Navbar() {
               miguel
               <motion.span 
                 animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 1, repeat: Infinity, ease: "steps(2, start)" }}
+                transition={{ duration: 1, repeat: Infinity, ease: "steps(2, start)" as any }}
                 className="text-jb-primary ml-1 inline-block w-3 h-6 bg-jb-primary/20 translate-y-1.5 rounded-sm"
               />
             </span>
