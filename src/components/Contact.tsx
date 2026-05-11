@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Loader2, Copy, Check, Terminal } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const FloatingInput = ({ id, label, type = "text", required = false, isTextarea = false }: {
   id: string;
@@ -85,6 +86,7 @@ const CodeWindow = ({ onCopy, copied }: { onCopy: () => void, copied: boolean })
 };
 
 export default function Contact() {
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -117,16 +119,16 @@ export default function Contact() {
             <div className="max-w-sm">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-jb-primary/10 text-jb-primary rounded-full text-[10px] font-mono font-bold uppercase tracking-widest mb-6">
                     <Terminal className="w-3 h-3" />
-                    06 // Connect_Sequence
+                    {t('contact.badge')}
                 </div>
                 
                 <h2 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight mb-6 leading-[1.1]">
-                    Vamos compilar <br />
-                    algo <span className="text-jb-primary">juntos?</span>
+                    {t('contact.title_part1')} <br />
+                    {t('contact.title_part2')} <span className="text-jb-primary">{t('contact.title_part3')}</span>
                 </h2>
                 
                 <p className="text-slate-500 text-base leading-relaxed font-medium mb-2">
-                    Seja para discutir arquiteturas complexas ou partilhar ideias sobre código e interfaces.
+                    {t('contact.description')}
                 </p>
                 
                 <CodeWindow onCopy={handleCopy} copied={copied} />
@@ -136,19 +138,19 @@ export default function Contact() {
           {/* Right Column: IDE Form */}
           <div className="lg:col-span-3 p-8 lg:p-16 bg-white flex flex-col justify-center">
             <div className="mb-10">
-                <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-[0.2em]">Contact_Form.kt</span>
+                <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-[0.2em]">{t('contact.form_filename')}</span>
                 <div className="h-px w-12 bg-jb-primary mt-2"></div>
             </div>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <FloatingInput id="firstName" label="O teu Nome" required />
-                <FloatingInput id="lastName" label="O teu Apelido" />
+                <FloatingInput id="firstName" label={t('contact.form.first_name')} required />
+                <FloatingInput id="lastName" label={t('contact.form.last_name')} />
               </div>
               
-              <FloatingInput id="email" label="O teu Email" type="email" required />
+              <FloatingInput id="email" label={t('contact.form.email')} type="email" required />
               
-              <FloatingInput id="message" label="A tua Mensagem..." isTextarea required />
+              <FloatingInput id="message" label={t('contact.form.message')} isTextarea required />
 
               <div className="pt-4">
                 <motion.button 
@@ -168,7 +170,7 @@ export default function Contact() {
                         className="flex items-center gap-2"
                       >
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Compilando...</span>
+                        <span>{t('contact.form.submitting')}</span>
                       </motion.div>
                     ) : (
                       <motion.div 
@@ -178,7 +180,7 @@ export default function Contact() {
                         exit={{ opacity: 0, y: -10 }}
                         className="flex items-center gap-2"
                       >
-                        <span className="tracking-wide uppercase text-[12px]">Executar Envio</span>
+                        <span className="tracking-wide uppercase text-[12px]">{t('contact.form.submit')}</span>
                         <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </motion.div>
                     )}

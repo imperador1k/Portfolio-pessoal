@@ -26,6 +26,7 @@ import {
   FileText,
   ImageIcon
 } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const experience = [
   {
@@ -56,6 +57,7 @@ const education = [
 ];
 
 export default function LinkedInProfile() {
+  const { t } = useLanguage();
   const [isMessagingOpen, setIsMessagingOpen] = useState(false);
   const [isConnected, setIsConnected] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -90,7 +92,7 @@ export default function LinkedInProfile() {
   const handleSendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
-      setErrorMessage('Por favor, preencha todos os campos.');
+      setErrorMessage(t('career.form.error_generic')); // Reusing error if applicable or add new one
       setSendStatus('error');
       return;
     }
@@ -239,7 +241,7 @@ export default function LinkedInProfile() {
             className="flex items-center gap-3 mb-4"
           >
             <span className="px-3 py-1 bg-[#0a66c2]/10 text-[#0a66c2] text-[10px] font-mono font-bold rounded-full tracking-wider uppercase">
-              Professional_Network
+              {t('linkedin.badge')}
             </span>
             <div className="h-px flex-1 bg-linear-to-r from-[#0a66c2]/20 to-transparent" />
           </motion.div>
@@ -298,24 +300,24 @@ export default function LinkedInProfile() {
                       </svg>
                     </div>
                     <p className="text-sm text-slate-700 leading-tight mb-2">
-                      Estudante de Engenharia Informática | Backend / Frontend & AI Developer
+                      {t('linkedin.profile.headline')}
                     </p>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 mb-4">
-                      <span>Benedita, Leiria, Portugal</span>
+                      <span>{t('linkedin.profile.location')}</span>
                       <button 
                         onClick={() => setIsContactModalOpen(true)}
                         className="text-[#0a66c2] font-semibold hover:underline"
                       >
-                        Contact info
+                        {t('linkedin.profile.contact_info')}
                       </button>
                     </div>
                     <a href="#" className="text-xs text-[#0a66c2] font-semibold hover:underline block mb-6">
-                      1 connection
+                      {t('linkedin.profile.connections')}
                     </a>
                     
                     <div className="flex flex-wrap gap-2">
                       <button className="px-5 py-1.5 bg-[#0a66c2] text-white rounded-full text-sm font-bold hover:bg-[#004182] transition-colors">
-                        Open to
+                        {t('linkedin.profile.open_to')}
                       </button>
                       <button 
                         onClick={() => setIsConnected(!isConnected)}
@@ -327,12 +329,12 @@ export default function LinkedInProfile() {
                       >
                         {isConnected ? (
                           <span className="flex items-center gap-1.5">
-                            <Check className="w-4 h-4" /> Connected
+                            <Check className="w-4 h-4" /> {t('linkedin.profile.connected')}
                           </span>
-                        ) : 'Connect'}
+                        ) : t('linkedin.profile.connect')}
                       </button>
                       <button className="px-5 py-1.5 border border-slate-400 text-slate-600 rounded-full text-sm font-bold hover:bg-slate-50 transition-colors">
-                        Resources
+                        {t('linkedin.profile.resources')}
                       </button>
                     </div>
                   </div>
@@ -360,7 +362,7 @@ export default function LinkedInProfile() {
               <div className="bg-[#0a66c2] px-6 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-white">
                   <Linkedin className="w-5 h-5 fill-current" />
-                  <span className="text-sm font-bold">InMail Message</span>
+                  <span className="text-sm font-bold">{t('linkedin.messaging.title')}</span>
                 </div>
                 <div className="flex items-center gap-4 text-white/80">
                    <Minus className="w-4 h-4 cursor-pointer hover:text-white" />
@@ -374,45 +376,45 @@ export default function LinkedInProfile() {
                       <img src="/icon.png" alt="Miguel Santos" className="w-full h-full object-cover" />
                    </div>
                    <div>
-                      <p className="text-xs text-slate-500 mb-0.5">To:</p>
+                      <p className="text-xs text-slate-500 mb-0.5">{t('linkedin.messaging.to')}</p>
                       <p className="text-sm font-bold text-slate-900">Miguel Santos • 1st</p>
-                      <p className="text-[10px] text-slate-500">Backend / Frontend & AI Developer</p>
+                      <p className="text-[10px] text-slate-500">{t('linkedin.profile.headline')}</p>
                    </div>
                 </div>
 
                 <form onSubmit={handleSendMessage} className="space-y-6">
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="relative group">
-                        <label className="absolute left-0 -top-3 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">Subject</label>
+                        <label className="absolute left-0 -top-3 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">{t('linkedin.messaging.subject')}</label>
                         <input 
                           type="text" 
                           required
                           value={subject}
                           onChange={(e) => setSubject(e.target.value)}
-                          placeholder="Ex: Opportunity for Collaboration"
+                          placeholder={t('linkedin.messaging.subject_placeholder')}
                           className="w-full border-b border-slate-200 py-2 text-sm outline-none focus:border-[#0a66c2] transition-colors placeholder:text-slate-300"
                         />
                       </div>
                       <div className="relative group">
-                        <label className="absolute left-0 -top-3 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">Your Email (Required)</label>
+                        <label className="absolute left-0 -top-3 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">{t('linkedin.messaging.email')}</label>
                         <input 
                           type="email" 
                           required
                           value={senderEmail}
                           onChange={(e) => setSenderEmail(e.target.value)}
-                          placeholder="Ex: your@email.com"
+                          placeholder={t('linkedin.messaging.email_placeholder')}
                           className="w-full border-b border-slate-200 py-2 text-sm outline-none focus:border-[#0a66c2] transition-colors placeholder:text-slate-300"
                         />
                       </div>
                    </div>
 
                    <div className="relative group pt-4">
-                      <label className="absolute left-0 top-1 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">Message Body</label>
+                      <label className="absolute left-0 top-1 text-[10px] font-bold text-[#0a66c2] uppercase tracking-widest bg-white px-1">{t('linkedin.messaging.body')}</label>
                       <textarea 
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         required
-                        placeholder="Write your message here..."
+                        placeholder={t('linkedin.messaging.body_placeholder')}
                         className="w-full min-h-[200px] border border-slate-200 rounded-lg p-4 mt-4 text-sm outline-none focus:border-[#0a66c2] focus:ring-1 focus:ring-[#0a66c2] transition-all resize-none placeholder:text-slate-300"
                       />
                    </div>
@@ -458,7 +460,7 @@ export default function LinkedInProfile() {
                               exit={{ opacity: 0 }}
                               className="text-xs text-emerald-600 font-bold flex items-center gap-1"
                             >
-                              <Check className="w-4 h-4" /> Sent!
+                              <Check className="w-4 h-4" /> {t('linkedin.messaging.sent')}
                             </motion.span>
                           )}
                         </AnimatePresence>
@@ -467,7 +469,7 @@ export default function LinkedInProfile() {
                            disabled={isSending}
                            className="bg-[#0a66c2] text-white px-8 py-2 rounded-full font-bold text-sm hover:bg-[#004182] transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
                         >
-                           {isSending ? 'Sending...' : 'Send InMail'}
+                           {isSending ? t('linkedin.messaging.sending') : t('linkedin.messaging.send')}
                            {!isSending && <Send className="w-4 h-4" />}
                         </button>
                       </div>
@@ -480,9 +482,9 @@ export default function LinkedInProfile() {
                     <Linkedin className="w-4 h-4 fill-current" />
                  </div>
                  <p className="text-[10px] text-slate-500 leading-tight">
-                    Professional messaging. This InMail is powered by your interest in working together. 
+                    {t('linkedin.messaging.footer')}
                     <br />
-                    <span className="font-bold text-[#0a66c2] cursor-pointer hover:underline">Learn more about Miguel's availability.</span>
+                    <span className="font-bold text-[#0a66c2] cursor-pointer hover:underline">{t('linkedin.messaging.learn_more')}</span>
                  </p>
               </div>
             </div>
@@ -493,14 +495,14 @@ export default function LinkedInProfile() {
           <div className="lg:col-span-4 space-y-4">
             <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-sm font-bold text-slate-900">Profile language</h3>
+                  <h3 className="text-sm font-bold text-slate-900">{t('linkedin.sidebar.language')}</h3>
                </div>
-               <p className="text-xs text-slate-500">English</p>
+               <p className="text-xs text-slate-500">{t('language_name')}</p>
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-sm font-bold text-slate-900">Public profile & URL</h3>
+                  <h3 className="text-sm font-bold text-slate-900">{t('linkedin.sidebar.public_profile')}</h3>
                </div>
                <a 
                   href="https://linkedin.com/in/miguel-sant0s" 
@@ -513,7 +515,7 @@ export default function LinkedInProfile() {
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-               <h3 className="text-sm font-bold text-slate-900 mb-4">People you may know</h3>
+               <h3 className="text-sm font-bold text-slate-900 mb-4">{t('linkedin.sidebar.people_know')}</h3>
                <div className="space-y-6">
                   {[
                     { name: 'Cristiano Ronaldo', role: 'Atleta', img: '/cr7.webp' },
@@ -537,9 +539,9 @@ export default function LinkedInProfile() {
                               }`}
                            >
                               {connectedPeople[person.name] ? (
-                                 <><Check className="w-3 h-3" /> Pending</>
+                                 <><Check className="w-3 h-3" /> {t('linkedin.sidebar.pending')}</>
                               ) : (
-                                 <><Plus className="w-3 h-3" /> Connect</>
+                                 <><Plus className="w-3 h-3" /> {t('linkedin.sidebar.connect')}</>
                               )}
                            </button>
                         </div>
@@ -547,7 +549,7 @@ export default function LinkedInProfile() {
                   ))}
                </div>
                <button className="w-full mt-4 py-1.5 text-slate-500 text-sm font-bold hover:bg-slate-50 rounded transition-colors flex items-center justify-center gap-1">
-                  Show all <ChevronRight className="w-4 h-4" />
+                  {t('linkedin.sidebar.show_all')} <ChevronRight className="w-4 h-4" />
                </button>
              </div>
            </div>
@@ -567,7 +569,7 @@ export default function LinkedInProfile() {
                   </div>
                   <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></div>
                </div>
-               <span className="text-xs font-bold text-slate-700">Messaging</span>
+               <span className="text-xs font-bold text-slate-700">{t('linkedin.widget.title')}</span>
             </div>
             <div className="flex items-center gap-3 text-slate-500">
                <MoreHorizontal className="w-4 h-4" />
@@ -591,7 +593,7 @@ export default function LinkedInProfile() {
                         </div>
                         <p className="text-xs font-bold text-slate-900">Miguel Santos</p>
                         <p className="text-[9px] text-slate-500 text-center px-4 leading-tight opacity-75">
-                           Backend / Frontend & AI Developer
+                           {t('linkedin.profile.headline')}
                         </p>
                      </div>
 
@@ -601,7 +603,7 @@ export default function LinkedInProfile() {
                            animate={{ opacity: 1, scale: 1, y: 0 }}
                            className="bg-emerald-50 text-emerald-700 p-3 rounded-lg text-xs flex items-center gap-2 border border-emerald-100 shadow-sm"
                         >
-                           <Check className="w-4 h-4" /> Message sent! Check your email.
+                           <Check className="w-4 h-4" /> {t('linkedin.widget.sent_feedback')}
                         </motion.div>
                      )}
                      
@@ -611,10 +613,10 @@ export default function LinkedInProfile() {
 
                      <div className="space-y-4">
                         {[
-                          { sender: 'Miguel Santos', text: "Olá! Obrigado por visitares o meu perfil. 👋", time: '09:00 AM' },
-                          { isSystem: true, text: "Miguel Santos accepted your connection request" },
-                          { sender: 'Miguel Santos', text: "Estou disponível para novos desafios em Backend e AI. Se tiveres algum projeto em mente, diz-me!", time: '09:05 AM' },
-                          { sender: 'Miguel Santos', text: "Podes também anexar documentos se precisares que eu analise algo. Estarei por aqui!", time: '09:06 AM' }
+                          { sender: 'Miguel Santos', text: t('linkedin.widget.welcome'), time: '09:00 AM' },
+                          { isSystem: true, text: t('linkedin.widget.system_accepted') },
+                          { sender: 'Miguel Santos', text: t('linkedin.widget.availability'), time: '09:05 AM' },
+                          { sender: 'Miguel Santos', text: t('linkedin.widget.attachments'), time: '09:06 AM' }
                         ].map((msg, i) => (
                            msg.isSystem ? (
                              <div key={i} className="flex justify-center my-2">
@@ -644,7 +646,7 @@ export default function LinkedInProfile() {
                            type="text"
                            value={subject}
                            onChange={(e) => setSubject(e.target.value)}
-                           placeholder="Subject"
+                           placeholder={t('linkedin.messaging.subject')}
                            className="flex-1 text-[11px] font-bold outline-none bg-transparent placeholder:text-slate-400 text-slate-700"
                         />
                         <input 
@@ -660,7 +662,7 @@ export default function LinkedInProfile() {
                         <textarea 
                            value={message}
                            onChange={(e) => setMessage(e.target.value)}
-                           placeholder="Write a message..."
+                           placeholder={t('linkedin.widget.placeholder')}
                            className="w-full text-xs outline-none bg-transparent resize-none h-24 placeholder:text-slate-400 font-sans"
                         />
 
@@ -698,12 +700,12 @@ export default function LinkedInProfile() {
                                     <svg className="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                                        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                                     </svg>
-                                    Sending...
+                                    {t('linkedin.messaging.sending')}
                                  </>
                               ) : (
                                  <>
                                     <Send className="w-3 h-3" />
-                                    Send
+                                    {t('linkedin.widget.send')}
                                  </>
                               )}
                            </button>
@@ -742,7 +744,7 @@ export default function LinkedInProfile() {
                    </div>
                    <div>
                       <h3 className="text-xl font-bold text-slate-900 tracking-tight">Miguel Santos</h3>
-                      <p className="text-[10px] text-[#0a66c2] font-bold uppercase tracking-widest">Connect with me</p>
+                      <p className="text-[10px] text-[#0a66c2] font-bold uppercase tracking-widest">{t('linkedin.modal.title')}</p>
                    </div>
                 </div>
                 <button 
@@ -778,7 +780,7 @@ export default function LinkedInProfile() {
                       bg: 'bg-blue-50'
                     },
                     { 
-                      label: 'Professional Email', 
+                      label: t('linkedin.modal.email_label'), 
                       value: 'migasmps2005@gmail.com', 
                       link: 'mailto:migasmps2005@gmail.com',
                       icon: <MessageSquare className="w-5 h-5" />,
@@ -786,8 +788,8 @@ export default function LinkedInProfile() {
                       bg: 'bg-blue-50'
                     },
                     { 
-                      label: 'WhatsApp Direct', 
-                      value: 'Click to open chat', 
+                      label: t('linkedin.modal.whatsapp_label'), 
+                      value: t('linkedin.modal.whatsapp_value'), 
                       link: 'https://wa.me/351912345678',
                       icon: <MessageCircle className="w-5 h-5 fill-current" />,
                       color: 'text-emerald-500',
@@ -795,145 +797,124 @@ export default function LinkedInProfile() {
                     }
                   ].map((contact, idx) => (
                     <React.Fragment key={idx}>
-                      {contact.label === 'Professional Email' ? (
+                      {contact.label === t('linkedin.modal.email_label') ? (
                         <div
                           onClick={() => setShowEmailForm(true)}
-                          className="group flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-white hover:border-[#0a66c2]/30 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 cursor-pointer"
+                          className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-xl hover:border-[#0a66c2]/50 hover:shadow-md transition-all group cursor-pointer"
                         >
-                          <div className={`p-3 ${contact.bg} ${contact.color} rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
-                             {contact.icon}
+                          <div className="flex items-center gap-4">
+                            <div className={`w-10 h-10 rounded-lg ${contact.bg} ${contact.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                              {contact.icon}
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{contact.label}</p>
+                              <p className="text-sm font-semibold text-slate-700">{contact.value}</p>
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{contact.label}</p>
-                            <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-[#0a66c2] transition-colors">{contact.value}</p>
-                          </div>
-                          <div className="text-slate-300 group-hover:text-[#0a66c2] transition-colors">
-                            <MessageSquare className="w-4 h-4" />
-                          </div>
+                          <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-[#0a66c2] transition-colors" />
                         </div>
                       ) : (
-                        <motion.a
+                        <a 
                           href={contact.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.1 }}
-                          className="group flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-white hover:border-[#0a66c2]/30 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300"
+                          className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-xl hover:border-[#0a66c2]/50 hover:shadow-md transition-all group"
                         >
-                          <div className={`p-3 ${contact.bg} ${contact.color} rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
-                             {contact.icon}
+                          <div className="flex items-center gap-4">
+                            <div className={`w-10 h-10 rounded-lg ${contact.bg} ${contact.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                              {contact.icon}
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{contact.label}</p>
+                              <p className="text-sm font-semibold text-slate-700">{contact.value}</p>
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{contact.label}</p>
-                            <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-[#0a66c2] transition-colors">{contact.value}</p>
-                          </div>
-                          <div className="text-slate-300 group-hover:text-[#0a66c2] transition-colors">
-                            <ExternalLink className="w-4 h-4" />
-                          </div>
-                        </motion.a>
+                          <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-[#0a66c2] transition-colors" />
+                        </a>
                       )}
                     </React.Fragment>
                   ))}
                     </motion.div>
                   ) : (
-                    <motion.form 
+                    <motion.div 
                       key="form"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
-                      onSubmit={handleSendEmail}
-                      className="space-y-4"
                     >
-                      <div className="space-y-3">
+                      <form onSubmit={handleSendEmail} className="space-y-4">
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nome Completo</label>
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">{t('career.form.name')}</label>
                           <input 
                             type="text" 
                             required
                             value={formData.name}
                             onChange={(e) => setFormData({...formData, name: e.target.value})}
-                            disabled={isSending || sendStatus === 'success'}
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0a66c2]/50 focus:border-[#0a66c2] transition-all disabled:opacity-50"
-                            placeholder="Ex: João Silva"
+                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm outline-none focus:bg-white focus:border-[#0a66c2] transition-all"
+                            placeholder={t('career.form.name_placeholder')}
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Seu Email</label>
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">{t('career.form.email')}</label>
                           <input 
                             type="email" 
                             required
                             value={formData.email}
                             onChange={(e) => setFormData({...formData, email: e.target.value})}
-                            disabled={isSending || sendStatus === 'success'}
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0a66c2]/50 focus:border-[#0a66c2] transition-all disabled:opacity-50"
-                            placeholder="Ex: joao@empresa.com"
+                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm outline-none focus:bg-white focus:border-[#0a66c2] transition-all"
+                            placeholder={t('career.form.email_placeholder')}
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Mensagem</label>
+                          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">{t('career.form.message')}</label>
                           <textarea 
                             required
-                            rows={3}
                             value={formData.message}
                             onChange={(e) => setFormData({...formData, message: e.target.value})}
-                            disabled={isSending || sendStatus === 'success'}
-                            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0a66c2]/50 focus:border-[#0a66c2] transition-all resize-none disabled:opacity-50"
-                            placeholder="Olá Miguel, gostava de falar contigo sobre..."
+                            rows={4}
+                            className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm outline-none focus:bg-white focus:border-[#0a66c2] transition-all resize-none"
+                            placeholder={t('career.form.message_placeholder')}
                           />
                         </div>
-                      </div>
 
-                      {sendStatus === 'error' && (
-                        <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-lg border border-red-100">
-                          {errorMessage}
-                        </div>
-                      )}
+                        {sendStatus === 'success' && (
+                          <div className="bg-emerald-50 text-emerald-600 p-3 rounded-xl text-xs font-bold flex items-center gap-2">
+                            <Check className="w-4 h-4" /> {t('career.form.success')}
+                          </div>
+                        )}
+                        {sendStatus === 'error' && (
+                          <div className="bg-red-50 text-red-600 p-3 rounded-xl text-xs font-bold flex items-center gap-2">
+                            <X className="w-4 h-4" /> {errorMessage}
+                          </div>
+                        )}
 
-                      {sendStatus === 'success' && (
-                        <div className="p-3 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-lg border border-emerald-100 flex items-center justify-center gap-2">
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                          Enviada! Verifica o teu email.
-                        </div>
-                      )}
-
-                      <div className="pt-2">
                         <button 
                           type="submit"
                           disabled={isSending || sendStatus === 'success'}
-                          className="w-full py-3 bg-[#0a66c2] text-white rounded-xl font-bold text-sm hover:bg-[#004182] hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                          className="w-full bg-[#0a66c2] text-white py-4 rounded-xl font-bold text-sm hover:bg-[#004182] transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2"
                         >
                           {isSending ? (
-                            <>
-                              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                              Enviando...
-                            </>
+                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                           ) : sendStatus === 'success' ? (
-                            'Enviado'
+                            t('linkedin.messaging.sent')
                           ) : (
-                            'Enviar Mensagem Segura'
+                            <>
+                              <Send className="w-4 h-4" /> {t('linkedin.widget.send')}
+                            </>
                           )}
                         </button>
-                      </div>
-                    </motion.form>
+                      </form>
+                    </motion.div>
                   )}
                 </AnimatePresence>
-
-                <div className="pt-4 pb-2">
-                   <p className="text-[11px] text-center text-slate-400 font-medium">
-                      Available for freelance opportunities and full-time positions.
-                   </p>
-                </div>
               </div>
-
-              <div className="bg-slate-50/50 px-8 py-5 flex items-center justify-between border-t border-slate-100">
-                <span className="text-[10px] text-slate-400 font-medium">© 2024 Miguel Santos Hub</span>
-                <button 
-                  onClick={() => setIsContactModalOpen(false)}
-                  className="px-8 py-2.5 bg-[#0a66c2] text-white rounded-xl font-bold text-sm hover:bg-[#004182] hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 transition-all duration-200"
-                >
-                  Close Profile
-                </button>
+              
+              <div className="bg-slate-50/50 px-8 py-4 border-t border-slate-100/50 flex items-center justify-between">
+                <p className="text-[10px] text-slate-400 font-medium italic">Usually responds within 24 hours</p>
+                <div className="flex gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-tighter">Available for projects</span>
+                </div>
               </div>
             </motion.div>
           </div>

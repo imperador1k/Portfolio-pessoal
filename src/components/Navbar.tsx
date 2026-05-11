@@ -1,25 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Download } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, Variants } from 'motion/react';
-
-const navLinks = [
-  { name: 'Home', href: '#home', id: 'home' },
-  { name: 'Sobre', href: '#sobre', id: 'sobre' },
-  { name: 'Timeline', href: '#timeline', id: 'timeline' },
-  { name: 'Hall of Fame', href: '#certificacoes', id: 'certificacoes' },
-  { name: 'Tech Stack', href: '#skills', id: 'skills' },
-  { name: 'GitHub', href: '#github', id: 'github' },
-  { name: 'LinkedIn', href: '#contactos', id: 'contactos' },
-  { name: 'CV', href: '#cv', id: 'cv' },
-];
+import { Github, Linkedin, Download } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Navbar() {
+  const { language, setLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const { scrollY } = useScroll();
+
+  const navLinks = [
+    { name: t('navbar.home'), href: '#home', id: 'home' },
+    { name: t('navbar.about'), href: '#sobre', id: 'sobre' },
+    { name: t('navbar.timeline'), href: '#timeline', id: 'timeline' },
+    { name: t('navbar.hall_of_fame'), href: '#certificacoes', id: 'certificacoes' },
+    { name: t('navbar.tech_stack'), href: '#skills', id: 'skills' },
+    { name: t('navbar.github'), href: '#github', id: 'github' },
+    { name: t('navbar.linkedin'), href: '#contactos', id: 'contactos' },
+    { name: t('navbar.cv'), href: '#cv', id: 'cv' },
+  ];
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 20);
@@ -89,7 +91,7 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Navigation (Sliding Pill) */}
-          <ul className={`hidden md:flex items-center gap-1 relative z-50 transition-all duration-500 rounded-full p-1 border ${isScrolled ? 'bg-slate-50/50 border-slate-200/50 backdrop-blur-sm' : 'bg-transparent border-transparent'}`}>
+          <ul className={`hidden md:flex items-center gap-1 relative z-50 transition-all duration-500 rounded-full p-1 border mx-4 ${isScrolled ? 'bg-slate-50/50 border-slate-200/50 backdrop-blur-sm' : 'bg-transparent border-transparent'}`}>
             {navLinks.map((item, index) => {
               const isActive = activeSection === item.id;
               return (
@@ -122,9 +124,25 @@ export default function Navbar() {
 
           {/* Call to Action & Hamburger */}
           <div className="flex items-center gap-3 z-50">
+            {/* Language Switcher */}
+            <div className="hidden md:flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 mr-2">
+              <button 
+                onClick={() => setLanguage('pt')}
+                className={`px-2 py-1 rounded-full text-[10px] font-bold transition-all ${language === 'pt' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+              >
+                PT
+              </button>
+              <button 
+                onClick={() => setLanguage('en')}
+                className={`px-2 py-1 rounded-full text-[10px] font-bold transition-all ${language === 'en' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+              >
+                EN
+              </button>
+            </div>
+
             <a href="#linkedin-contact" className="hidden sm:flex items-center justify-center px-6 py-2.5 relative rounded-full group outline-none overflow-hidden transition-all duration-300">
               <div className="absolute inset-0 rounded-full bg-slate-900 group-hover:bg-jb-primary transition-colors duration-300"></div>
-              <span className="relative font-bold text-white text-[13px] tracking-wide">Conectar</span>
+              <span className="relative font-bold text-white text-[13px] tracking-wide">{t('navbar.connect')}</span>
             </a>
 
             {/* Mobile Hamburger to X */}
@@ -162,7 +180,25 @@ export default function Navbar() {
             variants={menuVariants}
             className="fixed inset-0 bg-white/95 backdrop-blur-xl z-40 flex flex-col pt-24 px-8 pb-10 overflow-y-auto md:hidden"
           >
-            <div className="flex flex-col gap-6 mt-8">
+            {/* Mobile Language Switcher */}
+            <motion.div variants={itemVariants} className="flex justify-end mb-8">
+               <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1">
+                <button 
+                  onClick={() => setLanguage('pt')}
+                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${language === 'pt' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
+                >
+                  Português
+                </button>
+                <button 
+                  onClick={() => setLanguage('en')}
+                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${language === 'en' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400'}`}
+                >
+                  English
+                </button>
+              </div>
+            </motion.div>
+
+            <div className="flex flex-col gap-6">
               {navLinks.map((item, i) => (
                 <motion.a
                   variants={itemVariants}
@@ -188,12 +224,12 @@ export default function Navbar() {
               </div>
               
               <a href="#linkedin-contact" onClick={() => setIsOpen(false)} className="w-full flex items-center justify-center gap-2.5 py-4 bg-slate-900 text-white font-bold rounded-2xl active:scale-95 transition-all">
-                <span>Conectar</span>
+                <span>{t('navbar.connect')}</span>
               </a>
               
               <a href="#cv" onClick={() => setIsOpen(false)} className="w-full flex items-center justify-center gap-2.5 py-4 bg-jb-secondary/10 border border-jb-primary/20 text-jb-primary font-bold rounded-2xl active:bg-jb-primary/20 transition-colors">
                 <Download className="w-5 h-5" />
-                <span>Ver CV (Interactive)</span>
+                <span>{t('navbar.view_cv')}</span>
               </a>
             </motion.div>
           </motion.div>

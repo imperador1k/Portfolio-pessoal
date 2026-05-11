@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useState } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
 import { 
   KotlinIcon, AndroidIcon, JavaIcon, ReactIcon, ViteIcon, PostgresIcon, 
   TailwindIcon, VSCodeIcon, GitIcon, IntelliJIcon, JetpackComposeIcon, AndroidStudioIcon 
@@ -17,21 +18,18 @@ import {
   Code2
 } from 'lucide-react';
 
-const skillCategories = [
+const getSkillCategories = (t: any) => [
   {
     id: 'mobile',
-    title: 'Mobile Ecosystem',
+    title: t('skills.categories.mobile'),
     folder: 'mobile',
     items: [
-      { name: 'Kotlin', ext: 'kt', icon: KotlinIcon, code: `// Modern Native Android Development
+      { name: 'Kotlin', ext: 'kt', icon: KotlinIcon, code: `// ${t('skills.items.kotlin.title')}
 import kotlinx.coroutines.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-// Utilizo Kotlin como linguagem principal para Android.
-// A sua sintaxe funcional, safety checks de nullabilidade (Null Safety)
-// e o ecossistema de Coroutines e Flows garantem apps super fluídas
-// e sem os pesadelos típicos de multithreading.
+// ${t('skills.items.kotlin.desc')}
 
 class ProductViewModel(
     private val repository: ProductRepository
@@ -57,14 +55,12 @@ class ProductViewModel(
         }
     }
 }` },
-      { name: 'JetpackCompose', ext: 'kt', icon: JetpackComposeIcon, code: `// Declarative UI Toolkit for Android
+      { name: 'JetpackCompose', ext: 'kt', icon: JetpackComposeIcon, code: `// ${t('skills.items.compose.title')}
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 
-// Com o Jetpack Compose mudei o paradigma de criar layouts.
-// Esquece os XLMs dolorosos, agora o state da app dita
-// o que é renderizado de forma automática e reativa.
+// ${t('skills.items.compose.desc')}
 
 @Composable
 fun ProductScreen(
@@ -94,17 +90,14 @@ fun ProductScreen(
         }
     }
 }` },
-      { name: 'AndroidSDK', ext: 'java', icon: AndroidIcon, code: `// Core Android Foundation
+      { name: 'AndroidSDK', ext: 'java', icon: AndroidIcon, code: `// ${t('skills.items.android.title')}
 package com.miguelsantos.core;
 
 import android.app.Application;
 import android.os.StrictMode;
 import android.util.Log;
 
-// O SDK Android é a base onde tudo assenta.
-// Perceber o Lifecycle das activities/fragments,
-// gerir memoria, broadcasts, services e storage local
-// é crítico para nao desenvolver apps que derretem baterias.
+// ${t('skills.items.android.desc')}
 
 public class FoundationApp extends Application {
     
@@ -132,15 +125,13 @@ public class FoundationApp extends Application {
         }
     }
 }` },
-      { name: 'Java', ext: 'java', icon: JavaIcon, code: `// Enterprise Backend & Legacy Android
+      { name: 'Java', ext: 'java', icon: JavaIcon, code: `// ${t('skills.items.java.title')}
 package com.miguelsantos.legacy;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-// Apesar de Kotlin ser o Rei no Mobile,
-// o Java é a espinha dorsal de muitos sistemas Backend
-// e de aplicações Legacy em manutenção. 
+// ${t('skills.items.java.desc')}
 
 public class JavaArchitecture {
     
@@ -166,17 +157,14 @@ public class JavaArchitecture {
   },
   {
     id: 'web',
-    title: 'Web & Backend',
+    title: t('skills.categories.web'),
     folder: 'web',
     items: [
-      { name: 'React', ext: 'tsx', icon: ReactIcon, code: `// Frontend Architecture
+      { name: 'React', ext: 'tsx', icon: ReactIcon, code: `// ${t('skills.items.react.title')}
 import React, { useState, useEffect, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// O React mudou a web moderna.
-// Utilizo muito no freelancing para criar dashboards complexos e
-// landing pages altamente interativas (como esta).
-// Hooks, Contexts, suspense... you name it.
+// ${t('skills.items.react.desc')}
 
 interface DashboardProps {
   userId: string;
@@ -207,14 +195,12 @@ export const ModernDashboard: React.FC<DashboardProps> = ({ userId }) => {
     </div>
   );
 };` },
-      { name: 'Vite', ext: 'config.ts', icon: ViteIcon, code: `// Lightning fast build tooling
+      { name: 'Vite', ext: 'config.ts', icon: ViteIcon, code: `// ${t('skills.items.vite.title')}
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-// O Vite retirou-me o medo de dar CTRL+S e ter de esperar!
-// Compila de forma imediata (HMR instantâneo).
-// Utilizo como standard em todas as apps React/TypeScript.
+// ${t('skills.items.vite.desc')}
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -243,10 +229,8 @@ export default defineConfig(({ mode }) => {
     }
   };
 });` },
-      { name: 'Postgres', ext: 'sql', icon: PostgresIcon, code: `-- High Performance Relational Database
--- PostgreSQL: A source of truth robusta.
--- Utilizo-o para arquitetar base-de-dados para sistemas pesados.
--- Relacionamentos complexos, JSONB ops e views matarealizadas.
+      { name: 'Postgres', ext: 'sql', icon: PostgresIcon, code: `-- ${t('skills.items.postgres.title')}
+-- ${t('skills.items.postgres.desc')}
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -271,15 +255,13 @@ CREATE OR REPLACE VIEW daily_active_users AS
 SELECT date_trunc('day', last_login) as day, count(DISTINCT id)
 FROM users
 GROUP BY 1 ORDER BY 1 DESC;` },
-      { name: 'Tailwind', ext: 'css', icon: TailwindIcon, code: `/* Utility-first CSS framework */
+      { name: 'Tailwind', ext: 'css', icon: TailwindIcon, code: `/* ${t('skills.items.tailwind.title')} */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* 
- * O Tailwind permite-me estilizar interfaces à velocidade da luz
- * diretamente no markup (HTML/JSX), garantindo uma library de tokens
- * sólida (cores, paddings, borders) configuradas globalmente.
+ * ${t('skills.items.tailwind.desc')}
  */
 
 @layer components {
@@ -310,15 +292,13 @@ GROUP BY 1 ORDER BY 1 DESC;` },
   },
   {
     id: 'tools',
-    title: 'Dev Tools',
+    title: t('skills.categories.tools'),
     folder: 'tools',
     items: [
-      { name: 'AndroidStudio', ext: 'xml', icon: AndroidStudioIcon, code: `<!-- IDE Config // Android Studio -->
+      { name: 'AndroidStudio', ext: 'xml', icon: AndroidStudioIcon, code: `<!-- ${t('skills.items.studio.title')} -->
 <component name="ProjectSettings">
     <!-- 
-      O meu canivete suíço principal. 
-      Com atalhos refinados, profiling de memória ativo e 
-      tools de inspect UI sempre prontas a debugar Views/Compose.
+      ${t('skills.items.studio.desc')}
     -->
     <option name="optimizeImports" value="true" />
     <option name="showLineNumbers" value="true" />
@@ -334,13 +314,11 @@ GROUP BY 1 ORDER BY 1 DESC;` },
     </component>
 </component>` },
       { name: 'GitConfig', ext: 'json', icon: GitIcon, code: `{
-  "description": "Version Control Mastery",
+  "description": "${t('skills.items.git.title')}",
   "tools": "Git & GitHub",
   "usage": "Trabalho diário em equipa",
   
-  // Utilizo Git para CI/CD pipelines, 
-  // feature branch models, rebase rebases interactivos 
-  // e pull requests.
+  // ${t('skills.items.git.desc')}
   "user": {
     "name": "Miguel Santos",
     "email": "hello@miguelsantos.dev",
@@ -360,8 +338,8 @@ GROUP BY 1 ORDER BY 1 DESC;` },
     "visual": "!gitk"
   }
 }` },
-      { name: 'IntelliJ', ext: 'config', icon: IntelliJIcon, code: `// IntelliJ IDEA Configuration
-// O cérebro para Backend Java/Kotlin
+      { name: 'IntelliJ', ext: 'config', icon: IntelliJIcon, code: `// ${t('skills.items.intellij.title')}
+// ${t('skills.items.intellij.desc')}
 
 plugin_manager.enable("Database_Tools_and_SQL")
 plugin_manager.enable("Docker_Integration")
@@ -380,11 +358,10 @@ shortcut.add("SHIFT+SHIFT", "Search_Files")
 shortcut.add("ALT+ENTER", "Show_Intentions")
 shortcut.add("CTRL+D", "Duplicate_Line")` },
       { name: 'VSCode', ext: 'json', icon: VSCodeIcon, code: `{
-  "description": "Web Development Hub",
+  "description": "${t('skills.items.vscode.title')}",
   "editor": "Visual Studio Code",
   
-  // Utilizo o VSCode para tudo o que é Web, Node.js e Scripts.
-  // Extremamente customizado para typescript, vite, e react.
+  // ${t('skills.items.vscode.desc')}
   
   "editor.fontSize": 14,
   "editor.fontFamily": "'JetBrains Mono', 'Cascadia Code', monospace",
@@ -405,6 +382,9 @@ shortcut.add("CTRL+D", "Duplicate_Line")` },
 ];
 
 export default function Skills() {
+  const { t } = useLanguage();
+  const skillCategories = getSkillCategories(t);
+  
   const [openFiles, setOpenFiles] = useState<string[]>(['Kotlin']);
   const [activeFile, setActiveFile] = useState('Kotlin');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -454,17 +434,16 @@ export default function Skills() {
             className="flex items-center gap-3 mb-6"
           >
             <span className="px-3 py-1 bg-jb-primary/10 text-jb-primary text-[10px] font-mono font-bold rounded-full tracking-widest uppercase shadow-sm">
-              Technical_Workspace
+              {t('skills.badge')}
             </span>
             <div className="h-px flex-1 bg-linear-to-r from-jb-primary/20 to-transparent" />
           </motion.div>
           <h2 className="text-4xl sm:text-7xl font-black text-slate-900 tracking-tighter uppercase leading-[0.9]">
-            Stack.ide <span className="text-jb-primary">/</span> <br />
-            <span className="text-slate-500 font-mono italic normal-case font-medium text-xl sm:text-4xl">Engineering & Tools</span>
+            {t('skills.title')} <span className="text-jb-primary">/</span> <br />
+            <span className="text-slate-500 font-mono italic normal-case font-medium text-xl sm:text-4xl">{t('skills.subtitle')}</span>
           </h2>
           <p className="mt-4 text-slate-600 max-w-2xl text-[15px] sm:text-base leading-relaxed">
-            Aqui podes explorar explorar as tecnologias e ferramentas com as quais trabalho diariamente. 
-            Não é só um design bonito: **abre os ficheiros no explorador abaixo** para leres exemplos reais de código e compreenderes como utilizo cada stack no desenvolvimento de aplicações escaláveis!
+            {t('skills.description')}
           </p>
         </div>
         
@@ -513,7 +492,7 @@ export default function Skills() {
                      className="bg-[#0d1117] border-right border-slate-800 flex flex-col absolute md:relative inset-y-0 left-0 z-40 shadow-2xl md:shadow-none h-full"
                   >
                      <div className="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center justify-between">
-                        <span>Explorer</span>
+                        <span>{t('skills.explorer')}</span>
                         <ChevronDown className="w-3 h-3" />
                      </div>
                      
@@ -538,7 +517,7 @@ export default function Skills() {
                                        >
                                           <ChevronRight className={`w-3.5 h-3.5 transition-transform ${expandedFolders[cat.id] ? 'rotate-90' : ''}`} />
                                           <Folder className="w-4 h-4 text-slate-500" />
-                                          <span>{cat.folder}</span>
+                                          <span>{cat.title}</span>
                                        </button>
                                        
                                        {expandedFolders[cat.id] && (
@@ -641,7 +620,7 @@ export default function Skills() {
                                     {React.createElement(currentItem.icon, { className: "w-6 h-6 lg:w-8 lg:h-8" })}
                                  </div>
                                  <div className="text-center sm:text-left flex-1 min-w-0">
-                                    <h4 className="text-white font-bold text-base lg:text-lg mb-1">{currentItem.name} Proficiency</h4>
+                                    <h4 className="text-white font-bold text-base lg:text-lg mb-1">{currentItem.name} {t('skills.proficiency')}</h4>
                                     <div className="flex items-center gap-3">
                                        <div className="h-1.5 lg:h-2 flex-1 bg-slate-800 rounded-full overflow-hidden">
                                           <motion.div 
@@ -661,7 +640,7 @@ export default function Skills() {
                   ) : (
                      <div className="h-full flex flex-col items-center justify-center text-slate-600">
                         <Code2 className="w-12 h-12 mb-4 opacity-20" />
-                        <p className="text-xs">Select a file from the explorer.</p>
+                        <p className="text-xs">{t('skills.selectFile')}</p>
                      </div>
                   )}
                </div>
@@ -669,7 +648,7 @@ export default function Skills() {
                <div className="h-24 sm:h-32 bg-[#0d1117] border-t border-slate-800 p-4 font-mono text-[9px] sm:text-[11px] overflow-hidden shrink-0">
                   <div className="flex items-center gap-2 text-slate-500 mb-2 sm:mb-3 border-b border-slate-800 pb-2">
                      <TerminalIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                     <span className="uppercase tracking-widest font-bold">Terminal — zsh</span>
+                     <span className="uppercase tracking-widest font-bold">{t('skills.terminal')}</span>
                   </div>
                   <div className="space-y-1 text-slate-400">
                      <div className="flex gap-2 truncate">
@@ -679,7 +658,7 @@ export default function Skills() {
                      </div>
                      <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-slate-500 italic">Build Success in 1.4s</span>
+                        <span className="text-slate-500 italic">{t('skills.buildSuccess')} 1.4s</span>
                      </div>
                   </div>
                </div>

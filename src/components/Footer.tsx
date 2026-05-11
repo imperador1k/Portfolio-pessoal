@@ -1,15 +1,6 @@
 import { Github, Linkedin, Mail, ArrowUp, MapPin, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
-
-const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'Sobre', href: '#sobre' },
-  { label: 'Timeline', href: '#timeline' },
-  { label: 'Hall of Fame', href: '#certificacoes' },
-  { label: 'Tech Stack', href: '#skills' },
-  { label: 'GitHub', href: '#github' },
-  { label: 'LinkedIn', href: '#linkedin-contact' },
-];
+import { useLanguage } from '../i18n/LanguageContext';
 
 const codeStream = [
   'console.log("Pushing boundaries");',
@@ -24,7 +15,18 @@ const codeStream = [
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const navLinks = [
+    { label: t('footer.nav.home'), href: '#home' },
+    { label: t('footer.nav.about'), href: '#sobre' },
+    { label: t('footer.nav.timeline'), href: '#timeline' },
+    { label: t('footer.nav.hall_of_fame'), href: '#certificacoes' },
+    { label: t('footer.nav.tech_stack'), href: '#skills' },
+    { label: t('footer.nav.github'), href: '#github' },
+    { label: t('footer.nav.linkedin'), href: '#linkedin-contact' },
+  ];
 
   return (
     <footer className="relative overflow-hidden border-t border-slate-100" id="footer">
@@ -72,7 +74,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Explorar</h4>
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">{t('footer.explore')}</h4>
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.label}>
@@ -90,12 +92,12 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">Conectar</h4>
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6">{t('footer.connect')}</h4>
             <div className="flex flex-col gap-4">
               {[
                 { href: 'https://github.com/Imperador1k', icon: Github, label: 'GitHub', color: 'hover:text-slate-900' },
                 { href: 'https://linkedin.com', icon: Linkedin, label: 'LinkedIn', color: 'hover:text-[#0077B5]' },
-                { href: 'mailto:migasmps2005@gmail.com', icon: Mail, label: 'Email Direto', color: 'hover:text-[#FC4C02]' },
+                { href: 'mailto:migasmps2005@gmail.com', icon: Mail, label: t('footer.social.email'), color: 'hover:text-[#FC4C02]' },
               ].map(({ href, icon: Icon, label, color }) => (
                 <motion.a
                   key={label}
@@ -119,7 +121,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-slate-100">
           <div className="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-400 tracking-widest uppercase">
             <Zap className="w-3.5 h-3.5 text-[#FC4C02]" />
-            <span>© {new Date().getFullYear()} Miguel Santos — Built with Precision & High Intensity</span>
+            <span>© {new Date().getFullYear()} {t('footer.copyright')}</span>
           </div>
 
           <motion.button
@@ -127,7 +129,7 @@ export default function Footer() {
             whileHover={{ y: -3, backgroundColor: '#FC4C02', color: '#fff' }}
             whileTap={{ scale: 0.92 }}
             className="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 transition-all shadow-sm flex-shrink-0"
-            aria-label="Voltar ao topo"
+            aria-label={t('footer.back_to_top')}
           >
             <ArrowUp className="w-5 h-5" />
           </motion.button>

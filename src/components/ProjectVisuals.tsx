@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Network, ServerCog, TerminalSquare, Workflow } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export const NetworkVisual = () => (
   <div className="absolute inset-0 bg-[#FAFAFA] flex items-center justify-center overflow-hidden">
@@ -37,29 +38,32 @@ export const NetworkVisual = () => (
   </div>
 );
 
-export const MicroservicesVisual = () => (
-  <div className="absolute inset-0 bg-[#FAFAFA] flex items-center justify-center overflow-hidden p-4">
-    <div className="grid grid-cols-2 gap-3 w-full h-full max-w-[200px]">
-      <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 3, repeat: Infinity }} className="bg-white border border-slate-200 shadow-sm rounded p-2 flex flex-col gap-1 relative overflow-hidden">
-        <div className="w-full h-1 bg-cyan-100 rounded"><motion.div animate={{ width: ['0%', '100%'] }} transition={{ duration: 1.5, repeat: Infinity }} className="h-full bg-cyan-500 rounded"></motion.div></div>
-        <div className="w-full h-8 bg-slate-50 rounded mt-auto flex items-center justify-center"><ServerCog className="w-4 h-4 text-cyan-500" /></div>
-      </motion.div>
-      <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 3.5, repeat: Infinity }} className="bg-white border border-slate-200 shadow-sm rounded p-2 flex flex-col gap-1">
-        <div className="w-full h-1 bg-blue-400 rounded w-2/3"></div>
-        <div className="w-3/4 h-1 bg-slate-300 rounded"></div>
-        <div className="w-1/2 h-1 bg-slate-300 rounded"></div>
-      </motion.div>
-      <div className="col-span-2 bg-slate-50 border border-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] rounded p-2 font-mono text-[8px] text-slate-500 mt-2 overflow-hidden relative">
-         <motion.div animate={{ y: [0, -20] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="space-y-1">
-           <div className="font-bold text-slate-800">{'>'} worker_node_started</div>
-           <div className="text-emerald-600">{'>'} sync_db_state [OK]</div>
-           <div>{'>'} task_ack_received</div>
-           <div className="text-purple-600">{'>'} dispatching_jobs</div>
-         </motion.div>
+export const MicroservicesVisual = () => {
+  const { t } = useLanguage();
+  return (
+    <div className="absolute inset-0 bg-[#FAFAFA] flex items-center justify-center overflow-hidden p-4">
+      <div className="grid grid-cols-2 gap-3 w-full h-full max-w-[200px]">
+        <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 3, repeat: Infinity }} className="bg-white border border-slate-200 shadow-sm rounded p-2 flex flex-col gap-1 relative overflow-hidden">
+          <div className="w-full h-1 bg-cyan-100 rounded"><motion.div animate={{ width: ['0%', '100%'] }} transition={{ duration: 1.5, repeat: Infinity }} className="h-full bg-cyan-500 rounded"></motion.div></div>
+          <div className="w-full h-8 bg-slate-50 rounded mt-auto flex items-center justify-center"><ServerCog className="w-4 h-4 text-cyan-500" /></div>
+        </motion.div>
+        <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 3.5, repeat: Infinity }} className="bg-white border border-slate-200 shadow-sm rounded p-2 flex flex-col gap-1">
+          <div className="w-full h-1 bg-blue-400 rounded w-2/3"></div>
+          <div className="w-3/4 h-1 bg-slate-300 rounded"></div>
+          <div className="w-1/2 h-1 bg-slate-300 rounded"></div>
+        </motion.div>
+        <div className="col-span-2 bg-slate-50 border border-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] rounded p-2 font-mono text-[8px] text-slate-500 mt-2 overflow-hidden relative">
+          <motion.div animate={{ y: [0, -20] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="space-y-1">
+            <div className="font-bold text-slate-800">{'>'} {t('projects.visuals.microservices.started')}</div>
+            <div className="text-emerald-600">{'>'} {t('projects.visuals.microservices.sync')}</div>
+            <div>{'>'} {t('projects.visuals.microservices.ack')}</div>
+            <div className="text-purple-600">{'>'} {t('projects.visuals.microservices.dispatch')}</div>
+          </motion.div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const NeuralVisual = () => (
   <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
@@ -75,28 +79,32 @@ export const NeuralVisual = () => (
   </div>
 );
 
-export const TerminalVisual = () => (
-  <div className="absolute inset-0 bg-white p-4 flex flex-col font-mono text-xs overflow-hidden">
-    <div className="flex gap-1.5 mb-4 border-b border-slate-100 pb-3">
-      <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-      <div className="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
-      <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+export const TerminalVisual = () => {
+  const { t } = useLanguage();
+  return (
+    <div className="absolute inset-0 bg-white p-4 flex flex-col font-mono text-xs overflow-hidden">
+      <div className="flex gap-1.5 mb-4 border-b border-slate-100 pb-3">
+        <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+        <div className="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+        <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+      </div>
+      <div className="space-y-1.5 text-slate-600 font-medium font-mono text-[11px]">
+        <div><span className="text-orange-500 font-bold">~/projects</span> <span className="text-slate-800">$ npx</span> cli-scaffold init</div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+          <span className="text-cyan-600 font-bold">?</span> <span className="text-slate-800">Project name:</span> <span className="text-slate-500">enterprise-app</span>
+        </motion.div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="flex items-center gap-2">
+          <TerminalSquare className="w-3 h-3 text-purple-500 animate-spin-slow" />
+          <span className="text-slate-500">{t('projects.visuals.terminal.generating')}</span>
+        </motion.div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="pl-4">
+          <span className="text-green-500 font-bold">✔</span> {t('projects.visuals.terminal.created')}
+        </motion.div>
+      </div>
     </div>
-    <div className="space-y-1.5 text-slate-600 font-medium font-mono text-[11px]">
-       <div><span className="text-orange-500 font-bold">~/projects</span> <span className="text-slate-800">$ npx</span> cli-scaffold init</div>
-       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-         <span className="text-cyan-600 font-bold">?</span> <span className="text-slate-800">Project name:</span> <span className="text-slate-500">enterprise-app</span>
-       </motion.div>
-       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="flex items-center gap-2">
-         <TerminalSquare className="w-3 h-3 text-purple-500 animate-spin-slow" />
-         <span className="text-slate-500">Generating structure...</span>
-       </motion.div>
-       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="pl-4">
-         <span className="text-green-500 font-bold">✔</span> Created pages/
-       </motion.div>
-    </div>
-  </div>
-);
+  );
+};
+
 export const MobileVisual = () => (
   <div className="absolute inset-0 bg-[#F8FAFC] flex items-center justify-center overflow-hidden p-6">
     {/* Stylized Phone Frame */}

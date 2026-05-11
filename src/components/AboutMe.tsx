@@ -1,35 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, MessageCircle, ExternalLink, X, ChevronLeft, ChevronRight, Terminal, User } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { 
+  Heart, 
+  MessageCircle, 
+  X, 
+  ChevronLeft, 
+  ChevronRight, 
+  ExternalLink,
+  MapPin,
+  MoreHorizontal,
+  Send,
+  Check
+} from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const stories = [
-  {
-    id: 1,
-    image: "/discipline.jpg",
-    caption: "Early morning discipline. 🏋️‍♂️",
-    category: "Discipline"
-  },
-  {
-    id: 2,
-    image: "/motorcycle.jpg",
-    caption: "Flow state on two wheels. 🏍️",
-    category: "Ride"
-  },
-  {
-    id: 3,
-    image: "/mountain.jpg",
-    caption: "Reaching new heights. 🏔️",
-    category: "Mountain"
-  }
+  { id: 1, image: "/discipline.jpg", key: "s1", category_key: "discipline" },
+  { id: 2, image: "/motorcycle.jpg", key: "s2", category_key: "ride" },
+  { id: 3, image: "/mountain.jpg", key: "s3", category_key: "mountain" }
 ];
 
 const hobbies = [
   {
     id: 1,
-    title: "Shape & Discipline",
-    category: "Academy",
-    description: "Consistent training is the foundation of mental clarity and high performance in engineering.",
+    key: "p1",
+    category_key: "academy",
     image: "/discipline.jpg",
     baseLikes: 1200,
     comments: "42",
@@ -37,9 +33,8 @@ const hobbies = [
   },
   {
     id: 2,
-    title: "Pure Focus",
-    category: "Natural",
-    description: "Finding clarity in simplicity. The best logic often comes when we step away from the screen.",
+    key: "p2",
+    category_key: "natural",
     image: "/natural.jpg",
     baseLikes: 856,
     comments: "12",
@@ -47,9 +42,8 @@ const hobbies = [
   },
   {
     id: 3,
-    title: "Road Freedom",
-    category: "Motorcycle",
-    description: "The open road is where I find focus and clear the mind. Two wheels, one purpose.",
+    key: "p3",
+    category_key: "motorcycle",
     image: "/motorcycle.jpg",
     baseLikes: 3100,
     comments: "156",
@@ -57,9 +51,8 @@ const hobbies = [
   },
   {
     id: 4,
-    title: "Vibes & Nature",
-    category: "Travel",
-    description: "Disconnecting from the grid to recharge the creative batteries in the wild.",
+    key: "p4",
+    category_key: "travel",
     image: "/mountain.jpg",
     baseLikes: 2400,
     comments: "89",
@@ -67,9 +60,8 @@ const hobbies = [
   },
   {
     id: 5,
-    title: "Capture the Moment",
-    category: "Photography",
-    description: "Attention to detail isn't just for code; it's about seeing the world through a different lens.",
+    key: "p5",
+    category_key: "photography",
     image: "/water.png",
     baseLikes: 942,
     comments: "28",
@@ -77,9 +69,8 @@ const hobbies = [
   },
   {
     id: 6,
-    title: "The Journey Begins",
-    category: "Origins",
-    description: "Where it all started. The first spark of passion for engineering and building digital worlds.",
+    key: "p6",
+    category_key: "origins",
     image: "/journey.jpg",
     baseLikes: 5200,
     comments: "999",
@@ -88,7 +79,8 @@ const hobbies = [
 ];
 
 export default function AboutMe() {
-  const [selectedPost, setSelectedPost] = useState<typeof hobbies[0] | null>(null);
+  const { t } = useLanguage();
+  const [selectedPost, setSelectedPost] = useState<any | null>(null);
   const [showStories, setShowStories] = useState(false);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -179,7 +171,7 @@ export default function AboutMe() {
       id: now.toString(),
       user: 'visitor',
       text: newComment.trim(),
-      time: 'Just now'
+      time: t('about.just_now')
     };
 
     setComments(prev => ({
@@ -193,7 +185,7 @@ export default function AboutMe() {
 
   const isLiked = (postId: number) => likedPosts.includes(postId);
   
-  const getLikesDisplay = (post: typeof hobbies[0]) => {
+  const getLikesDisplay = (post: any) => {
     const count = isLiked(post.id) ? post.baseLikes + 1 : post.baseLikes;
     return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count;
   };
@@ -254,10 +246,10 @@ export default function AboutMe() {
           viewport={{ once: true }}
           className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight"
         >
-          Beyond <span className="text-slate-400 font-light">the Code</span>
+          {t('about.title')} <span className="text-slate-400 font-light">{t('about.subtitle')}</span>
         </motion.h2>
         <p className="mt-4 text-lg text-slate-500 max-w-2xl font-light">
-          Explora o que me move fora do terminal. Da disciplina no treino à liberdade na estrada.
+          {t('about.description')}
         </p>
       </div>
 
@@ -292,8 +284,8 @@ export default function AboutMe() {
               <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
                 <div className="flex items-center gap-1.5">
                   <h3 className="text-2xl font-black text-slate-900 tracking-tight">miguelsantos.pr</h3>
-                  <svg aria-label="Verificado" fill="rgb(0, 149, 246)" height="18" role="img" viewBox="0 0 40 40" width="18">
-                    <title>Verificado</title>
+                  <svg aria-label={t('about.verified')} fill="rgb(0, 149, 246)" height="18" role="img" viewBox="0 0 40 40" width="18">
+                    <title>{t('about.verified')}</title>
                     <path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fillRule="evenodd"></path>
                   </svg>
                 </div>
@@ -306,26 +298,26 @@ export default function AboutMe() {
                         : 'bg-jb-primary text-white shadow-jb-primary/20 hover:bg-jb-primary/90'
                     }`}
                   >
-                    {isFollowing ? 'Following' : 'Follow'}
+                    {isFollowing ? t('about.following') : t('about.follow')}
                   </button>
                   <a 
                     href="#contactos"
                     className="px-5 py-1.5 bg-slate-200 text-slate-900 text-xs font-bold rounded-lg transition-all active:scale-95 flex items-center justify-center hover:bg-slate-300"
                   >
-                    Message
+                    {t('about.message')}
                   </a>
                 </div>
               </div>
 
               <div className="flex justify-center md:justify-start gap-8 mb-6">
                 <div className="text-sm">
-                  <span className="font-bold text-slate-900">42</span> <span className="text-slate-500">projects</span>
+                  <span className="font-bold text-slate-900">42</span> <span className="text-slate-500">{t('about.posts')}</span>
                 </div>
                 <div className="text-sm">
-                  <span className="font-bold text-slate-900">{isFollowing ? '1,500' : '1,499'}</span> <span className="text-slate-500">followers</span>
+                  <span className="font-bold text-slate-900">{isFollowing ? '1,500' : '1,499'}</span> <span className="text-slate-500">{t('about.followers')}</span>
                 </div>
                 <div className="text-sm">
-                  <span className="font-bold text-slate-900">∞</span> <span className="text-slate-500">coffee</span>
+                  <span className="font-bold text-slate-900">∞</span> <span className="text-slate-500">{t('about.following_stats')}</span>
                 </div>
               </div>
 
@@ -335,7 +327,7 @@ export default function AboutMe() {
                   📱 Mobile Engineer & UI Architect<br />
                   🏋️‍♂️ Academy Enthusiast<br />
                   ☕ Coffee is my compile juice<br />
-                  📍 Based in Portugal
+                  📍 Based in {t('about.location')}
                 </p>
                 <div className="flex flex-col gap-1 mt-2">
                   <a href="https://github.com/imperador1k" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-jb-primary inline-flex items-center gap-1 hover:underline w-fit">
@@ -352,9 +344,9 @@ export default function AboutMe() {
           {/* Stories Highlights (Circle icons) */}
           <div className="flex gap-8 mt-12 overflow-x-auto no-scrollbar pb-4">
             {[
-              { name: 'Gym', icon: '💪', color: 'from-orange-400 to-red-500' },
+              { name: t('about.categories.discipline'), icon: '💪', color: 'from-orange-400 to-red-500' },
               { name: 'Setup', icon: '🖥️', color: 'from-blue-400 to-indigo-500' },
-              { name: 'Travel', icon: '✈️', color: 'from-green-400 to-emerald-500' },
+              { name: t('about.categories.travel'), icon: '✈️', color: 'from-green-400 to-emerald-500' },
               { name: 'Gaming', icon: '🎮', color: 'from-purple-400 to-pink-500' },
               { name: 'Coffee', icon: '☕', color: 'from-yellow-400 to-orange-500' }
             ].map((story) => (
@@ -385,7 +377,7 @@ export default function AboutMe() {
             >
               <img 
                 src={post.image} 
-                alt={post.title} 
+                alt={t(`about.posts_content.${post.key}.title`)} 
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -482,11 +474,11 @@ export default function AboutMe() {
                 {/* Header */}
                 <div className="absolute top-10 left-4 z-50 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-slate-200">
-                    <img src="/insta.png" className="w-full h-full object-cover" />
+                    <img src="/icon.png" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white text-xs font-bold shadow-sm">miguelsantos.pr</span>
-                    <span className="text-[10px] text-white/70 shadow-sm">{stories[currentStoryIndex].category}</span>
+                    <span className="text-[10px] text-white/70 shadow-sm">{t(`about.categories.${stories[currentStoryIndex].category_key}`)}</span>
                   </div>
                 </div>
 
@@ -517,7 +509,7 @@ export default function AboutMe() {
                 {/* Caption */}
                 <div className="absolute bottom-12 left-6 right-6 z-50">
                   <p className="text-white text-lg font-medium leading-tight drop-shadow-lg">
-                    {stories[currentStoryIndex].caption}
+                    {t(`about.stories_content.${stories[currentStoryIndex].key}`)}
                   </p>
                 </div>
               </div>
@@ -591,8 +583,8 @@ export default function AboutMe() {
                         >
                           <X className="w-5 h-5 text-slate-500" />
                         </button>
-                        <span className="text-sm font-bold text-slate-900 absolute left-1/2 -translate-x-1/2 pt-1">Comments</span>
-                        <div className="w-7 h-7" /> {/* Spacer to balance flexbox if needed, though using absolute center here */}
+                        <span className="text-sm font-bold text-slate-900 absolute left-1/2 -translate-x-1/2 pt-1">{t('about.comments_drawer')}</span>
+                        <div className="w-7 h-7" />
                       </div>
 
                       {/* Comments Content */}
@@ -600,11 +592,11 @@ export default function AboutMe() {
                         {/* Original Post Desc */}
                         <div className="flex gap-3">
                           <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0">
-                            <img src="/insta.png" className="w-full h-full object-cover" />
+                            <img src="/icon.png" className="w-full h-full object-cover" />
                           </div>
                           <div className="text-sm">
                             <span className="font-bold mr-2">miguelsantos.pr</span>
-                            <span className="text-slate-600 leading-relaxed">{selectedPost.description}</span>
+                            <span className="text-slate-600 leading-relaxed">{t(`about.posts_content.${selectedPost.key}.desc`)}</span>
                           </div>
                         </div>
 
@@ -630,7 +622,7 @@ export default function AboutMe() {
                           <input 
                             autoFocus
                             type="text" 
-                            placeholder="Add a comment..."
+                            placeholder={t('about.add_comment')}
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && addComment(selectedPost.id)}
@@ -641,7 +633,7 @@ export default function AboutMe() {
                             disabled={!newComment.trim()}
                             className="text-jb-primary font-bold text-sm disabled:opacity-30"
                           >
-                            Post
+                            {t('about.post_btn')}
                           </button>
                         </div>
                       </div>
@@ -656,7 +648,7 @@ export default function AboutMe() {
                 >
                   <img 
                     src={selectedPost.image} 
-                    alt={selectedPost.title} 
+                    alt={t(`about.posts_content.${selectedPost.key}.title`)} 
                     className="w-full h-full object-cover"
                   />
                   {/* Heart Animation on Double Click */}
@@ -680,12 +672,12 @@ export default function AboutMe() {
                   <div className="p-4 border-b border-slate-100 flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 p-[2px]">
                       <div className="w-full h-full rounded-full bg-white border border-white overflow-hidden">
-                        <img src="/insta.png" className="w-full h-full object-cover" />
+                        <img src="/icon.png" className="w-full h-full object-cover" />
                       </div>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-xs font-bold text-slate-900">miguelsantos.pr</span>
-                      <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter">{selectedPost.category}</span>
+                      <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter">{t(`about.categories.${selectedPost.category_key}`)}</span>
                     </div>
                   </div>
 
@@ -694,16 +686,16 @@ export default function AboutMe() {
                     {/* Post Description as First Comment */}
                     <div className="flex gap-3">
                       <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0">
-                        <img src="/insta.png" className="w-full h-full object-cover" />
+                        <img src="/icon.png" className="w-full h-full object-cover" />
                       </div>
                       <div className="text-sm">
                         <span className="font-bold mr-2">miguelsantos.pr</span>
-                        <span className="text-slate-600 leading-relaxed">{selectedPost.description}</span>
+                        <span className="text-slate-600 leading-relaxed">{t(`about.posts_content.${selectedPost.key}.desc`)}</span>
                         <div className="text-[10px] text-slate-400 mt-1 font-mono uppercase">2D</div>
                       </div>
                     </div>
 
-                    {/* Fictional & User Comments */}
+                    {/* User Comments */}
                     {(comments[selectedPost.id] || []).map((c) => (
                       <motion.div 
                         initial={{ opacity: 0, x: -10 }}
@@ -740,7 +732,7 @@ export default function AboutMe() {
                       </button>
                     </div>
                     <div className="text-sm font-black text-slate-900">
-                      {getLikesDisplay(selectedPost)} likes
+                      {getLikesDisplay(selectedPost)} {t('about.likes')}
                     </div>
                     <div className="text-[10px] text-slate-400 font-mono uppercase">MAY 6, 2026</div>
                   </div>
@@ -753,14 +745,14 @@ export default function AboutMe() {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-[10px] text-red-500 font-bold"
                       >
-                        Slow down! You're commenting too fast.
+                        {t('about.too_fast')}
                       </motion.span>
                     )}
                     <div className="flex gap-3 items-center">
                       <input 
                         ref={commentInputRef}
                         type="text" 
-                        placeholder={commentError ? "Please wait..." : "Add a comment..."}
+                        placeholder={commentError ? t('about.wait') : t('about.add_comment')}
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && addComment(selectedPost.id)}
@@ -772,7 +764,7 @@ export default function AboutMe() {
                         disabled={!newComment.trim() || commentError}
                         className="text-jb-primary font-bold text-sm disabled:opacity-30 transition-opacity"
                       >
-                        Post
+                        {t('about.post_btn')}
                       </button>
                     </div>
                   </div>

@@ -1,83 +1,85 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Download, LayoutGrid, Menu, Bell, ChevronDown, ChevronRight, FileText, Check, RefreshCw, Folder, Wifi, Battery, User, Home, Code, UserCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { KotlinIcon, AndroidIcon, ReactIcon } from './Icons';
+import { useLanguage } from '../i18n/LanguageContext';
 
 type HeroState = 'typing' | 'building' | 'success';
 
 type TabName = 'HeroContent.kt' | 'MainActivity.kt' | 'Theme.tsx' | 'Styles.css';
 
-const FILE_SYSTEM: Record<TabName, { icon: React.ReactNode, path: string[], code: {nodes: {text: string, color: string}[], indent: number}[] }> = {
-  'HeroContent.kt': {
-    icon: <KotlinIcon className="w-3.5 h-3.5 text-purple-500" />,
-    path: ['src', 'main', 'kotlin', 'HeroContent.kt'],
-    code: [
-      { nodes: [{ text: "data class ", color: "text-purple-600 font-medium" }, { text: "Developer", color: "text-slate-900 font-semibold" }, { text: "(", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "name", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ", ", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "role", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ")", color: "text-slate-600" }], indent: 0 },
-      { nodes: [{ text: "val ", color: "text-purple-600 font-medium" }, { text: "miguel ", color: "text-blue-600 font-semibold" }, { text: "= ", color: "text-slate-600" }, { text: "Developer", color: "text-slate-900 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "\"Miguel\"", color: "text-green-600" }, { text: ", ", color: "text-slate-600" }, { text: "\"Android Engineer\"", color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 0 },
-      { nodes: [], indent: 0 },
-      { nodes: [{ text: "@Composable", color: "text-amber-600 font-medium" }], indent: 0 },
-      { nodes: [{ text: "fun ", color: "text-purple-600 font-medium" }, { text: "PortfolioScreen", color: "text-amber-500 font-semibold" }, { text: "() {", color: "text-slate-600" }], indent: 0 },
-      { nodes: [{ text: "if ", color: "text-purple-600 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "miguel", color: "text-blue-600 font-semibold" }, { text: ".", color: "text-slate-600" }, { text: "isReady", color: "text-purple-600 font-medium" }, { text: ") {", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "ShowHero", color: "text-cyan-600 border-b border-cyan-100" }, { text: "(", color: "text-slate-600" }, { text: "title = ", color: "text-cyan-600" }, { text: "\"Construindo software limpo\"", color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 8 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
-    ]
-  },
-  'MainActivity.kt': {
-    icon: <KotlinIcon className="w-3.5 h-3.5 text-purple-500" />,
-    path: ['src', 'main', 'kotlin', 'MainActivity.kt'],
-    code: [
-      { nodes: [{ text: "class ", color: "text-purple-600 font-medium" }, { text: "MainActivity", color: "text-amber-500 font-semibold" }, { text: " : ", color: "text-slate-600" }, { text: "ComponentActivity", color: "text-slate-900 font-medium" }, { text: "() {", color: "text-slate-600" }], indent: 0 },
-      { nodes: [{ text: "override fun ", color: "text-purple-600 font-medium" }, { text: "onCreate", color: "text-blue-600 font-semibold" }, { text: "(savedInstanceState: ", color: "text-slate-600" }, { text: "Bundle?", color: "text-slate-900 font-medium" }, { text: ") {", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "super", color: "text-blue-600 font-medium" }, { text: ".", color: "text-slate-600" }, { text: "onCreate", color: "text-blue-600" }, { text: "(savedInstanceState)", color: "text-slate-600" }], indent: 8 },
-      { nodes: [{ text: "setContent", color: "text-cyan-600" }, { text: " {", color: "text-slate-600" }], indent: 8 },
-      { nodes: [{ text: "PortfolioTheme", color: "text-amber-500" }, { text: " {", color: "text-slate-600" }], indent: 12 },
-      { nodes: [{ text: "PortfolioScreen", color: "text-cyan-600" }, { text: "()", color: "text-slate-600" }], indent: 16 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 12 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 8 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
-    ]
-  },
-  'Theme.tsx': {
-    icon: <ReactIcon className="w-3.5 h-3.5 text-cyan-500" />,
-    path: ['src', 'theme', 'Theme.tsx'],
-    code: [
-      { nodes: [{ text: "export const ", color: "text-purple-600 font-medium" }, { text: "Theme", color: "text-blue-600 font-semibold" }, { text: " = {", color: "text-slate-600" }], indent: 0 },
-      { nodes: [{ text: "colors", color: "text-slate-900 font-medium" }, { text: ": {", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "primary", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#7F52FF'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
-      { nodes: [{ text: "background", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#19191C'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
-      { nodes: [{ text: "surface", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#232326'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
-      { nodes: [{ text: "text", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#FFFFFF'", color: "text-green-600" }], indent: 8 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "};", color: "text-slate-600" }], indent: 0 }
-    ]
-  },
-  'Styles.css': {
-    icon: <span className="text-blue-400 text-xs font-black">#</span>,
-    path: ['src', 'styles', 'Styles.css'],
-    code: [
-      { nodes: [{ text: ":root", color: "text-amber-600 font-medium" }, { text: " {", color: "text-slate-600" }], indent: 0 },
-      { nodes: [{ text: "--jb-primary", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "#7F52FF", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "--radius-md", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "12px", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "--spacing-safe", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "24px", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 },
-      { nodes: [], indent: 0 },
-      { nodes: [{ text: ".debug-mode", color: "text-amber-500 font-medium" }, { text: " * {", color: "text-slate-600" }], indent: 0 },
-      { nodes: [{ text: "outline", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "1px dashed ", color: "text-green-600" }, { text: "rgba", color: "text-blue-600" }, { text: "(255,0,0,0.3);", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "background", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "rgba", color: "text-blue-600" }, { text: "(0,255,0,0.05);", color: "text-slate-600" }], indent: 4 },
-      { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
-    ]
-  }
-};
-
 export default function Hero() {
+  const { t } = useLanguage();
   const [heroState, setHeroState] = useState<HeroState>('typing');
   const [activeTab, setActiveTab] = useState<TabName>('HeroContent.kt');
   const [visibleLines, setVisibleLines] = useState<number>(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
   const [emulatorTab, setEmulatorTab] = useState<'home' | 'work' | 'me'>('home');
+
+  const FILE_SYSTEM: Record<TabName, { icon: React.ReactNode, path: string[], code: {nodes: {text: string, color: string}[], indent: number}[] }> = useMemo(() => ({
+    'HeroContent.kt': {
+      icon: <KotlinIcon className="w-3.5 h-3.5 text-purple-500" />,
+      path: ['src', 'main', 'kotlin', 'HeroContent.kt'],
+      code: [
+        { nodes: [{ text: "data class ", color: "text-purple-600 font-medium" }, { text: "Developer", color: "text-slate-900 font-semibold" }, { text: "(", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "name", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ", ", color: "text-slate-600" }, { text: "val ", color: "text-purple-600 font-medium" }, { text: "role", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "String", color: "text-slate-900 font-medium" }, { text: ")", color: "text-slate-600" }], indent: 0 },
+        { nodes: [{ text: "val ", color: "text-purple-600 font-medium" }, { text: "miguel ", color: "text-blue-600 font-semibold" }, { text: "= ", color: "text-slate-600" }, { text: "Developer", color: "text-slate-900 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "\"Miguel\"", color: "text-green-600" }, { text: ", ", color: "text-slate-600" }, { text: `"${t('hero.emulator.home.role')}"`, color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 0 },
+        { nodes: [], indent: 0 },
+        { nodes: [{ text: "@Composable", color: "text-amber-600 font-medium" }], indent: 0 },
+        { nodes: [{ text: "fun ", color: "text-purple-600 font-medium" }, { text: "PortfolioScreen", color: "text-amber-500 font-semibold" }, { text: "() {", color: "text-slate-600" }], indent: 0 },
+        { nodes: [{ text: "if ", color: "text-purple-600 font-medium" }, { text: "(", color: "text-slate-600" }, { text: "miguel", color: "text-blue-600 font-semibold" }, { text: ".", color: "text-slate-600" }, { text: "isReady", color: "text-purple-600 font-medium" }, { text: ") {", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "ShowHero", color: "text-cyan-600 border-b border-cyan-100" }, { text: "(", color: "text-slate-600" }, { text: "title = ", color: "text-cyan-600" }, { text: `"${t('hero.ide.code.hero_title')}"`, color: "text-green-600" }, { text: ")", color: "text-slate-600" }], indent: 8 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
+      ]
+    },
+    'MainActivity.kt': {
+      icon: <KotlinIcon className="w-3.5 h-3.5 text-purple-500" />,
+      path: ['src', 'main', 'kotlin', 'MainActivity.kt'],
+      code: [
+        { nodes: [{ text: "class ", color: "text-purple-600 font-medium" }, { text: "MainActivity", color: "text-amber-500 font-semibold" }, { text: " : ", color: "text-slate-600" }, { text: "ComponentActivity", color: "text-slate-900 font-medium" }, { text: "() {", color: "text-slate-600" }], indent: 0 },
+        { nodes: [{ text: "override fun ", color: "text-purple-600 font-medium" }, { text: "onCreate", color: "text-blue-600 font-semibold" }, { text: "(savedInstanceState: ", color: "text-slate-600" }, { text: "Bundle?", color: "text-slate-900 font-medium" }, { text: ") {", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "super", color: "text-blue-600 font-medium" }, { text: ".", color: "text-slate-600" }, { text: "onCreate", color: "text-blue-600" }, { text: "(savedInstanceState)", color: "text-slate-600" }], indent: 8 },
+        { nodes: [{ text: "setContent", color: "text-cyan-600" }, { text: " {", color: "text-slate-600" }], indent: 8 },
+        { nodes: [{ text: "PortfolioTheme", color: "text-amber-500" }, { text: " {", color: "text-slate-600" }], indent: 12 },
+        { nodes: [{ text: "PortfolioScreen", color: "text-cyan-600" }, { text: "()", color: "text-slate-600" }], indent: 16 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 12 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 8 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
+      ]
+    },
+    'Theme.tsx': {
+      icon: <ReactIcon className="w-3.5 h-3.5 text-cyan-500" />,
+      path: ['src', 'theme', 'Theme.tsx'],
+      code: [
+        { nodes: [{ text: "export const ", color: "text-purple-600 font-medium" }, { text: "Theme", color: "text-blue-600 font-semibold" }, { text: " = {", color: "text-slate-600" }], indent: 0 },
+        { nodes: [{ text: "colors", color: "text-slate-900 font-medium" }, { text: ": {", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "primary", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#7F52FF'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
+        { nodes: [{ text: "background", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#19191C'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
+        { nodes: [{ text: "surface", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#232326'", color: "text-green-600" }, { text: ",", color: "text-slate-600" }], indent: 8 },
+        { nodes: [{ text: "text", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "'#FFFFFF'", color: "text-green-600" }], indent: 8 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "};", color: "text-slate-600" }], indent: 0 }
+      ]
+    },
+    'Styles.css': {
+      icon: <span className="text-blue-400 text-xs font-black">#</span>,
+      path: ['src', 'styles', 'Styles.css'],
+      code: [
+        { nodes: [{ text: ":root", color: "text-amber-600 font-medium" }, { text: " {", color: "text-slate-600" }], indent: 0 },
+        { nodes: [{ text: "--jb-primary", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "#7F52FF", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "--radius-md", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "12px", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "--spacing-safe", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "24px", color: "text-purple-600" }, { text: ";", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 },
+        { nodes: [], indent: 0 },
+        { nodes: [{ text: ".debug-mode", color: "text-amber-500 font-medium" }, { text: " * {", color: "text-slate-600" }], indent: 0 },
+        { nodes: [{ text: "outline", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "1px dashed ", color: "text-green-600" }, { text: "rgba", color: "text-blue-600" }, { text: "(255,0,0,0.3);", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "background", color: "text-cyan-600" }, { text: ": ", color: "text-slate-600" }, { text: "rgba", color: "text-blue-600" }, { text: "(0,255,0,0.05);", color: "text-slate-600" }], indent: 4 },
+        { nodes: [{ text: "}", color: "text-slate-600" }], indent: 0 }
+      ]
+    }
+  }), [t]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -96,7 +98,7 @@ export default function Hero() {
       }
       return prev;
     });
-  }, []);
+  }, [FILE_SYSTEM]);
 
   // Globally allow skipping the animation with any click or scroll
   useEffect(() => {
@@ -131,7 +133,7 @@ export default function Hero() {
     }, 150); // Speed up typing slightly
     
     return () => clearInterval(typingInterval);
-  }, [heroState]);
+  }, [heroState, FILE_SYSTEM]);
 
   // When switching tabs in success state, immediately show all lines
   useEffect(() => {
@@ -172,14 +174,14 @@ export default function Hero() {
         >
           <span className="w-1.5 h-1.5 rounded-full bg-jb-primary animate-pulse"></span>
           <span className="text-[10px] font-mono font-medium text-slate-400 tracking-wider uppercase">
-            v2.4.1 Stable
+            {t('hero.badge')}
           </span>
         </motion.div>
 
         <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tighter mb-6 font-mono italic">
-          Miguel <span className="text-jb-primary not-italic">/</span> 
+          {t('hero.title')} <span className="text-jb-primary not-italic">/</span> 
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#7F52FF] via-[#D946EF] to-[#F97316] ml-3 not-italic">
-            Engenheiro Mobile
+            {t('hero.role')}
           </span>
         </h1>
 
@@ -189,7 +191,11 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed"
         >
-          Explora a minha arquitetura. <span className="text-slate-900 font-bold underline decoration-jb-primary/30 decoration-2 underline-offset-4">Interage com o código</span> para veres a interface a reagir em tempo real.
+          {t('hero.tagline_start')}{' '}
+          <span className="text-slate-900 font-bold underline decoration-jb-primary/30 decoration-2 underline-offset-4">
+            {t('hero.tagline_highlight')}
+          </span>{' '}
+          {t('hero.tagline_end')}
         </motion.p>
       </div>
 
@@ -381,24 +387,24 @@ export default function Hero() {
                   <AnimatePresence mode="popLayout">
                     {heroState === 'typing' && (
                        <motion.div key="typing" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="flex flex-col gap-0.5 text-gray-400 mt-1 px-2">
-                          <motion.span animate={{opacity: [0.5, 1, 0.5]}} transition={{repeat: Infinity, duration: 1.5}}>{'>'} Daemon listening...</motion.span>
+                          <motion.span animate={{opacity: [0.5, 1, 0.5]}} transition={{repeat: Infinity, duration: 1.5}}>{'>'} {t('hero.ide.terminal.listening')}</motion.span>
                        </motion.div>
                     )}
                     {heroState === 'building' && (
                        <motion.div key="building" className="flex flex-col text-gray-600 gap-0.5 relative pt-1 px-2" initial={{opacity:0}} animate={{opacity:1}}>
                           <motion.div animate={{y: [0, -32]}} transition={{duration: 2, ease: "linear"}} className="flex flex-col gap-0.5">
-                            <div><span className="text-blue-500">{'>'}</span> Resolving dependencies...</div>
-                            <div><span className="text-blue-500">{'>'}</span> Compiling Kotlin...</div>
-                            <div><span className="text-blue-500">{'>'}</span> Task :app:compileDebugKotlin <span className="text-orange-400 font-bold ml-1">EXECUTING</span></div>
-                            <div><span className="text-blue-500">{'>'}</span> Task :app:assembleDebug <span className="text-orange-400 font-bold ml-1">EXECUTING</span></div>
+                            <div><span className="text-blue-500">{'>'}</span> {t('hero.ide.terminal.resolving')}</div>
+                            <div><span className="text-blue-500">{'>'}</span> {t('hero.ide.terminal.compiling')}</div>
+                            <div><span className="text-blue-500">{'>'}</span> Task :app:compileDebugKotlin <span className="text-orange-400 font-bold ml-1">{t('hero.ide.terminal.executing')}</span></div>
+                            <div><span className="text-blue-500">{'>'}</span> Task :app:assembleDebug <span className="text-orange-400 font-bold ml-1">{t('hero.ide.terminal.executing')}</span></div>
                             <div className="text-gray-400 font-sans mt-0.5">1 warnings found</div>
                           </motion.div>
                        </motion.div>
                     )}
                     {heroState === 'success' && (
                        <motion.div key="success" className="flex flex-col gap-0.5 text-[#27C93F] mt-1 px-2" initial={{opacity:0}} animate={{opacity:1}}>
-                          <span className="font-semibold text-[11px]">BUILD SUCCESSFUL in 943ms.</span>
-                          <span className="text-gray-400 font-sans text-xs">Installed on device.</span>
+                          <span className="font-semibold text-[11px]">{t('hero.ide.terminal.success')}</span>
+                          <span className="text-gray-400 font-sans text-xs">{t('hero.ide.terminal.installed')}</span>
                        </motion.div>
                     )}
                   </AnimatePresence>
@@ -408,9 +414,9 @@ export default function Hero() {
                 <div className="h-6 bg-gray-100/90 border-t border-gray-300/60 px-3 flex items-center justify-between text-[10px] text-gray-500 font-sans shrink-0 absolute bottom-0 inset-x-0 w-full z-20">
                   <div className="flex items-center gap-3">
                     {heroState === 'success' ? (
-                       <span className="text-green-600 font-medium flex items-center gap-1"><Check className="w-3 h-3"/> Build Successful</span>
+                       <span className="text-green-600 font-medium flex items-center gap-1"><Check className="w-3 h-3"/> {t('hero.ide.build_success')}</span>
                     ) : (
-                       <span className="flex items-center gap-1 text-slate-500"><RefreshCw className={`w-3 h-3 ${heroState === 'building' ? 'animate-spin text-blue-500' : ''}`} /> {heroState === 'typing' ? 'Editing...' : 'Building...'}</span>
+                       <span className="flex items-center gap-1 text-slate-500"><RefreshCw className={`w-3 h-3 ${heroState === 'building' ? 'animate-spin text-blue-500' : ''}`} /> {heroState === 'typing' ? t('hero.ide.editing') : t('hero.ide.building')}</span>
                     )}
                     <span>Git: main</span>
                   </div>
@@ -514,18 +520,23 @@ export default function Hero() {
                                ×
                             </button>
                          </div>
-                         {['Sobre', 'Skills', 'Projetos', 'Contacto'].map(item => (
+                         {[
+                            { label: t('footer.nav.about'), id: 'sobre' },
+                            { label: t('footer.nav.tech_stack'), id: 'skills' },
+                            { label: t('footer.nav.home'), id: 'projetos' }, // Reuse projects anchor
+                            { label: t('footer.connect'), id: 'footer' }
+                         ].map(item => (
                             <motion.button 
-                               key={item}
+                               key={item.id}
                                whileTap={{ scale: 0.98, backgroundColor: "rgba(241, 245, 249, 1)" }}
                                onClick={(e) => {
                                   e.stopPropagation();
                                   setIsMenuOpen(false);
-                                  document.getElementById(item.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+                                  document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
                                }}
                                className="text-left py-4 px-4 rounded-2xl text-lg font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors flex items-center justify-between"
                             >
-                               {item}
+                               {item.label}
                                <ChevronRight className="w-5 h-5 text-slate-300" />
                             </motion.button>
                          ))}
@@ -554,7 +565,7 @@ export default function Hero() {
                         {heroState === 'building' && (
                            <motion.div initial={{opacity:0}} animate={{opacity:1}} className="flex flex-col gap-1.5 mt-8 px-2">
                              <div className="text-[#3DDC84] font-semibold break-all font-mono">{'>'} Task :app:compile</div>
-                             <div className="text-slate-500 font-mono">Resolving dependencies...</div>
+                             <div className="text-slate-500 font-mono">{t('hero.ide.terminal.resolving')}</div>
                              <div className="flex flex-col gap-1 mt-4">
                                 <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider font-mono">Building APK</span>
                                 <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
@@ -594,22 +605,22 @@ export default function Hero() {
                                 </div>
                               </div>
                               <div className="flex flex-col">
-                                <span className="text-[10px] font-mono text-jb-primary font-bold tracking-tighter uppercase">Mobile Engineer</span>
+                                <span className="text-[10px] font-mono text-jb-primary font-bold tracking-tighter uppercase">{t('hero.emulator.home.role')}</span>
                                 <span className={`text-xl font-extrabold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} tracking-tight leading-none`}>Miguel</span>
                               </div>
                             </div>
                             
                             <h2 className={`text-2xl font-bold tracking-tight leading-tight ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-mono italic`}>
-                              Construindo software <br />
-                              <span className="text-jb-primary">limpo & eficiente.</span>
+                              {t('hero.emulator.home.headline')} <br />
+                              <span className="text-jb-primary">{t('hero.emulator.home.headline_highlight')}</span>
                             </h2>
                             
                             {/* Specialties Section */}
                             <div className="w-full grid grid-cols-1 gap-3">
                                <span className={`text-[9px] font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>Services.kt</span>
                                {[
-                                 { title: 'Native Apps', desc: 'Performance extrema em Android/iOS.', color: 'border-blue-200 bg-blue-50/30' },
-                                 { title: 'Clean UI', desc: 'Interfaces intuitivas e animações fluidas.', color: 'border-purple-200 bg-purple-50/30' }
+                                 { title: t('hero.emulator.home.services.native.title'), desc: t('hero.emulator.home.services.native.desc'), color: 'border-blue-200 bg-blue-50/30' },
+                                 { title: t('hero.emulator.home.services.ui.title'), desc: t('hero.emulator.home.services.ui.desc'), color: 'border-purple-200 bg-purple-50/30' }
                                ].map((service, i) => (
                                  <div key={i} className={`w-full border rounded-2xl p-4 transition-colors ${service.color} ${activeTab === 'Theme.tsx' ? 'bg-[#232326]/50 border-white/5' : ''}`}>
                                     <h4 className={`text-xs font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} mb-1`}>{service.title}</h4>
@@ -621,7 +632,7 @@ export default function Hero() {
                             {/* Current Learning */}
                             <div className={`w-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5' : 'bg-slate-50 border-slate-100'} border rounded-2xl p-4 flex items-center justify-between`}>
                                <div className="flex flex-col">
-                                  <span className="text-[8px] text-slate-500 font-mono uppercase">Currently learning</span>
+                                  <span className="text-[8px] text-slate-500 font-mono uppercase">{t('hero.emulator.home.learning')}</span>
                                   <span className={`text-[11px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} font-mono`}>Kotlin Multiplatform</span>
                                </div>
                                <RefreshCw className="w-4 h-4 text-jb-primary animate-spin-slow" />
@@ -636,7 +647,7 @@ export default function Hero() {
                                       {tech}
                                     </span>
                                   ))}
-                               </div>
+                                </div>
                             </div>
                           </motion.div>
                         )}
@@ -648,7 +659,7 @@ export default function Hero() {
                             className="w-full flex flex-col items-start gap-4"
                           >
                              <div className="flex justify-between items-center w-full mb-2">
-                                <h3 className={`text-xs font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>Featured.kt</h3>
+                                <h3 className={`text-xs font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>{t('hero.emulator.work.featured')}</h3>
                                 <div className="flex gap-1.5">
                                    <span className="w-2 h-2 rounded-full bg-jb-primary"></span>
                                    <span className="w-2 h-2 rounded-full bg-slate-200"></span>
@@ -656,10 +667,10 @@ export default function Hero() {
                              </div>
 
                              {[
-                               { name: 'Fitness App', tech: 'Kotlin / Compose', status: 'Live', desc: 'Transforming health through code.' },
-                               { name: 'Fintech UI', tech: 'React Native', status: 'Dev', desc: 'Secure & fast banking experience.' },
-                               { name: 'Travel Guide', tech: 'Swift / SwiftUI', status: 'Live', desc: 'Your perfect companion.' },
-                               { name: 'AI Chatbot', tech: 'Python / React', status: 'WIP', desc: 'Next-gen conversation.' }
+                               { name: t('hero.emulator.work.projects.fitness.name'), tech: 'Kotlin / Compose', status: 'Live', desc: t('hero.emulator.work.projects.fitness.desc') },
+                               { name: t('hero.emulator.work.projects.fintech.name'), tech: 'React Native', status: 'Dev', desc: t('hero.emulator.work.projects.fintech.desc') },
+                               { name: t('hero.emulator.work.projects.travel.name'), tech: 'Swift / SwiftUI', status: 'Live', desc: t('hero.emulator.work.projects.travel.desc') },
+                               { name: t('hero.emulator.work.projects.ai.name'), tech: 'Python / React', status: 'WIP', desc: t('hero.emulator.work.projects.ai.desc') }
                              ].map((proj, i) => (
                                <div key={i} className={`w-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326] border-white/5' : 'bg-white border-slate-100'} border rounded-2xl p-4 shadow-sm flex flex-col gap-3 transition-colors`}>
                                   <div className="flex justify-between items-start">
@@ -689,16 +700,16 @@ export default function Hero() {
                                    <h3 className={`text-sm font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'}`}>Status</h3>
                                    <span className="flex items-center gap-1.5">
                                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                                      <span className="text-[9px] font-mono font-bold text-green-600 uppercase">Available</span>
+                                      <span className="text-[9px] font-mono font-bold text-green-600 uppercase">{t('hero.emulator.me.status')}</span>
                                    </span>
                                 </div>
                                 <p className={`text-[11px] ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} leading-relaxed font-mono`}>
-                                   Focado em arquiteturas reativas e UI declarativa. Atualmente a explorar o potencial de animações fluidas em Android.
+                                   {t('hero.emulator.me.bio')}
                                 </p>
                              </div>
 
                              <div className="w-full space-y-4">
-                                <span className={`text-[10px] font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>Experience.md</span>
+                                <span className={`text-[10px] font-mono font-bold ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest`}>{t('hero.emulator.me.experience')}</span>
                                 {[
                                   { role: 'Senior Dev', company: 'Tech Corp', year: '2023-Present' },
                                   { role: 'Mobile Lead', company: 'Startup X', year: '2021-2023' }
@@ -749,9 +760,9 @@ export default function Hero() {
                     className={`absolute bottom-0 inset-x-0 h-20 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C]/95 border-t border-white/5' : 'bg-white/95 border-t border-slate-100'} backdrop-blur-md z-50 flex items-center justify-around px-8 pb-6 transition-colors duration-500`}
                   >
                     {[
-                      { id: 'home', icon: <Home className="w-5 h-5"/>, label: 'Home' },
-                      { id: 'work', icon: <LayoutGrid className="w-5 h-5"/>, label: 'Work' },
-                      { id: 'me', icon: <User className="w-5 h-5"/>, label: 'Me' }
+                      { id: 'home', icon: <Home className="w-5 h-5"/>, label: t('hero.emulator.nav.home') },
+                      { id: 'work', icon: <LayoutGrid className="w-5 h-5"/>, label: t('hero.emulator.nav.work') },
+                      { id: 'me', icon: <User className="w-5 h-5"/>, label: t('hero.emulator.nav.me') }
                     ].map((item, i) => (
                       <motion.div 
                         key={item.id} 
@@ -790,7 +801,7 @@ export default function Hero() {
             exit={{ opacity: 0 }}
             className="absolute bottom-6 left-0 right-0 mx-auto text-center text-[10px] text-slate-400 font-sans font-semibold tracking-widest uppercase z-10 pointer-events-none"
           >
-            Processing... Click anywhere to skip
+            {t('hero.skip')}
           </motion.div>
         )}
       </AnimatePresence>

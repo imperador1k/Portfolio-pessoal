@@ -13,6 +13,7 @@ import {
   Plus,
   Scale
 } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const allRepos = [
   {
@@ -111,6 +112,7 @@ const starredRepos = [
 ];
 
 export default function GithubProfile() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = React.useState<'overview' | 'repositories' | 'projects' | 'packages' | 'stars'>('overview');
   const [isFollowing, setIsFollowing] = React.useState(() => {
     if (typeof window !== 'undefined') {
@@ -138,7 +140,7 @@ export default function GithubProfile() {
             className="flex items-center gap-3 mb-4"
           >
             <span className="px-3 py-1 bg-jb-primary/10 text-jb-primary text-[10px] font-mono font-bold rounded-full tracking-wider uppercase">
-              Engineering_Hub
+              {t('github.badge')}
             </span>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-jb-primary/20 to-transparent" />
           </motion.div>
@@ -148,29 +150,29 @@ export default function GithubProfile() {
             viewport={{ once: true }}
             className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight"
           >
-            GitHub <span className="text-slate-400 font-light">Ecosystem</span>
+            {t('github.title_main')} <span className="text-slate-400 font-light">{t('github.title_highlight')}</span>
           </motion.h2>
           <p className="mt-4 text-lg text-slate-500 max-w-2xl font-light">
-            Explora o meu ambiente de desenvolvimento real, onde a arquitetura se encontra com a execução.
+            {t('github.description')}
           </p>
         </div>
         
         {/* GitHub Mock Header Tabs */}
         <div className="flex items-center gap-6 border-b border-slate-200 mb-8 overflow-x-auto no-scrollbar">
           {[
-            { id: 'overview', name: 'Overview', icon: <BookOpen className="w-4 h-4" /> },
-            { id: 'repositories', name: 'Repositories', icon: <Layout className="w-4 h-4" />, count: allRepos.length },
-            { id: 'projects', name: 'Projects', icon: <Layout className="w-4 h-4" /> },
+            { id: 'overview', name: t('github.tabs.overview'), icon: <BookOpen className="w-4 h-4" /> },
+            { id: 'repositories', name: t('github.tabs.repositories'), icon: <Layout className="w-4 h-4" />, count: allRepos.length },
+            { id: 'projects', name: t('github.tabs.projects'), icon: <Layout className="w-4 h-4" /> },
             { 
               id: 'packages', 
-              name: 'Packages', 
+              name: t('github.tabs.packages'), 
               icon: (
                 <svg data-component="Octicon" aria-hidden="true" focusable="false" className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
                   <path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"></path>
                 </svg>
               ) 
             },
-            { id: 'stars', name: 'Stars', icon: <Star className="w-4 h-4" />, count: 128 },
+            { id: 'stars', name: t('github.tabs.stars'), icon: <Star className="w-4 h-4" />, count: 128 },
           ].map((tab) => (
             <div 
               key={tab.id}
@@ -222,17 +224,17 @@ export default function GithubProfile() {
                   : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100 hover:border-slate-300'
               }`}
             >
-              {isFollowing ? 'Unfollow' : 'Follow'}
+              {isFollowing ? t('github.profile.unfollow') : t('github.profile.follow')}
             </button>
 
             <div className="space-y-4 mb-8">
               <p className="text-sm text-slate-800">
-                Android Engineer & Full-stack Developer. Building high-performance digital solutions with Kotlin and React.
+                {t('github.profile.bio')}
               </p>
               
               <div className="flex items-center gap-2 text-sm text-slate-600">
                 <MapPin className="w-4 h-4" />
-                <span>Portugal</span>
+                <span>{t('github.profile.location')}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-600">
                 <LinkIcon className="w-4 h-4" />
@@ -241,7 +243,7 @@ export default function GithubProfile() {
             </div>
 
             <div className="border-t border-slate-200 pt-6">
-              <h2 className="text-sm font-semibold text-slate-900 mb-4">Achievements</h2>
+              <h2 className="text-sm font-semibold text-slate-900 mb-4">{t('github.profile.achievements')}</h2>
               <div className="flex flex-wrap gap-2">
                 {achievements.map((achievement) => (
                   <div key={achievement.id} className="group relative">
@@ -262,8 +264,8 @@ export default function GithubProfile() {
             {activeTab === 'overview' ? (
               <div className="flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-sm font-semibold text-slate-900">Pinned</h2>
-                  <span className="text-xs text-slate-500 cursor-pointer hover:text-jb-primary">Customize your pins</span>
+                  <h2 className="text-sm font-semibold text-slate-900">{t('github.overview.pinned')}</h2>
+                  <span className="text-xs text-slate-500 cursor-pointer hover:text-jb-primary">{t('github.overview.customize')}</span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -284,7 +286,7 @@ export default function GithubProfile() {
                             {repo.name}
                           </a>
                           <span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200 text-slate-500 uppercase">
-                            Public
+                            {t('github.repositories.public')}
                           </span>
                         </div>
                       </div>
@@ -316,7 +318,7 @@ export default function GithubProfile() {
 
                 {/* Contribution Graph */}
                 <div className="mt-10 border border-slate-200 rounded-md p-4 overflow-hidden bg-white">
-                  <h2 className="text-sm font-semibold text-slate-900 mb-4">842 contributions in the last year</h2>
+                  <h2 className="text-sm font-semibold text-slate-900 mb-4">842 {t('github.overview.contributions')}</h2>
                   <div className="flex gap-1 overflow-x-auto no-scrollbar">
                       {Array.from({ length: 52 }).map((_, weekIndex) => (
                         <div key={weekIndex} className="flex flex-col gap-1">
@@ -340,15 +342,15 @@ export default function GithubProfile() {
                       ))}
                   </div>
                   <div className="flex justify-between items-center mt-2 text-[10px] text-slate-500">
-                    <span>Learn how we count contributions</span>
+                    <span>{t('github.overview.learn_more')}</span>
                     <div className="flex items-center gap-1">
-                      <span>Less</span>
+                      <span>{t('github.overview.less')}</span>
                       <div className="flex gap-1">
                         {['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'].map(c => (
                           <div key={c} className="w-2.5 h-2.5 rounded-[2px]" style={{ backgroundColor: c }} />
                         ))}
                       </div>
-                      <span>More</span>
+                      <span>{t('github.overview.more')}</span>
                     </div>
                   </div>
                 </div>
@@ -361,18 +363,22 @@ export default function GithubProfile() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input 
                       type="text" 
-                      placeholder="Find a repository..." 
+                      placeholder={t('github.repositories.search_placeholder')} 
                       className="w-full pl-9 pr-4 py-1.5 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-jb-primary/20 focus:border-jb-primary/50 transition-all"
                     />
                   </div>
                   <div className="flex gap-2">
-                    {['Type', 'Language', 'Sort'].map(filter => (
-                      <button key={filter} className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-md text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-1">
-                        {filter} <ChevronDown className="w-3 h-3" />
+                    {[
+                      { label: t('github.repositories.type') },
+                      { label: t('github.repositories.language') },
+                      { label: t('github.repositories.sort') }
+                    ].map(filter => (
+                      <button key={filter.label} className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-md text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center gap-1">
+                        {filter.label} <ChevronDown className="w-3 h-3" />
                       </button>
                     ))}
                     <button className="px-3 py-1.5 bg-[#2da44e] text-white rounded-md text-xs font-semibold hover:bg-[#2c974b] flex items-center gap-1">
-                      <Plus className="w-3 h-3" /> New
+                      <Plus className="w-3 h-3" /> {t('github.repositories.new')}
                     </button>
                   </div>
                 </div>
@@ -384,7 +390,7 @@ export default function GithubProfile() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <a href="#" className="text-xl font-semibold text-[#0969da] hover:underline">{repo.name}</a>
-                          <span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200 text-slate-500 uppercase tracking-tighter">Public</span>
+                          <span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200 text-slate-500 uppercase tracking-tighter">{t('github.repositories.public')}</span>
                         </div>
                         <p className="text-sm text-slate-500 mb-4 max-w-2xl">{repo.description}</p>
                         
@@ -407,7 +413,7 @@ export default function GithubProfile() {
                               <span>{repo.license}</span>
                             </div>
                           )}
-                          <span>Updated {repo.updated}</span>
+                          <span>{t('github.repositories.updated')} {repo.updated}</span>
                         </div>
                       </div>
 
@@ -434,7 +440,7 @@ export default function GithubProfile() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input 
                       type="text" 
-                      placeholder="Search all projects" 
+                      placeholder={t('github.projects.search_placeholder')} 
                       className="w-full pl-9 pr-4 py-1.5 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-jb-primary/20 focus:border-jb-primary/50 transition-all"
                     />
                   </div>
@@ -448,11 +454,11 @@ export default function GithubProfile() {
                           <div className="flex items-center gap-2 mb-1">
                             <Layout className="w-4 h-4 text-slate-500" />
                             <h3 className="font-semibold text-slate-900">{project.name}</h3>
-                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200 text-slate-500 uppercase">{project.isPublic ? 'Public' : 'Private'}</span>
+                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200 text-slate-500 uppercase">{project.isPublic ? t('github.repositories.public') : 'Private'}</span>
                           </div>
                           <p className="text-xs text-slate-500">{project.description}</p>
                         </div>
-                        <span className="text-xs text-slate-400">Updated {project.updated}</span>
+                        <span className="text-xs text-slate-400">{t('github.repositories.updated')} {project.updated}</span>
                       </div>
                       
                       <div className="mt-4 flex items-center gap-4">
@@ -463,7 +469,7 @@ export default function GithubProfile() {
                           />
                         </div>
                         <span className="text-[10px] font-medium text-slate-500 whitespace-nowrap">
-                          {project.progress}% Complete • {project.items} items
+                          {project.progress}% {t('github.projects.complete')} • {project.items} {t('github.projects.items')}
                         </span>
                       </div>
                     </div>
@@ -477,9 +483,9 @@ export default function GithubProfile() {
                       <path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"></path>
                     </svg>
                  </div>
-                 <h3 className="text-xl font-semibold text-slate-900 mb-2">Get started with GitHub Packages</h3>
+                 <h3 className="text-xl font-semibold text-slate-900 mb-2">{t('github.packages.title')}</h3>
                  <p className="text-sm text-slate-500 max-w-sm text-center mb-6">
-                    GitHub Packages is a software package hosting service that allows you to host your software packages privately or publicly.
+                    {t('github.packages.description')}
                  </p>
                  <div className="flex gap-4">
                     {packagesData.map(pkg => (
@@ -488,7 +494,7 @@ export default function GithubProfile() {
                           <p className="text-[10px] text-slate-500 mb-4">{pkg.description}</p>
                           <div className="flex justify-between text-[10px] text-slate-400">
                              <span>{pkg.type}</span>
-                             <span>{pkg.downloads} downloads</span>
+                             <span>{pkg.downloads} {t('github.packages.downloads')}</span>
                           </div>
                        </div>
                     ))}
@@ -497,7 +503,7 @@ export default function GithubProfile() {
             ) : (
               <div className="flex flex-col">
                  <div className="border-b border-slate-200 pb-4 mb-4">
-                    <h3 className="text-sm font-semibold text-slate-900">Starred Repositories</h3>
+                    <h3 className="text-sm font-semibold text-slate-900">{t('github.tabs.stars')}</h3>
                  </div>
                  <div className="divide-y divide-slate-100">
                     {starredRepos.map(repo => (
@@ -516,11 +522,11 @@ export default function GithubProfile() {
                                    <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                                    <span>{repo.stars}</span>
                                 </div>
-                                <span>Updated {repo.updated}</span>
+                                <span>{t('github.repositories.updated')} {repo.updated}</span>
                              </div>
                           </div>
                           <button className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-200 rounded-md text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                             <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" /> Starred
+                             <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" /> {t('github.tabs.stars')}
                           </button>
                        </div>
                     ))}

@@ -10,11 +10,13 @@ import {
 } from "react-simple-maps";
 import { motion } from "motion/react";
 import { MapPin, Plus, Minus, RotateCcw, Globe2, Clock, Map } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 // Topologia simplificada do mundo
 const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
 
 export default function LocationMap() {
+  const { t } = useLanguage();
   // Estado para a Tooltip (nome do país)
   const [tooltipContent, setTooltipContent] = useState("");
   
@@ -48,15 +50,15 @@ export default function LocationMap() {
       <div className="flex-1 w-full space-y-6 z-10 lg:pl-6">
         <div className="inline-flex items-center gap-2 bg-slate-100/80 backdrop-blur-sm px-3 py-1.5 rounded-full">
            <MapPin className="w-3.5 h-3.5 text-[#FC4C02]" />
-           <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Base de Operações</span>
+           <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">{t('location_map.badge')}</span>
         </div>
 
         <div>
            <h4 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tighter mb-4 leading-tight">
-              Made in <br/><span className="text-[#FC4C02]">Portugal</span>
+              {t('location_map.title_main')} <br/><span className="text-[#FC4C02]">{t('location_map.title_highlight')}</span>
            </h4>
            <p className="text-slate-600 text-lg leading-relaxed font-medium max-w-lg">
-              Orgulhosamente a viver num país à beira-mar plantado. Mais do que bom clima e excelente gastronomia, Portugal é hoje um <span className="text-slate-900 font-bold">hub tecnológico vibrante</span> onde o talento e a criatividade se encontram.
+              {t('location_map.description')}
            </p>
         </div>
 
@@ -65,15 +67,15 @@ export default function LocationMap() {
            <div className="flex items-center gap-3">
               <div className="bg-slate-100/80 p-2.5 rounded-xl text-slate-600"><Globe2 className="w-5 h-5" /></div>
               <div>
-                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Localização</p>
-                 <p className="text-sm font-bold text-slate-800">Europa Ocidental</p>
+                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{t('location_map.label_location')}</p>
+                 <p className="text-sm font-bold text-slate-800">{t('location_map.region')}</p>
               </div>
            </div>
            <div className="flex items-center gap-3">
               <div className="bg-slate-100/80 p-2.5 rounded-xl text-slate-600"><Clock className="w-5 h-5" /></div>
               <div>
-                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Timezone</p>
-                 <p className="text-sm font-bold text-slate-800">Lisboa (GMT+1)</p>
+                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{t('location_map.label_timezone')}</p>
+                 <p className="text-sm font-bold text-slate-800">{t('location_map.timezone')}</p>
               </div>
            </div>
         </div>
@@ -102,7 +104,7 @@ export default function LocationMap() {
 
          {/* Bagde de Instrução */}
          <div className="absolute right-0 bottom-4 z-20 flex items-center gap-1.5 bg-slate-100/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200/50 text-[10px] font-bold text-slate-500 uppercase tracking-widest pointer-events-none">
-            <Map className="w-3 h-3" /> Interativo
+            <Map className="w-3 h-3" /> {t('location_map.interactive')}
          </div>
             
          <ComposableMap

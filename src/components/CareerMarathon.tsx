@@ -10,94 +10,10 @@ import {
   Send,
   BarChart3
 } from 'lucide-react';
-
-const marathonData = [
-  {
-    id: 1,
-    type: 'The Foundation',
-    title: 'Engenharia Informática',
-    org: 'Licenciatura (A Base)',
-    date: '2024 - ∞',
-    image: '/journey.jpg',
-    description: 'Aqui começou a verdadeira maratona. Onde construí as minhas bases lógicas. Foi aqui que percebi que a programação era o que queria fazer para a vida. As noites a debugar C e a estruturar arquiteturas ensinaram-me a resiliência de um verdadeiro engenheiro.',
-    stats: { time: 'Em Curso', effort: 'Máximo', elevation: 'Bases Sólidas' },
-    achievement: 'In Progress',
-    tags: ['C/C++', 'Algorithms', 'Architecture'],
-    splits: [
-       { label: '01 Lógica e Algoritmos', split: 'Ano 1', effort: 'Pointers', zone: 'Z4' },
-       { label: '02 Sistemas', split: 'Ano 2', effort: 'Bases de Dados', zone: 'Z3' }
-    ],
-    insight: "A base de tudo. Onde aprendi que o código é apenas o meio, mas a lógica é o fim.",
-    comments: [
-      { user: "Mentores", text: "Excelente capacidade analítica demonstrada ao longo do curso." }
-    ]
-  },
-  {
-    id: 2,
-    type: 'Web Sprint',
-    title: 'O Mergulho no Frontend',
-    org: 'Autodidata / Projetos Reais',
-    date: '2024 - 2025',
-    image: '/water.png',
-    description: 'Um sprint explosivo que começou com 5 meses intensos de HTML, CSS e JS puro. Foi nesta fase que desenvolvi o site para o alojamento local do meu pai, um projeto real que me fez perceber o impacto do software no mundo. Daí, o salto para React e Node.js foi inevitável para escalar a minha paixão.',
-    stats: { time: '1 Ano', effort: 'Aceleração', elevation: 'Ecossistema Web' },
-    achievement: 'First Real Project',
-    tags: ['React', 'TypeScript', 'Node.js', 'Vanilla Web'],
-    splits: [
-       { label: '01 Bases do Alojamento', split: '5 Meses', effort: 'HTML/CSS/JS', zone: 'Z2' },
-       { label: '02 Ecossistema React', split: '6 Meses', effort: 'Hooks & State', zone: 'Z4' },
-       { label: '03 Fullstack Leap', split: 'Current', effort: 'Node & API', zone: 'Z5' }
-    ],
-    insight: "O meu primeiro projeto real não foi apenas código, foi a descoberta de que adoro criar soluções que ajudam pessoas.",
-    comments: [
-      { user: "Pai", text: "O site ficou incrível e ajudou imenso o negócio!" }
-    ]
-  },
-  {
-    id: 3,
-    type: 'Business Hike',
-    title: 'Digital B2B Solutions',
-    org: 'Freelance / Empreendedorismo',
-    date: '2025 - 2026',
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=70&w=800&auto=format&fit=crop',
-    description: 'O momento em que a minha veia empreendedora se ativou. Comecei a desenvolver soluções digitais para negócios locais e empresas de construção (obras) que precisavam de uma imagem digital sólida. Foco total em converter necessidades de negócio em interfaces funcionais e profissionais.',
-    stats: { time: '1 Ano', effort: 'Tático', elevation: 'Negócios' },
-    achievement: 'Entrepreneurial Mindset',
-    tags: ['UI/UX', 'Digital Image', 'B2B', 'Freelance'],
-    splits: [
-       { label: '01 Veia Empreendedora', split: 'Start', effort: 'Client Hunting', zone: 'Z3' },
-       { label: '02 Digital Presence', split: 'Growth', effort: 'Landing Pages', zone: 'Z5' },
-       { label: '03 Sector Focus', split: 'Target', effort: 'Construction/Obras', zone: 'Z4' }
-    ],
-    insight: "Percebi que o sucesso de um projeto não é apenas código, é como ele ajuda o cliente a crescer o seu negócio.",
-    comments: [
-      { user: "Cliente (Obras)", text: "O site deu-nos a visibilidade que nos faltava no mercado digital." }
-    ]
-  },
-  {
-    id: 4,
-    type: 'Android Ultra',
-    title: 'Engenharia Mobile Nativa',
-    org: 'Miguel Santos Dev',
-    date: 'Presente',
-    image: '/natural.jpg',
-    description: 'O cume montanhoso atual. A transição de Web para Android foi uma decisão estratégica: identifiquei um mercado com alta procura, barreira de entrada exigente e salários acima da média. Ao mergulhar em Kotlin e Jetpack Compose, o desafio técnico conquistou-me. Hoje, a robustez do nativo é onde me sinto em casa.',
-    stats: { time: 'Active', effort: 'Max Zone', elevation: 'Nativo Mobile' },
-    achievement: 'Strategic Pivot',
-    tags: ['Kotlin', 'Jetpack Compose', 'Coroutines', 'Architecture'],
-    splits: [
-       { label: '01 Análise de Mercado', split: 'Pivot', effort: 'Strategic Shift', zone: 'Z4' },
-       { label: '02 Mastery Kotlin', split: 'Growth', effort: 'Native Core', zone: 'Z5' },
-       { label: '03 Compose UI', split: 'Current', effort: 'Premium UX', zone: 'Z4' }
-    ],
-    insight: "Escolhi o caminho mais difícil porque é aí que a procura é maior e a concorrência é menor. Android é engenharia pura.",
-    comments: [
-      { user: "Recruiter", text: "Perfil raro. Difícil encontrar devs nativos com esta base sólida." }
-    ]
-  }
-];
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function CareerMarathon() {
+  const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -105,6 +21,92 @@ export default function CareerMarathon() {
   });
 
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 20 });
+
+  const marathonData = [
+    {
+      id: 1,
+      type: t('timeline.foundation.type'),
+      title: t('timeline.foundation.title'),
+      org: t('timeline.foundation.org'),
+      date: `2024 - ∞`,
+      image: '/journey.jpg',
+      description: t('timeline.foundation.desc'),
+      stats: { time: t('timeline.in_progress'), effort: t('timeline.effort'), elevation: t('timeline.focus') },
+      achievement: 'In Progress',
+      tags: ['C/C++', 'Algorithms', 'Architecture'],
+      splits: [
+         { label: t('timeline.foundation.s1'), split: t('timeline.foundation.y1'), effort: 'Pointers', zone: 'Z4' },
+         { label: t('timeline.foundation.s2'), split: t('timeline.foundation.y2'), effort: 'Bases de Dados', zone: 'Z3' }
+      ],
+      insight: t('timeline.foundation.insight'),
+      comments: [
+        { user: t('timeline.mentors'), text: t('timeline.foundation.comment') }
+      ]
+    },
+    {
+      id: 2,
+      type: t('timeline.web.type'),
+      title: t('timeline.web.title'),
+      org: t('timeline.web.org'),
+      date: '2024 - 2025',
+      image: '/water.png',
+      description: t('timeline.web.desc'),
+      stats: { time: '1 Ano', effort: t('timeline.effort'), elevation: t('timeline.focus') },
+      achievement: 'First Real Project',
+      tags: ['React', 'TypeScript', 'Node.js', 'Vanilla Web'],
+      splits: [
+         { label: t('timeline.web.s1'), split: t('timeline.web.y1'), effort: 'HTML/CSS/JS', zone: 'Z2' },
+         { label: t('timeline.web.s2'), split: t('timeline.web.y2'), effort: 'Hooks & State', zone: 'Z4' },
+         { label: t('timeline.web.s3'), split: t('timeline.web.y3'), effort: 'Node & API', zone: 'Z5' }
+      ],
+      insight: t('timeline.web.insight'),
+      comments: [
+        { user: t('timeline.father'), text: t('timeline.web.comment') }
+      ]
+    },
+    {
+      id: 3,
+      type: t('timeline.business.type'),
+      title: t('timeline.business.title'),
+      org: t('timeline.business.org'),
+      date: '2025 - 2026',
+      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=70&w=800&auto=format&fit=crop',
+      description: t('timeline.business.desc'),
+      stats: { time: '1 Ano', effort: t('timeline.effort'), elevation: t('timeline.focus') },
+      achievement: 'Entrepreneurial Mindset',
+      tags: ['UI/UX', 'Digital Image', 'B2B', 'Freelance'],
+      splits: [
+         { label: t('timeline.business.s1'), split: t('timeline.business.y1'), effort: 'Client Hunting', zone: 'Z3' },
+         { label: t('timeline.business.s2'), split: t('timeline.business.y2'), effort: 'Landing Pages', zone: 'Z5' },
+         { label: t('timeline.business.s3'), split: t('timeline.business.y3'), effort: 'Construction/Obras', zone: 'Z4' }
+      ],
+      insight: t('timeline.business.insight'),
+      comments: [
+        { user: t('timeline.client'), text: t('timeline.business.comment') }
+      ]
+    },
+    {
+      id: 4,
+      type: t('timeline.android.type'),
+      title: t('timeline.android.title'),
+      org: t('timeline.android.org'),
+      date: t('timeline.present'),
+      image: '/natural.jpg',
+      description: t('timeline.android.desc'),
+      stats: { time: 'Active', effort: t('timeline.effort'), elevation: t('timeline.focus') },
+      achievement: 'Strategic Pivot',
+      tags: ['Kotlin', 'Jetpack Compose', 'Coroutines', 'Architecture'],
+      splits: [
+         { label: t('timeline.android.s1'), split: t('timeline.android.y1'), effort: 'Strategic Shift', zone: 'Z4' },
+         { label: t('timeline.android.s2'), split: t('timeline.android.y2'), effort: 'Native Core', zone: 'Z5' },
+         { label: t('timeline.android.s3'), split: t('timeline.android.y3'), effort: 'Premium UX', zone: 'Z4' }
+      ],
+      insight: t('timeline.android.insight'),
+      comments: [
+        { user: t('timeline.recruiter'), text: t('timeline.android.comment') }
+      ]
+    }
+  ];
 
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden" id="timeline">
@@ -124,14 +126,14 @@ export default function CareerMarathon() {
               className="flex items-center gap-3 mb-8 bg-orange-50 text-[#FC4C02] w-fit px-5 py-2.5 rounded-full shadow-sm border border-orange-100"
             >
               <Activity className="w-5 h-5" />
-              <span className="text-xs font-black uppercase tracking-[0.2em]">Timeline Evolution</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em]">{t('timeline.badge')}</span>
             </motion.div>
             <h2 className="text-6xl lg:text-8xl font-black text-slate-900 tracking-tighter leading-[0.9] mb-8">
-              A Minha <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FC4C02] to-orange-400">Maratona</span>
+              {t('timeline.title_main')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FC4C02] to-orange-400">{t('timeline.title_highlight')}</span>
             </h2>
             <p className="text-slate-500 text-lg lg:text-xl font-medium max-w-xl leading-relaxed border-l-4 border-orange-200 pl-5">
-              Ninguém corre uma maratona focando-se na meta. A evolução profissional é analisada <strong className="text-slate-700">split a split</strong>, projeto a projeto. Esta é a jornada lógica até ao presente.
+              {t('timeline.description')}
             </p>
           </div>
         </div>
@@ -147,7 +149,7 @@ export default function CareerMarathon() {
 
           <div className="space-y-16 lg:space-y-24">
             {marathonData.map((activity, index) => (
-              <ActivityCard key={activity.id} activity={activity} index={index} />
+              <ActivityCard key={activity.id} activity={activity as any} index={index} />
             ))}
           </div>
         </div>
@@ -156,7 +158,8 @@ export default function CareerMarathon() {
   );
 }
 
-function ActivityCard({ activity, index }: { activity: typeof marathonData[0], index: number }) {
+function ActivityCard({ activity, index }: { activity: any, index: number }) {
+  const { t } = useLanguage();
   const isEven = index % 2 === 0;
   const [kudos, setKudos] = useState(Math.floor(Math.random() * 40) + 15);
   const [hasKudosed, setHasKudosed] = useState(false);
@@ -175,12 +178,12 @@ function ActivityCard({ activity, index }: { activity: typeof marathonData[0], i
     if (!newComment.trim()) return;
     
     if (isCooldown) {
-      setError("Calma aí! Espera uns segundos.");
+      setError(t('timeline.cooldown'));
       setTimeout(() => setError(""), 3000);
       return;
     }
     
-    const updatedComments = [...comments, { user: "Tu (Visitante)", text: newComment }];
+    const updatedComments = [...comments, { user: t('timeline.visitor'), text: newComment }];
     setComments(updatedComments);
     localStorage.setItem(`comments-${activity.id}`, JSON.stringify(updatedComments));
     setNewComment("");
@@ -263,10 +266,10 @@ function ActivityCard({ activity, index }: { activity: typeof marathonData[0], i
             <div className="mb-8 bg-slate-50 border border-slate-100 rounded-2xl p-5 shadow-sm">
                <h5 className="text-[10px] lg:text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
                   <BarChart3 className="w-4 h-4 text-[#FC4C02]" />
-                  A evolução deste split
+                  {t('timeline.split_evolution')}
                </h5>
                <div className="space-y-3">
-                  {activity.splits.map((s, i) => (
+                  {activity.splits.map((s: any, i: number) => (
                      <div key={i} className="flex items-center justify-between group/split py-1 border-b border-white last:border-0">
                         <div className="flex flex-col">
                            <span className="text-xs font-bold text-slate-900">{s.label}</span>
@@ -287,9 +290,9 @@ function ActivityCard({ activity, index }: { activity: typeof marathonData[0], i
 
             <div className="grid grid-cols-3 gap-4 mb-6 pt-4 border-t border-slate-100">
                {[
-                  { label: 'Tempo', val: activity.stats.time, icon: <Timer className="w-4 h-4" />, color: 'text-blue-500' },
-                  { label: 'Esforço', val: activity.stats.effort, icon: <Zap className="w-4 h-4" />, color: 'text-amber-500' },
-                  { label: 'Foco', val: activity.stats.elevation, icon: <Activity className="w-4 h-4" />, color: 'text-[#FC4C02]' }
+                  { label: t('timeline.time'), val: activity.stats.time, icon: <Timer className="w-4 h-4" />, color: 'text-blue-500' },
+                  { label: t('timeline.effort'), val: activity.stats.effort, icon: <Zap className="w-4 h-4" />, color: 'text-amber-500' },
+                  { label: t('timeline.focus'), val: activity.stats.elevation, icon: <Activity className="w-4 h-4" />, color: 'text-[#FC4C02]' }
                ].map(m => (
                   <div key={m.label} className="flex flex-col">
                      <span className={`flex items-center gap-1 ${m.color} text-[9px] mb-1 font-black uppercase tracking-widest`}>
@@ -306,7 +309,7 @@ function ActivityCard({ activity, index }: { activity: typeof marathonData[0], i
             </div>
 
             <div className="flex flex-wrap gap-2">
-               {activity.tags.map((tag, i) => (
+               {activity.tags.map((tag: string, i: number) => (
                   <span key={i} className="px-3 py-1.5 bg-white text-slate-500 text-[10px] font-black rounded-lg border border-slate-200 hover:border-[#FC4C02] hover:text-[#FC4C02] transition-colors">
                      #{tag.toUpperCase()}
                   </span>
@@ -368,7 +371,7 @@ function ActivityCard({ activity, index }: { activity: typeof marathonData[0], i
                               value={newComment}
                               onChange={(e) => setNewComment(e.target.value)}
                               disabled={isCooldown}
-                              placeholder="Publica um comentário..."
+                              placeholder={t('timeline.comment_placeholder')}
                               className="w-full bg-white border border-slate-200 rounded-xl py-3 pl-4 pr-12 text-sm font-medium focus:outline-none focus:border-[#FC4C02] transition-colors"
                            />
                            <button 
