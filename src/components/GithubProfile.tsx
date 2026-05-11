@@ -48,14 +48,15 @@ const allRepos = [
     tags: ['school', 'school-education', 'school-management-system']
   },
   {
-    name: 'android-architecture-premium',
-    description: 'Advanced Android templates using Clean Architecture, Hilt, and Coroutines.',
-    language: 'Kotlin',
-    languageColor: '#A97BFF',
-    stars: 56,
-    forks: 8,
+    name: 'organizaS',
+    description: 'Um software focado em organizar de forma simples agendas e horários',
+    language: 'TypeScript',
+    languageColor: '#3178c6',
+    stars: 12,
+    forks: 3,
     isPublic: true,
-    updated: '3 days ago'
+    updated: '4 days ago',
+    tags: ['planner', 'scheduler', 'organizer']
   }
 ];
 

@@ -232,7 +232,7 @@ export default function ResumeView() {
                 
                 {/* Intro */}
                 <p className="text-[15px] leading-relaxed outline-none" contentEditable suppressContentEditableWarning>
-                  Sou estudante de Engenharia Informática e Web Developer Freelancer. Apaixonado por criar interfaces bonitas e sistemas robustos. Foco principal em React, TypeScript, Node.js e ecossistemas mobile (Android/Kotlin).
+                  Futuro Engenheiro de Software com um mindset focado em resultados e performance. Especialista em dominar o ecossistema Android Nativo e elevar interfaces Web a um nível premium. Unindo a complexidade do Kotlin à versatilidade do TypeScript para construir o futuro, um commit de cada vez.
                 </p>
 
                 {/* Divider */}

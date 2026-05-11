@@ -17,16 +17,15 @@ const marathonData = [
     type: 'The Foundation',
     title: 'Engenharia Informática',
     org: 'Licenciatura (A Base)',
-    date: '2020 - 2023',
+    date: '2024 - ∞',
     image: '/journey.jpg',
-    description: 'Aqui começou a verdadeira maratona. Três anos intensos onde construí as minhas bases lógicas. Foi aqui que percebi que a programação era o que queria fazer para a vida. As noites a debugar C e a estruturar arquiteturas ensinaram-me a resiliência de um verdadeiro engenheiro.',
-    stats: { time: '3 Anos', effort: 'Hardcore', elevation: 'Bases Sólidas' },
-    achievement: 'Degree Completed',
+    description: 'Aqui começou a verdadeira maratona. Onde construí as minhas bases lógicas. Foi aqui que percebi que a programação era o que queria fazer para a vida. As noites a debugar C e a estruturar arquiteturas ensinaram-me a resiliência de um verdadeiro engenheiro.',
+    stats: { time: 'Em Curso', effort: 'Máximo', elevation: 'Bases Sólidas' },
+    achievement: 'In Progress',
     tags: ['C/C++', 'Algorithms', 'Architecture'],
     splits: [
        { label: '01 Lógica e Algoritmos', split: 'Ano 1', effort: 'Pointers', zone: 'Z4' },
-       { label: '02 Sistemas', split: 'Ano 2', effort: 'Bases de Dados', zone: 'Z3' },
-       { label: '03 Projeto Final', split: 'Ano 3', effort: 'Tese Concluída', zone: 'Z5' }
+       { label: '02 Sistemas', split: 'Ano 2', effort: 'Bases de Dados', zone: 'Z3' }
     ],
     insight: "A base de tudo. Onde aprendi que o código é apenas o meio, mas a lógica é o fim.",
     comments: [
@@ -37,42 +36,42 @@ const marathonData = [
     id: 2,
     type: 'Web Sprint',
     title: 'O Mergulho no Frontend',
-    org: 'Autodidata',
-    date: '2022 - 2023',
+    org: 'Autodidata / Projetos Reais',
+    date: '2024 - 2025',
     image: '/water.png',
-    description: 'Um sprint explosivo em direção ao desenvolvimento web e interfaces. Domínio do ecossistema JavaScript e React para construir aplicações modernas. O código passou a ter uma cara visual bonita e responsiva.',
+    description: 'Um sprint explosivo que começou com 5 meses intensos de HTML, CSS e JS puro. Foi nesta fase que desenvolvi o site para o alojamento local do meu pai, um projeto real que me fez perceber o impacto do software no mundo. Daí, o salto para React e Node.js foi inevitável para escalar a minha paixão.',
     stats: { time: '1 Ano', effort: 'Aceleração', elevation: 'Ecossistema Web' },
-    achievement: 'First Deploys',
-    tags: ['React', 'TypeScript', 'Node.js'],
+    achievement: 'First Real Project',
+    tags: ['React', 'TypeScript', 'Node.js', 'Vanilla Web'],
     splits: [
-       { label: '01 Domínio do DOM', split: 'Q1', effort: 'Fundamentos', zone: 'Z2' },
-       { label: '02 Ecossistema Prático', split: 'Q2', effort: 'React Hooks', zone: 'Z4' },
-       { label: '03 Performance', split: 'Q3', effort: 'Deployments', zone: 'Z5' }
+       { label: '01 Bases do Alojamento', split: '5 Meses', effort: 'HTML/CSS/JS', zone: 'Z2' },
+       { label: '02 Ecossistema React', split: '6 Meses', effort: 'Hooks & State', zone: 'Z4' },
+       { label: '03 Fullstack Leap', split: 'Current', effort: 'Node & API', zone: 'Z5' }
     ],
-    insight: "A velocidade da web fascinou-me. O feedback visual instantâneo acelerou a minha evolução.",
+    insight: "O meu primeiro projeto real não foi apenas código, foi a descoberta de que adoro criar soluções que ajudam pessoas.",
     comments: [
-      { user: "Dev Tracker", text: "Commits diários constantes. Boa evolução!" }
+      { user: "Pai", text: "O site ficou incrível e ajudou imenso o negócio!" }
     ]
   },
   {
     id: 3,
     type: 'Business Hike',
     title: 'Digital B2B Solutions',
-    org: 'Freelance & Agência',
-    date: '2023 - 2024',
+    org: 'Freelance / Empreendedorismo',
+    date: '2025 - 2026',
     image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=70&w=800&auto=format&fit=crop',
-    description: 'Trabalho de campo no mundo real. Comecei a aplicar os meus conhecimentos técnicos em negócios e clientes reais. Aprendi a dura verdade do mercado: código perfeito só interessa se resolver o problema do utilizador final e gerar conversão.',
-    stats: { time: '1.5 Anos', effort: 'Tático', elevation: 'Negócios' },
-    achievement: 'Customer Focus',
-    tags: ['UI/UX', 'Conversão', 'Freelance'],
+    description: 'O momento em que a minha veia empreendedora se ativou. Comecei a desenvolver soluções digitais para negócios locais e empresas de construção (obras) que precisavam de uma imagem digital sólida. Foco total em converter necessidades de negócio em interfaces funcionais e profissionais.',
+    stats: { time: '1 Ano', effort: 'Tático', elevation: 'Negócios' },
+    achievement: 'Entrepreneurial Mindset',
+    tags: ['UI/UX', 'Digital Image', 'B2B', 'Freelance'],
     splits: [
-       { label: '01 Levantamento', split: 'Bases', effort: 'Comunicação', zone: 'Z3' },
-       { label: '02 Desenvolvimento', split: 'Code', effort: 'Prazos Rigorosos', zone: 'Z5' },
-       { label: '03 Lançamento', split: 'Launch', effort: 'Suporte', zone: 'Z4' }
+       { label: '01 Veia Empreendedora', split: 'Start', effort: 'Client Hunting', zone: 'Z3' },
+       { label: '02 Digital Presence', split: 'Growth', effort: 'Landing Pages', zone: 'Z5' },
+       { label: '03 Sector Focus', split: 'Target', effort: 'Construction/Obras', zone: 'Z4' }
     ],
-    insight: "No mundo real, a melhor stack é apenas aquela que resulta para o problema em causa.",
+    insight: "Percebi que o sucesso de um projeto não é apenas código, é como ele ajuda o cliente a crescer o seu negócio.",
     comments: [
-      { user: "Loja Parceira", text: "As nossas vendas aumentaram drasticamente após o redesign!" }
+      { user: "Cliente (Obras)", text: "O site deu-nos a visibilidade que nos faltava no mercado digital." }
     ]
   },
   {
@@ -82,18 +81,18 @@ const marathonData = [
     org: 'Miguel Santos Dev',
     date: 'Presente',
     image: '/natural.jpg',
-    description: 'O cume montanhoso atual. Transitei totalmente o meu foco para o ecossistema Android nativo, apaixonando-me pela fluidez e robustez de Kotlin. O design declarativo do Jetpack Compose permite-me agora criar interfaces premium à mesma velocidade a que o penso.',
+    description: 'O cume montanhoso atual. A transição de Web para Android foi uma decisão estratégica: identifiquei um mercado com alta procura, barreira de entrada exigente e salários acima da média. Ao mergulhar em Kotlin e Jetpack Compose, o desafio técnico conquistou-me. Hoje, a robustez do nativo é onde me sinto em casa.',
     stats: { time: 'Active', effort: 'Max Zone', elevation: 'Nativo Mobile' },
-    achievement: 'King of the Mountain',
-    tags: ['Kotlin', 'Jetpack Compose', 'Coroutines'],
+    achievement: 'Strategic Pivot',
+    tags: ['Kotlin', 'Jetpack Compose', 'Coroutines', 'Architecture'],
     splits: [
-       { label: '01 Mudança de Ritmo', split: 'Current', effort: 'Adeus XML', zone: 'Z3' },
-       { label: '02 Coroutines & Flows', split: 'Current', effort: 'Asincronismo', zone: 'Z5' },
-       { label: '03 Arquiteturas', split: 'Current', effort: 'MVVM Clean', zone: 'Z4' }
+       { label: '01 Análise de Mercado', split: 'Pivot', effort: 'Strategic Shift', zone: 'Z4' },
+       { label: '02 Mastery Kotlin', split: 'Growth', effort: 'Native Core', zone: 'Z5' },
+       { label: '03 Compose UI', split: 'Current', effort: 'Premium UX', zone: 'Z4' }
     ],
-    insight: "Mobile é pessoal. Cada pixel e fluxo de memória conta porque a app vive na bateria do utilizador.",
+    insight: "Escolhi o caminho mais difícil porque é aí que a procura é maior e a concorrência é menor. Android é engenharia pura.",
     comments: [
-      { user: "Senior Dev", text: "Excelente utilização de MVI/MVVM. Arquitetura altamente testável." }
+      { user: "Recruiter", text: "Perfil raro. Difícil encontrar devs nativos com esta base sólida." }
     ]
   }
 ];
