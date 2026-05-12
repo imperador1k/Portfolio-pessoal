@@ -595,6 +595,10 @@ export const en = {
       title: 'Community Feedback',
       subtitle: 'Based on real engineering experiences',
       excellent: 'Excellent',
+      very_good: 'Very Good',
+      good: 'Good',
+      poor: 'Poor',
+      very_poor: 'Very Poor',
       score: '4.9 out of 5',
       verified: 'Verified',
       date: 'Experience in',
@@ -614,7 +618,13 @@ export const en = {
           reliability: 'Reliability & Delivery'
         },
         submit: 'Post Review',
-        success: 'Review posted successfully!'
+        success: 'Review Sent!',
+        rating_label: 'How would you rate it?',
+        satisfaction_label: 'Satisfaction Level'
+      },
+      empty: {
+        title: 'No reviews yet',
+        desc: 'Your opinion is essential for the evolution of this Hub. Be the first to rate the service or this portfolio.'
       }
     }
   }

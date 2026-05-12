@@ -40,24 +40,6 @@ const getRatingColor = (rating: number) => {
   return '#ff3722'; // Red
 };
 
-const getRatingLabel = (rating: number) => {
-  if (rating >= 4.5) return "Excelente";
-  if (rating >= 3.5) return "Muito Bom";
-  if (rating >= 2.5) return "Bom";
-  if (rating >= 1.5) return "Pobre";
-  return "Muito Pobre";
-};
-
-const RoleIcon = ({ type, color }: { type: string, color: string }) => {
-  switch (type) {
-    case 'dev': return <Code className="w-5 h-5" style={{ color }} />;
-    case 'recruiter': return <Search className="w-5 h-5" style={{ color }} />;
-    case 'client': return <Building2 className="w-5 h-5" style={{ color }} />;
-    case 'designer': return <Palette className="w-5 h-5" style={{ color }} />;
-    default: return <User className="w-5 h-5" style={{ color }} />;
-  }
-};
-
 const TrustPilotStar = ({ filled = true, color = '#00b67a', size = "w-5 h-5", iconSize = "w-3.5 h-3.5" }: { 
   filled?: boolean, 
   color?: string,
@@ -86,6 +68,16 @@ const StarRating = ({ rating, size, iconSize }: { rating: number, size?: string,
   </div>
 );
 
+const RoleIcon = ({ type, color }: { type: string, color: string }) => {
+  switch (type) {
+    case 'dev': return <Code className="w-5 h-5" style={{ color }} />;
+    case 'recruiter': return <Search className="w-5 h-5" style={{ color }} />;
+    case 'client': return <Building2 className="w-5 h-5" style={{ color }} />;
+    case 'designer': return <Palette className="w-5 h-5" style={{ color }} />;
+    default: return <User className="w-5 h-5" style={{ color }} />;
+  }
+};
+
 export default function TrustReviews() {
   const { t } = useLanguage();
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -100,17 +92,25 @@ export default function TrustReviews() {
   const [newComment, setNewComment] = useState('');
   const [selectedRole, setSelectedRole] = useState('dev');
 
+  const getTranslatedRatingLabel = (rating: number) => {
+    if (rating >= 4.5) return t('claude.reviews.excellent');
+    if (rating >= 3.5) return t('claude.reviews.very_good');
+    if (rating >= 2.5) return t('claude.reviews.good');
+    if (rating >= 1.5) return t('claude.reviews.poor');
+    return t('claude.reviews.very_poor');
+  };
+
   // Calculations
   const stats = useMemo(() => {
-    if (reviews.length === 0) return { avg: 5.0, count: 0, label: "Excelente" };
+    if (reviews.length === 0) return { avg: 5.0, count: 0, label: t('claude.reviews.excellent') };
     const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
     const avg = sum / reviews.length;
     return {
       avg: parseFloat(avg.toFixed(1)),
       count: reviews.length,
-      label: getRatingLabel(avg)
+      label: getTranslatedRatingLabel(avg)
     };
-  }, [reviews]);
+  }, [reviews, t]);
 
   const topics = [
     { id: 'engineering', label: t('claude.reviews.modal.topics.engineering') },
@@ -298,9 +298,9 @@ export default function TrustReviews() {
              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)]">
                 <MessageSquare className="w-10 h-10 text-slate-200" />
              </div>
-             <h3 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">Ainda sem opiniões</h3>
+             <h3 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">{t('claude.reviews.empty.title')}</h3>
              <p className="text-slate-400 font-medium mb-10 text-center max-w-md px-6 leading-relaxed">
-                A tua opinião é fundamental para a evolução deste Hub. Sê o primeiro a avaliar o serviço ou este portfólio.
+                {t('claude.reviews.empty.desc')}
              </p>
              <button 
                 onClick={() => setIsModalOpen(true)}
@@ -337,7 +337,6 @@ export default function TrustReviews() {
                   exit={{ opacity: 0, scale: 0.9, y: 50 }}
                   className="relative w-full max-w-2xl bg-white rounded-[56px] shadow-2xl overflow-hidden border border-white"
                 >
-                   {/* Decorative background gradient */}
                    <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-slate-50 to-transparent pointer-events-none" />
                    
                    <div className="p-12 md:p-16 max-h-[90vh] overflow-y-auto custom-scrollbar relative z-10">
@@ -351,11 +350,6 @@ export default function TrustReviews() {
                                 }}
                             >
                                <Award className="w-8 h-8" style={{ color: getRatingColor(newRating) }} />
-                               <motion.div 
-                                 animate={{ rotate: 360 }}
-                                 transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                 className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
-                               />
                             </div>
                             <div>
                                <h3 className="text-3xl font-black text-slate-900 tracking-tighter leading-none">{t('claude.reviews.modal.title')}</h3>
@@ -383,11 +377,6 @@ export default function TrustReviews() {
                              style={{ backgroundColor: `${getRatingColor(newRating)}`, color: 'white' }}
                            >
                               <CheckCircle2 className="w-14 h-14" />
-                              <motion.div 
-                                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                                className="absolute inset-0 rounded-full border-4 border-white/30"
-                              />
                            </motion.div>
                            <h4 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter">{t('claude.reviews.modal.success')}</h4>
                            <p className="text-slate-400 text-lg font-medium">Agradeço a tua contribuição para a transparência deste Hub.</p>
@@ -402,8 +391,7 @@ export default function TrustReviews() {
                         <div className="space-y-10">
                            {/* Star Selection */}
                            <div className="bg-slate-50/50 p-10 rounded-[48px] border border-slate-100 flex flex-col items-center gap-6 shadow-inner relative overflow-hidden group">
-                              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent opacity-20" />
-                              <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Qual a tua avaliação?</span>
+                              <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">{t('claude.reviews.modal.satisfaction_label')}</span>
                               <div className="flex gap-4 relative z-10">
                                  {[1, 2, 3, 4, 5].map((s) => (
                                    <button 
@@ -421,7 +409,7 @@ export default function TrustReviews() {
                                  ))}
                               </div>
                               <span className="text-2xl font-black transition-all duration-700 tracking-tighter uppercase" style={{ color: getRatingColor(newRating) }}>
-                                 {getRatingLabel(newRating)}
+                                 {getTranslatedRatingLabel(newRating)}
                               </span>
                            </div>
 

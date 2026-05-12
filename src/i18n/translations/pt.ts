@@ -607,6 +607,10 @@ export const pt = {
       title: 'Feedback da Comunidade',
       subtitle: 'Baseado em experiências reais de engenharia',
       excellent: 'Excelente',
+      very_good: 'Muito Bom',
+      good: 'Bom',
+      poor: 'Pobre',
+      very_poor: 'Muito Pobre',
       score: '4.9 de 5',
       verified: 'Verificado',
       date: 'Experiência em',
@@ -619,6 +623,7 @@ export const pt = {
         msg_placeholder: 'O Miguel é realmente um Elite Developer...',
         topic_label: 'Review Topic',
         topic_placeholder: 'Choose a topic...',
+        topic_placeholder: 'Escolhe um tópico',
         topics: {
           engineering: 'Engenharia de Software',
           design: 'UI/UX & Design',
@@ -626,7 +631,13 @@ export const pt = {
           reliability: 'Fiabilidade & Entrega'
         },
         submit: 'Publicar Review',
-        success: 'Review enviada com sucesso!'
+        success: 'Review Enviada!',
+        rating_label: 'Qual a tua avaliação?',
+        satisfaction_label: 'Nível de Satisfação'
+      },
+      empty: {
+        title: 'Ainda sem opiniões',
+        desc: 'A tua opinião é fundamental para a evolução deste Hub. Sê o primeiro a avaliar o serviço ou este portfólio.'
       }
     }
   }

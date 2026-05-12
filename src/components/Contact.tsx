@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import { Send, Loader2, Copy, Check, Terminal } from 'lucide-react';
+import { Send, Loader2, Copy, Check, Terminal, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../i18n/LanguageContext';
 
-const FloatingInput = ({ id, label, type = "text", required = false, isTextarea = false }: {
+const FloatingInput = ({ id, label, value, onChange, type = "text", required = false, isTextarea = false }: {
   id: string;
   label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   type?: string;
   required?: boolean;
   isTextarea?: boolean;
 }) => {
-  const [value, setValue] = useState("");
-  
   return (
     <div className="relative group">
       {isTextarea ? (
         <textarea 
           id={id}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChange}
           className="peer w-full bg-slate-50 text-slate-900 placeholder-transparent px-4 pt-7 pb-3 outline-none text-sm font-sans rounded-xl border border-slate-200 focus:border-transparent focus:bg-white focus:ring-2 focus:ring-jb-primary focus:shadow-lg focus:shadow-jb-primary/10 transition-all duration-300 resize-none min-h-[140px] block"
           placeholder={label}
           required={required}
@@ -28,7 +28,7 @@ const FloatingInput = ({ id, label, type = "text", required = false, isTextarea 
           type={type} 
           id={id}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChange}
           className="peer w-full bg-slate-50 text-slate-900 placeholder-transparent px-4 pt-7 pb-3 outline-none text-sm font-sans rounded-xl border border-slate-200 focus:border-transparent focus:bg-white focus:ring-2 focus:ring-jb-primary focus:shadow-lg focus:shadow-jb-primary/10 transition-all duration-300 h-14 block"
           placeholder={label}
           required={required}
@@ -88,13 +88,51 @@ const CodeWindow = ({ onCopy, copied }: { onCopy: () => void, copied: boolean })
 export default function Contact() {
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [copied, setCopied] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    message: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => setIsSubmitting(false), 2000);
+    setStatus('idle');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          message: formData.message,
+          subject: `Contacto via Portfolio: ${formData.firstName}`
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus('success');
+        setFormData({ firstName: '', lastName: '', email: '', message: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Contact Error:', error);
+      setStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   const handleCopy = () => {
@@ -137,20 +175,41 @@ export default function Contact() {
 
           {/* Right Column: IDE Form */}
           <div className="lg:col-span-3 p-8 lg:p-16 bg-white flex flex-col justify-center">
-            <div className="mb-10">
-                <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-[0.2em]">{t('contact.form_filename')}</span>
-                <div className="h-px w-12 bg-jb-primary mt-2"></div>
+            <div className="mb-10 flex justify-between items-end">
+                <div>
+                  <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-[0.2em]">{t('contact.form_filename')}</span>
+                  <div className="h-px w-12 bg-jb-primary mt-2"></div>
+                </div>
+                
+                <AnimatePresence>
+                  {status === 'success' && (
+                    <motion.span 
+                      initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                      className="text-[10px] font-mono font-bold text-emerald-500 flex items-center gap-1"
+                    >
+                      <Check className="w-3 h-3" /> SUCCESS_SENT
+                    </motion.span>
+                  )}
+                  {status === 'error' && (
+                    <motion.span 
+                      initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                      className="text-[10px] font-mono font-bold text-rose-500 flex items-center gap-1"
+                    >
+                      <AlertCircle className="w-3 h-3" /> BUILD_FAILED
+                    </motion.span>
+                  )}
+                </AnimatePresence>
             </div>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <FloatingInput id="firstName" label={t('contact.form.first_name')} required />
-                <FloatingInput id="lastName" label={t('contact.form.last_name')} />
+                <FloatingInput id="firstName" label={t('contact.form.first_name')} value={formData.firstName} onChange={handleChange} required />
+                <FloatingInput id="lastName" label={t('contact.form.last_name')} value={formData.lastName} onChange={handleChange} />
               </div>
               
-              <FloatingInput id="email" label={t('contact.form.email')} type="email" required />
+              <FloatingInput id="email" label={t('contact.form.email')} type="email" value={formData.email} onChange={handleChange} required />
               
-              <FloatingInput id="message" label={t('contact.form.message')} isTextarea required />
+              <FloatingInput id="message" label={t('contact.form.message')} isTextarea value={formData.message} onChange={handleChange} required />
 
               <div className="pt-4">
                 <motion.button 
@@ -158,26 +217,31 @@ export default function Contact() {
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   disabled={isSubmitting}
-                  className="w-full bg-linear-to-r from-jb-primary to-cyan-500 text-white py-4 rounded-xl font-bold text-sm shadow-[0_12px_40px_-10px_rgba(127,82,255,0.4)] transition-all flex items-center justify-center overflow-hidden relative group disabled:opacity-80 disabled:cursor-not-allowed h-14"
+                  className={`w-full ${status === 'success' ? 'bg-emerald-500' : 'bg-linear-to-r from-jb-primary to-cyan-500'} text-white py-4 rounded-xl font-bold text-sm shadow-[0_12px_40px_-10px_rgba(127,82,255,0.4)] transition-all flex items-center justify-center overflow-hidden relative group disabled:opacity-80 disabled:cursor-not-allowed h-14`}
                 >
                   <AnimatePresence mode="wait">
                     {isSubmitting ? (
                       <motion.div 
                         key="loading"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
                         className="flex items-center gap-2"
                       >
                         <Loader2 className="w-5 h-5 animate-spin" />
                         <span>{t('contact.form.submitting')}</span>
                       </motion.div>
+                    ) : status === 'success' ? (
+                      <motion.div 
+                        key="sent"
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Check className="w-5 h-5" />
+                        <span className="tracking-wide uppercase text-[12px]">Mensagem Enviada!</span>
+                      </motion.div>
                     ) : (
                       <motion.div 
                         key="submit"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
                         className="flex items-center gap-2"
                       >
                         <span className="tracking-wide uppercase text-[12px]">{t('contact.form.submit')}</span>

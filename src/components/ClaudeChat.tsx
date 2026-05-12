@@ -19,7 +19,9 @@ import {
   ChevronDown,
   FileText,
   X,
-  Menu
+  Menu,
+  Linkedin,
+  Instagram
 } from 'lucide-react';
 
 import { useLanguage } from '../i18n/LanguageContext';
@@ -431,6 +433,89 @@ export default function ClaudeChat() {
 
         </motion.div>
       </div>
+
+      {/* ── Share Modal ───────────────────────────────────────── */}
+      <AnimatePresence>
+        {isShareModalOpen && (
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsShareModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg bg-white rounded-[32px] shadow-2xl overflow-hidden border border-white p-8 sm:p-10"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                   <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100">
+                      <ClaudeLogo className="w-6 h-6 text-slate-800" />
+                   </div>
+                   <div>
+                      <h3 className="text-xl font-bold text-slate-900 leading-none">{t('claude.share.title')}</h3>
+                      <p className="text-xs text-slate-400 mt-1.5 font-medium">Partilha este Hub de Engenharia</p>
+                   </div>
+                </div>
+                <button 
+                  onClick={() => setIsShareModalOpen(false)}
+                  className="p-2 hover:bg-slate-100 rounded-full transition-all text-slate-300 hover:text-slate-900"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
+                   <p className="text-[13px] font-medium text-slate-600 leading-relaxed">
+                      Este portfólio foi desenhado para demonstrar capacidades de arquitetura, performance e UI/UX de elite.
+                   </p>
+                   <div className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl shadow-sm">
+                      <div className="flex-1 truncate text-xs font-mono text-slate-400">
+                         https://miguelpsantos.tech
+                      </div>
+                      <button 
+                        onClick={copyToClipboard}
+                        className={`px-4 py-2 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all ${isCopied ? 'bg-green-500 text-white' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
+                      >
+                         {isCopied ? 'Copiado!' : 'Copiar'}
+                      </button>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                   <a 
+                    href="https://www.linkedin.com/in/miguel-sant0s/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 p-4 border border-slate-100 bg-slate-50 rounded-2xl hover:bg-white hover:shadow-xl transition-all group"
+                   >
+                      <Linkedin className="w-4 h-4 text-[#0077B5]" />
+                      <span className="text-xs font-bold text-slate-600 group-hover:text-slate-900">LinkedIn</span>
+                   </a>
+                   <a 
+                    href="https://instagram.com/miguelsantos.pr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 p-4 border border-slate-100 bg-slate-50 rounded-2xl hover:bg-white hover:shadow-xl transition-all group"
+                   >
+                      <Instagram className="w-4 h-4 text-[#E4405F]" />
+                      <span className="text-xs font-bold text-slate-600 group-hover:text-slate-900">Instagram</span>
+                   </a>
+                </div>
+              </div>
+
+              <div className="mt-8 text-center">
+                 <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Miguel P. Santos • Portfolio v2.0</p>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
