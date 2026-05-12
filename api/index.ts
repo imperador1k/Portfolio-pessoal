@@ -1,11 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { Resend } from 'resend';
-import dotenv from 'dotenv';
-import { getNotificationTemplate, getAutoReplyTemplate } from '../server/templates.ts';
-
-// Load environment variables
-dotenv.config();
+import { getNotificationTemplate, getAutoReplyTemplate } from '../server/templates';
 
 const app = express();
 
@@ -13,18 +9,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const resend = new Resend(process.env.RESEND_API);
-
 app.post('/api/send-email', async (req, res) => {
   const { name, email, subject, message } = req.body;
+
+  if (!process.env.RESEND_API) {
+    console.error('RESEND_API is missing in environment variables');
+    return res.status(500).json({ success: false, error: 'Configuração do servidor incompleta (API Key).' });
+  }
 
   if (!name || !email || !message) {
     return res.status(400).json({ success: false, error: 'Por favor, preencha todos os campos.' });
   }
 
-  try {
-    console.log(`Tentando enviar emails para: ${email} e migasmps2005@gmail.com`);
+  const resend = new Resend(process.env.RESEND_API);
 
+  try {
     // 1. Send notification to YOU (the owner)
     const notification = await resend.emails.send({
       from: 'Portfolio <contacto@miguelweb.dev>',
@@ -35,7 +34,8 @@ app.post('/api/send-email', async (req, res) => {
     });
 
     if (notification.error) {
-      console.error('Erro na Notificação:', notification.error);
+      console.error('Erro Resend (Notificação):', notification.error);
+      return res.status(400).json({ success: false, error: notification.error.message });
     }
 
     // 2. Send Auto-Reply to the VISITOR
@@ -47,13 +47,13 @@ app.post('/api/send-email', async (req, res) => {
     });
 
     if (autoReply.error) {
-      console.error('Erro no Auto-Reply:', autoReply.error);
+      console.error('Erro Resend (Auto-Reply):', autoReply.error);
     }
 
     res.status(200).json({ success: true, message: 'Processamento de emails concluído!' });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Server Error:', error);
-    res.status(500).json({ success: false, error: 'Ocorreu um erro ao processar o email.' });
+    res.status(500).json({ success: false, error: error.message || 'Erro interno no servidor.' });
   }
 });
 
