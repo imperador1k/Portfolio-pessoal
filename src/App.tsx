@@ -8,7 +8,11 @@ import AboutMe from './components/AboutMe';
 import LocationMap from './components/LocationMap';
 import GithubProfile from './components/GithubProfile';
 import LinkedInProfile from './components/LinkedInProfile';
+import YoutubeProfile from './components/YoutubeProfile';
+import SpotifyProfile from './components/SpotifyProfile';
+import ClaudeChat from './components/ClaudeChat';
 import ResumeView from './components/ResumeView';
+import TrustReviews from './components/TrustReviews';
 import Footer from './components/Footer';
 import MouseGradient from './components/MouseGradient';
 import SplashScreen from './components/SplashScreen';
@@ -44,7 +48,11 @@ function App() {
             <Skills />
             <GithubProfile />
             <LinkedInProfile />
+            <YoutubeProfile />
+            <SpotifyProfile />
+            <ClaudeChat />
             <ResumeView />
+            <TrustReviews />
           </main>
           <Footer />
         </div>

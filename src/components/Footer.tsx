@@ -25,7 +25,10 @@ export default function Footer() {
     { label: t('footer.nav.hall_of_fame'), href: '#certificacoes' },
     { label: t('footer.nav.tech_stack'), href: '#skills' },
     { label: t('footer.nav.github'), href: '#github' },
-    { label: t('footer.nav.linkedin'), href: '#linkedin-contact' },
+    { label: t('navbar.linkedin'), href: '#contactos' },
+    { label: 'Youtube', href: '#youtube' },
+    { label: 'Spotify', href: '#spotify' },
+    { label: t('navbar.cv'), href: '#cv' },
   ];
 
   return (

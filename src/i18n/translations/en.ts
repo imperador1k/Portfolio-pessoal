@@ -9,7 +9,8 @@ export const en = {
     linkedin: 'LinkedIn',
     cv: 'CV',
     connect: 'Connect',
-    view_cv: 'View CV (Interactive)'
+    view_cv: 'View CV (Interactive)',
+    reviews: 'Reviews'
   },
   about: {
     title: 'Beyond',
@@ -491,6 +492,129 @@ export const en = {
       terminal: {
         generating: 'Generating structure...',
         created: 'Created pages/'
+      }
+    }
+  },
+  youtube: {
+    badge: '05 // Creative_Feed',
+    title: 'Youtube',
+    highlight: 'Engineering Vlog',
+    handle: '@7guel',
+    subs: '7.2K subscribers',
+    videos_count: '12 videos',
+    subscribe: 'Subscribe',
+    subscribed: 'Subscribed',
+    views: 'views',
+    ago: 'ago',
+    bio: 'Exploring pure software engineering. Coding without shortcuts, building the future.',
+    videos: {
+      v1: {
+        title: 'Zero AI Challenge: Building an Android App from scratch',
+        views: '1.2K',
+        time: '2 days'
+      },
+      v2: {
+        title: 'The Art of Logic: Why I abandoned Copilots',
+        views: '856',
+        time: '5 days'
+      },
+      v3: {
+        title: 'Clean Architecture: The secret to immortal code',
+        views: '2.1K',
+        time: '1 week'
+      },
+      v4: {
+        title: 'Refactoring my Portfolio live',
+        views: '1.5K',
+        time: '2 weeks'
+      }
+    }
+  },
+  career: {
+    form: {
+      name: 'Full Name',
+      name_placeholder: 'What is your name?',
+      email: 'Email Address',
+      email_placeholder: 'example@email.com',
+      message: 'Message',
+      message_placeholder: 'How can I help you?',
+      success: 'Message Sent!',
+      error_generic: 'Error sending. Please try again.'
+    }
+  },
+  spotify: {
+    badge: '06 // Focus_Flow',
+    title: 'Spotify',
+    highlight: 'Coding Playlist',
+    sidebar: {
+      home: 'Home',
+      search: 'Search',
+      library: 'Your Library',
+      playlists: 'PLAYLISTS'
+    },
+    now_playing: 'Now Playing',
+    about_artist: 'About the artist',
+    follow: 'Follow',
+    monthly_listeners: '1 monthly listener',
+    song_title: 'study.mp3',
+    artist_name: 'Miguel Santos',
+    bio: 'Engineering and flow. This track is a custom white noise frequency designed for deep coding sessions without distractions.'
+  },
+  claude: {
+    badge: 'No-AI_Assistant',
+    welcome: 'Miguel is back!',
+    input_placeholder: 'Ask about skills or projects...',
+    actions: {
+      new_chat: 'New chat',
+      write: 'Write',
+      learn: 'Learn',
+      code: 'Code',
+      personal: 'Personal topics'
+    },
+    chat: {
+      user_query: 'Can you help Miguel with the code?',
+      ai_response: 'Critical Error: Miguel Santos detected. Access to logic denied. Miguel builds everything with pure engineering and 0% artificial assistance.',
+      ai_cta: 'However, his biological processor requires caffeine. Do you want to refuel the system?',
+      support_btn: 'Buy me a Coffee (Fuel)'
+    },
+    share: {
+      btn: 'Share',
+      title: 'Share Engineering Hub',
+      copy: 'Copy the link to share with someone',
+      copied: 'Copied!'
+    },
+    limit: {
+      message: 'You have reached the free limit for Miguel\'s brain queries.',
+      cta: 'To continue getting elite engineering insights, please refuel his biological processing with caffeine.',
+      btn: 'Refuel (Coffee)'
+    },
+    reviews: {
+      section_tag: 'User Experience',
+      section_title: 'Your feedback shapes my <span class="text-jb-primary">Engineering</span>.',
+      section_desc: 'Rate my service, portfolio performance, or your collaboration experience. Full transparency.',
+      title: 'Community Feedback',
+      subtitle: 'Based on real engineering experiences',
+      excellent: 'Excellent',
+      score: '4.9 out of 5',
+      verified: 'Verified',
+      date: 'Experience in',
+      write_btn: 'Write a Review',
+      modal: {
+        title: 'Rate your experience',
+        name_label: 'Your name',
+        name_placeholder: 'Ex: Elon Musk',
+        msg_label: 'Your opinion',
+        msg_placeholder: 'Miguel is truly an Elite Developer...',
+        topic_label: 'Review Topic',
+        topic_placeholder: 'Choose a topic...',
+        topics: {
+          engineering: 'Software Engineering',
+          design: 'UI/UX & Design',
+          communication: 'Communication & Soft Skills',
+          reliability: 'Reliability & Delivery'
+        },
+        submit: 'Post Review',
+        success: 'Review posted successfully!'
       }
     }
   }

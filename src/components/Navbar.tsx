@@ -20,6 +20,9 @@ export default function Navbar() {
     { name: t('navbar.tech_stack'), href: '#skills', id: 'skills' },
     { name: t('navbar.github'), href: '#github', id: 'github' },
     { name: t('navbar.linkedin'), href: '#contactos', id: 'contactos' },
+    { name: 'Youtube', href: '#youtube', id: 'youtube' },
+    { name: 'Spotify', href: '#spotify', id: 'spotify' },
+    { name: t('navbar.reviews'), href: '#reviews', id: 'reviews' },
     { name: t('navbar.cv'), href: '#cv', id: 'cv' },
   ];
 

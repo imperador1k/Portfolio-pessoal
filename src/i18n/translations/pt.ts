@@ -8,8 +8,9 @@ export const pt = {
     github: 'GitHub',
     linkedin: 'LinkedIn',
     cv: 'CV',
-    connect: 'Conectar',
-    view_cv: 'Ver CV (Interactive)'
+    connect: 'Connect',
+    view_cv: 'View CV (Interactive)',
+    reviews: 'Reviews'
   },
   about: {
     title: 'Além do',
@@ -503,6 +504,129 @@ export const pt = {
       terminal: {
         generating: 'Gerando estrutura...',
         created: 'Criado pages/'
+      }
+    }
+  },
+  youtube: {
+    badge: '05 // Creative_Feed',
+    title: 'Youtube',
+    highlight: 'Engineering Vlog',
+    handle: '@7guel',
+    subs: '7.2K subscritores',
+    videos_count: '12 vídeos',
+    subscribe: 'Subscrever',
+    subscribed: 'Subscrito',
+    views: 'visualizações',
+    ago: 'há',
+    bio: 'Explorando a engenharia de software pura. Programando sem atalhos, construindo o futuro.',
+    videos: {
+      v1: {
+        title: 'Zero AI Challenge: Construindo uma App Android do zero',
+        views: '1.2K',
+        time: '2 dias'
+      },
+      v2: {
+        title: 'A Arte da Lógica: Porque abandonei os Copilots',
+        views: '856',
+        time: '5 dias'
+      },
+      v3: {
+        title: 'Arquitetura Limpa: O segredo para código imortal',
+        views: '2.1K',
+        time: '1 semana'
+      },
+      v4: {
+        title: 'Refatorando o meu Portfólio em direto',
+        views: '1.5K',
+        time: '2 semanas'
+      }
+    }
+  },
+  career: {
+    form: {
+      name: 'Nome Completo',
+      name_placeholder: 'Como te chamas?',
+      email: 'Endereço de Email',
+      email_placeholder: 'exemplo@email.com',
+      message: 'Mensagem',
+      message_placeholder: 'Como posso ajudar?',
+      success: 'Mensagem Enviada!',
+      error_generic: 'Erro ao enviar. Tenta novamente.'
+    }
+  },
+  spotify: {
+    badge: '06 // Focus_Flow',
+    title: 'Spotify',
+    highlight: 'Coding Playlist',
+    sidebar: {
+      home: 'Início',
+      search: 'Pesquisar',
+      library: 'A tua Biblioteca',
+      playlists: 'PLAYLISTS'
+    },
+    now_playing: 'A reproduzir agora',
+    about_artist: 'Sobre o artista',
+    follow: 'Seguir',
+    monthly_listeners: '1 ouvinte mensal',
+    song_title: 'study.mp3',
+    artist_name: 'Miguel Santos',
+    bio: 'Engenharia e flow. Esta faixa é uma frequência de ruído branco personalizada, desenhada para sessões de código profundas e sem distrações.'
+  },
+  claude: {
+    badge: 'No-AI_Assistant',
+    welcome: 'Miguel está de volta!',
+    input_placeholder: 'Pergunta sobre habilidades ou projetos...',
+    actions: {
+      new_chat: 'Novo bate-papo',
+      write: 'Escrever',
+      learn: 'Aprender',
+      code: 'Código',
+      personal: 'Assuntos pessoais'
+    },
+    chat: {
+      user_query: 'Podes dar uma ajuda no código do Miguel?',
+      ai_response: 'Erro Crítico: Miguel Santos detetado. Acesso à lógica negado. O Miguel constrói tudo com engenharia pura e 0% de assistência artificial.',
+      ai_cta: 'No entanto, o seu processador biológico requer cafeína. Queres abastecer o sistema?',
+      support_btn: 'Oferecer um Café (Fuel)'
+    },
+    share: {
+      btn: 'Partilhar',
+      title: 'Partilhar Hub de Engenharia',
+      copy: 'Copia o link para partilhar com alguém',
+      copied: 'Copiado!'
+    },
+    limit: {
+      message: 'Esgotaste o limite de consultas gratuitas ao cérebro do Miguel.',
+      cta: 'Para continuar a obter insights de engenharia de elite, por favor abastece o processamento biológico dele com cafeína.',
+      btn: 'Refuel (Café)'
+    },
+    reviews: {
+      section_tag: 'Experiência do Utilizador',
+      section_title: 'A tua opinião molda a minha <span class="text-jb-primary">Engenharia</span>.',
+      section_desc: 'Avalia o meu serviço, a performance do portfólio ou a tua experiência de colaboração. Transparência total.',
+      title: 'Feedback da Comunidade',
+      subtitle: 'Baseado em experiências reais de engenharia',
+      excellent: 'Excelente',
+      score: '4.9 de 5',
+      verified: 'Verificado',
+      date: 'Experiência em',
+      write_btn: 'Escrever uma Review',
+      modal: {
+        title: 'Avalia a tua experiência',
+        name_label: 'O teu nome',
+        name_placeholder: 'Ex: Elon Musk',
+        msg_label: 'A tua opinião',
+        msg_placeholder: 'O Miguel é realmente um Elite Developer...',
+        topic_label: 'Review Topic',
+        topic_placeholder: 'Choose a topic...',
+        topics: {
+          engineering: 'Engenharia de Software',
+          design: 'UI/UX & Design',
+          communication: 'Comunicação & Soft Skills',
+          reliability: 'Fiabilidade & Entrega'
+        },
+        submit: 'Publicar Review',
+        success: 'Review enviada com sucesso!'
       }
     }
   }
