@@ -88,18 +88,18 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={`fixed z-[10000000] left-0 right-0 top-0 transition-all duration-700 ${isScrolled ? 'py-4' : 'py-6 md:py-10'}`}>
+      <header className={`fixed z-[70] left-0 right-0 top-0 transition-all duration-700 ${isScrolled ? 'py-4' : 'py-6 md:py-10'}`}>
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 flex items-center justify-between">
           <motion.a 
             href="#home" 
             animate={{ opacity: isOpen ? 0 : 1 }}
-            className="group font-black text-2xl tracking-tighter text-slate-800 z-[1001] flex items-center gap-2"
+            className="group font-black text-2xl tracking-tighter text-slate-800 z-10 flex items-center gap-2"
           >
             <span className="text-[#FC4C02]">M</span>
             <span>SANTOS</span>
           </motion.a>
 
-          <div className="flex items-center gap-6 z-[1001]">
+          <div className="flex items-center gap-6 z-10">
             <div className={`hidden lg:flex items-center gap-1 p-1 rounded-2xl border bg-white/50 backdrop-blur-md transition-all duration-500 ${isOpen ? 'opacity-0 pointer-events-none' : 'border-slate-100 shadow-sm opacity-100'}`}>
                <button onClick={() => setLanguage('pt')} className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${language === 'pt' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-800'}`}>PT</button>
                <button onClick={() => setLanguage('en')} className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${language === 'en' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-800'}`}>EN</button>
@@ -124,7 +124,7 @@ export default function Navbar() {
             animate="visible"
             exit="exit"
             variants={menuVariants}
-            className="fixed inset-0 bg-white z-[9999999] flex flex-col lg:flex-row overflow-hidden"
+            className="fixed inset-0 bg-white z-[60] flex flex-col lg:flex-row overflow-hidden"
           >
             {/* ── PC Sidebar ─────────────────────────────── */}
             <div className="hidden lg:flex flex-col w-[32%] h-full border-r border-slate-100 bg-slate-50/20 px-12 xl:px-20 py-10 xl:py-12 overflow-hidden">

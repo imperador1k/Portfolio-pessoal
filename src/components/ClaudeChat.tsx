@@ -194,7 +194,7 @@ export default function ClaudeChat() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden flex h-[700px] max-h-[85vh] relative"
+          className="rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden flex min-h-[600px] relative"
         >
           
           {/* Desktop Sidebar */}
@@ -236,10 +236,10 @@ export default function ClaudeChat() {
           </AnimatePresence>
 
           {/* Main Content Area */}
-          <div className="flex-1 flex flex-col relative bg-white overflow-y-auto custom-scrollbar overflow-x-hidden">
+          <div className="flex-1 flex flex-col relative bg-white overflow-x-hidden">
              
              {/* Header */}
-             <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 py-3">
+             <div className="z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 py-3">
                 <div className="flex items-center gap-2 sm:gap-4">
                   <button 
                     onClick={() => {

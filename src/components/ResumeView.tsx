@@ -69,10 +69,10 @@ export default function ResumeView() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="rounded-xl border border-slate-200 bg-white shadow-2xl overflow-hidden flex flex-col md:flex-row h-[800px] max-h-[80vh]"
+          className="rounded-xl border border-slate-200 bg-white shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]"
         >
           {/* Mobile Top Bar (Notion Style) */}
-          <div className="md:hidden flex items-center justify-between p-3 border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+          <div className="md:hidden flex items-center justify-between p-3 border-b border-slate-200 bg-white z-30 shadow-sm">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
               className="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-700 font-medium"
@@ -102,7 +102,7 @@ export default function ResumeView() {
                   initial={{ width: 0, opacity: 0 }}
                   animate={{ width: 260, opacity: 1 }}
                   exit={{ width: 0, opacity: 0 }}
-                  className={`bg-[#fbfbfa] border-r border-slate-100 flex-shrink-0 flex-col h-full overflow-y-auto no-scrollbar absolute md:relative z-50 md:z-10 shadow-2xl md:shadow-none ${isSidebarOpen ? 'flex' : 'hidden md:flex'}`}
+                  className={`bg-[#fbfbfa] border-r border-slate-100 flex-shrink-0 flex-col h-full absolute md:relative z-50 md:z-10 shadow-2xl md:shadow-none ${isSidebarOpen ? 'flex' : 'hidden md:flex'}`}
                 >
                 {/* Workspace Selector */}
                 <div className="p-3 flex items-center justify-between hover:bg-slate-200/50 cursor-pointer transition-colors mt-2">
@@ -129,7 +129,7 @@ export default function ResumeView() {
                   </div>
                 </div>
 
-                <div className="mt-4 px-3">
+                <div className="mt-4 px-3 pb-8">
                   <div className="px-2 py-1 flex items-center gap-1 group cursor-pointer">
                     <ChevronDown className="w-3 h-3 text-slate-400" />
                     <span className="text-[11px] font-semibold text-slate-500 tracking-wide">{t('resume.workspace_label')}</span>
@@ -156,10 +156,10 @@ export default function ResumeView() {
           </AnimatePresence>
 
           {/* Main Content */}
-          <div className="flex-1 bg-white overflow-y-auto no-scrollbar relative flex flex-col">
+          <div className="flex-1 bg-white relative flex flex-col">
             
             {/* Top Bar Navigation */}
-            <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm border-b border-slate-100 flex items-center justify-between px-4 py-3 shrink-0 hidden md:flex">
+            <div className="z-20 bg-white/90 backdrop-blur-sm border-b border-slate-100 flex items-center justify-between px-4 py-3 shrink-0 hidden md:flex">
               <div className="flex items-center gap-2 text-[13px] text-slate-500">
                 <span className="hover:underline cursor-pointer">{t('resume.workspace_name')}</span>
                 <span>/</span>

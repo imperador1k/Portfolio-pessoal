@@ -112,7 +112,7 @@ export default function SpotifyProfile() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden flex flex-col h-[700px] max-h-[85vh] relative"
+          className="rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden flex flex-col min-h-[600px] relative"
         >
           
           {/* Audio Element */}
@@ -165,9 +165,9 @@ export default function SpotifyProfile() {
             </div>
 
             {/* Main Content (Center) */}
-            <div className="flex-1 bg-white overflow-y-auto no-scrollbar relative flex flex-col">
+            <div className="flex-1 bg-white relative flex flex-col">
               {/* Top Navigation */}
-              <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-md px-8 py-4 flex items-center justify-between">
+              <div className="z-20 bg-white/80 backdrop-blur-md px-8 py-4 flex items-center justify-between">
                 <div className="flex gap-4">
                   <button className="p-1.5 bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors">
                     <ChevronLeft className="w-5 h-5" />
@@ -261,8 +261,8 @@ export default function SpotifyProfile() {
             </div>
 
             {/* Now Playing Panel (Right) - Hidden on Mobile/Tablet */}
-            <div className="hidden xl:flex w-[320px] bg-white border-l border-slate-100 flex-col overflow-y-auto no-scrollbar">
-               <div className="p-6 flex items-center justify-between sticky top-0 bg-white z-10">
+            <div className="hidden xl:flex w-[320px] bg-white border-l border-slate-100 flex-col">
+               <div className="p-6 flex items-center justify-between bg-white z-10">
                   <span className="text-[14px] font-bold text-slate-900">{t('spotify.now_playing')}</span>
                   <div className="flex gap-2">
                     <MoreHorizontal className="w-4 h-4 text-slate-500 cursor-pointer" />
@@ -318,7 +318,7 @@ export default function SpotifyProfile() {
           </div>
 
           {/* Bottom Player Bar */}
-          <div className="h-24 bg-white border-t border-slate-100 flex items-center px-4 shrink-0 relative z-30">
+          <div className="h-24 bg-white border-t border-slate-100 flex items-center px-4 shrink-0 relative z-30 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.05)]">
              {/* Left: Song Info */}
              <div className="w-[30%] flex items-center gap-3">
                 <div className="w-14 h-14 bg-slate-900 rounded shadow-md shrink-0 overflow-hidden">

@@ -312,11 +312,37 @@ export default function TrustReviews() {
           </motion.div>
         )}
 
-        {/* Floating Trustpilot Badge (Mock) */}
-        <div className="mt-28 flex items-center justify-center gap-12 opacity-20 grayscale hover:grayscale-0 transition-all cursor-default scale-110">
-           <div className="flex items-center gap-3">
-              <Star className="w-6 h-6 text-[#00b67a] fill-[#00b67a]" />
-              <span className="font-black text-3xl tracking-tighter text-slate-900">Trustpilot</span>
+        {/* Floating Trustpilot Badge (Dynamic Data) */}
+        <div className="mt-28 flex flex-col items-center justify-center gap-4 transition-all duration-700">
+           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 bg-slate-50/80 px-8 py-4 rounded-3xl border border-slate-100 transition-all cursor-default shadow-sm">
+              <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-[#00b67a] rounded-md flex items-center justify-center shadow-lg shadow-[#00b67a]/20">
+                    <Star className="w-5 h-5 text-white fill-white" />
+                 </div>
+                 <span className="font-black text-2xl tracking-tighter text-slate-900">Trustpilot</span>
+              </div>
+              
+              <div className="hidden md:block w-px h-6 bg-slate-200" />
+              
+              <div className="flex items-center gap-3">
+                 <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map(s => (
+                      <div 
+                        key={s} 
+                        className="w-4 h-4 flex items-center justify-center rounded-[2px]"
+                        style={{ backgroundColor: s <= Math.round(stats.avg) ? '#00b67a' : '#e2e8f0' }}
+                      >
+                        <Star className={`w-2.5 h-2.5 ${s <= Math.round(stats.avg) ? 'text-white fill-white' : 'text-slate-300'}`} />
+                      </div>
+                    ))}
+                 </div>
+                 <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-black text-slate-900 uppercase tracking-widest">TrustScore</span>
+                    <span className="text-xs font-bold text-slate-500">
+                      {stats.avg} | {stats.count} {stats.count === 1 ? 'Review' : 'Reviews'}
+                    </span>
+                 </div>
+              </div>
            </div>
         </div>
 

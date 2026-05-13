@@ -13,9 +13,11 @@ import SpotifyProfile from './components/SpotifyProfile';
 import ClaudeChat from './components/ClaudeChat';
 import ResumeView from './components/ResumeView';
 import TrustReviews from './components/TrustReviews';
+import TechStackSlider from './components/TechStackSlider';
 import Footer from './components/Footer';
 import MouseGradient from './components/MouseGradient';
 import SplashScreen from './components/SplashScreen';
+import SupportModal from './components/SupportModal';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,8 +55,10 @@ function App() {
             <ClaudeChat />
             <ResumeView />
             <TrustReviews />
+            <TechStackSlider />
           </main>
           <Footer />
+          <SupportModal />
         </div>
       )}
     </div>

@@ -211,7 +211,7 @@ export default function Contact() {
               
               <FloatingInput id="message" label={t('contact.form.message')} isTextarea value={formData.message} onChange={handleChange} required />
 
-              <div className="pt-4">
+              <div className="pt-4 space-y-4">
                 <motion.button 
                   type="submit"
                   whileHover={{ scale: 1.01 }}
@@ -250,6 +250,55 @@ export default function Contact() {
                     )}
                   </AnimatePresence>
                 </motion.button>
+
+                {/* IDE Console Feedback */}
+                <AnimatePresence>
+                  {(isSubmitting || status !== 'idle') && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="bg-slate-900 rounded-xl p-4 font-mono text-[11px] border border-white/10 shadow-inner overflow-hidden"
+                    >
+                      <div className="flex items-center gap-2 mb-2 border-b border-white/5 pb-2">
+                        <div className="w-2 h-2 rounded-full bg-slate-700"></div>
+                        <span className="text-slate-500 uppercase tracking-widest text-[9px]">Output Console</span>
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <div className="flex gap-2">
+                          <span className="text-slate-600">[{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}]</span>
+                          <span className="text-blue-400">INFO:</span>
+                          <span className="text-slate-300">Initializing contact protocol...</span>
+                        </div>
+                        
+                        {isSubmitting && (
+                          <div className="flex gap-2 animate-pulse">
+                            <span className="text-slate-600">[{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}]</span>
+                            <span className="text-yellow-500">EXEC:</span>
+                            <span className="text-slate-300">Compiling message and transmitting to gateway...</span>
+                          </div>
+                        )}
+
+                        {status === 'success' && (
+                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2">
+                            <span className="text-slate-600">[{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}]</span>
+                            <span className="text-emerald-500">SUCCESS:</span>
+                            <span className="text-emerald-400">Process finished with exit code 0. Message sent!</span>
+                          </motion.div>
+                        )}
+
+                        {status === 'error' && (
+                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2">
+                            <span className="text-slate-600">[{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}]</span>
+                            <span className="text-rose-500">ERROR:</span>
+                            <span className="text-rose-400">Failed to transmit. Check your connection or API status.</span>
+                          </motion.div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </form>
           </div>

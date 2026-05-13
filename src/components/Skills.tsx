@@ -451,7 +451,7 @@ export default function Skills() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#0d1117] rounded-2xl shadow-[0_30px_100px_rgba(0,0,0,0.5)] border border-slate-800/50 overflow-hidden flex flex-col h-[600px] lg:h-[700px] relative"
+          className="bg-[#0d1117] rounded-2xl shadow-[0_30px_100px_rgba(0,0,0,0.5)] border border-slate-800/50 overflow-hidden flex flex-col min-h-[600px] relative"
         >
           <AnimatePresence>
              {!isSidebarOpen && (
@@ -482,21 +482,21 @@ export default function Skills() {
              </div>
           </div>
 
-          <div className="flex-1 flex overflow-hidden relative">
+          <div className="flex-1 flex relative">
             <AnimatePresence initial={false}>
                {isSidebarOpen && (
                   <motion.div 
                      initial={{ width: 0, opacity: 0 }}
                      animate={{ width: 260, opacity: 1 }}
                      exit={{ width: 0, opacity: 0 }}
-                     className="bg-[#0d1117] border-right border-slate-800 flex flex-col absolute md:relative inset-y-0 left-0 z-40 shadow-2xl md:shadow-none h-full"
+                     className="bg-[#0d1117] border-r border-slate-800 flex flex-col absolute md:relative inset-y-0 left-0 z-40 shadow-2xl md:shadow-none h-full"
                   >
                      <div className="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center justify-between">
                         <span>{t('skills.explorer')}</span>
                         <ChevronDown className="w-3 h-3" />
                      </div>
                      
-                     <div className="flex-1 overflow-y-auto px-2 py-2 no-scrollbar">
+                     <div className="flex-1 px-2 py-2">
                         <div className="mb-2">
                            <button 
                               onClick={() => toggleFolder('src')}
@@ -571,7 +571,7 @@ export default function Skills() {
                   })}
                </div>
 
-               <div className="flex-1 p-4 lg:p-8 font-mono text-[11px] sm:text-[13px] overflow-y-auto no-scrollbar relative bg-[#0d1117]">
+               <div className="flex-1 p-4 lg:p-8 font-mono text-[11px] sm:text-[13px] relative bg-[#0d1117]">
                   {openFiles.length > 0 && currentItem ? (
                      <>
                         <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-transparent flex flex-col items-center pt-4 sm:pt-8 text-slate-700 pointer-events-none select-none text-[10px] sm:text-[12px] border-r border-slate-800/30">
