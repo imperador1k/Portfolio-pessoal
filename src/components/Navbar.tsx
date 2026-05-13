@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, Variants } from 'motion/react';
 import { Github, Linkedin, Download, X, Menu, Globe, ArrowRight, Mail, Zap, MessageSquare, Code, Cpu, Sparkles, ArrowUpRight, Phone, Send, User, ChevronRight, Home, Info, Clock, Trophy, Layers, Briefcase, Youtube, Music, FileText, Star, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { AudioVisualizer } from './AudioVisualizer';
 
 export default function Navbar() {
   const { language, setLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const [isSpotifyPlaying, setIsSpotifyPlaying] = useState(false);
 
   const { scrollY } = useScroll();
 
@@ -41,6 +43,15 @@ export default function Navbar() {
     document.querySelectorAll('section[id], #home').forEach((section) => observer.observe(section));
     
     return () => observer.disconnect();
+  }, []);
+
+  // Listen to Spotify Playback State
+  useEffect(() => {
+    const handlePlayState = (e: any) => {
+      setIsSpotifyPlaying(e.detail.isPlaying);
+    };
+    window.addEventListener('spotify-play-state', handlePlayState);
+    return () => window.removeEventListener('spotify-play-state', handlePlayState);
   }, []);
 
   // Nuclear Suppression
@@ -97,6 +108,9 @@ export default function Navbar() {
           >
             <span className="text-[#FC4C02]">M</span>
             <span>SANTOS</span>
+            <div className="ml-1 h-4 flex items-center">
+              <AudioVisualizer isPlaying={isSpotifyPlaying} />
+            </div>
           </motion.a>
 
           <div className="flex items-center gap-6 z-10">

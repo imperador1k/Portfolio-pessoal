@@ -88,7 +88,7 @@ const YoutubeProfile = () => {
                 rel="noopener noreferrer"
                 className="block w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white hover:opacity-90 transition-opacity"
               >
-                <img src="/icon.png" alt="Avatar" className="w-full h-full object-cover" />
+                <img src="/youtube.png" alt="Avatar" className="w-full h-full object-cover" />
               </a>
             </div>
 
@@ -225,7 +225,7 @@ const YoutubeProfile = () => {
                   
                   <div className="flex gap-3">
                      <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 hidden sm:block">
-                        <img src="/icon.png" className="w-full h-full object-cover" />
+                        <img src="/youtube.png" className="w-full h-full object-cover" />
                      </div>
                      <div className="flex flex-col gap-1">
                         <h4 className="text-sm font-bold text-slate-900 line-clamp-2 leading-tight group-hover:text-[#FF0000] transition-colors">

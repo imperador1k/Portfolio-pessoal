@@ -20,6 +20,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { supabase } from '../lib/supabase';
 
 interface Review {
   id: string;
@@ -100,6 +101,38 @@ export default function TrustReviews() {
     return t('claude.reviews.very_poor');
   };
 
+  // Fetch Reviews from Supabase
+  const fetchReviews = async () => {
+    const { data, error } = await supabase
+      .from('portfolio_reviews')
+      .select('*')
+      .eq('is_approved', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching reviews:', error);
+      return;
+    }
+
+    if (data) {
+      const formattedReviews: Review[] = data.map(r => ({
+        id: r.id,
+        name: r.name,
+        initials: r.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2),
+        rating: r.rating,
+        topic: r.topic || 'Geral',
+        text: r.comment,
+        date: new Date(r.created_at).toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' }),
+        roleIcon: r.role_icon || 'user'
+      }));
+      setReviews(formattedReviews);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchReviews();
+  }, []);
+
   // Calculations
   const stats = useMemo(() => {
     if (reviews.length === 0) return { avg: 5.0, count: 0, label: t('claude.reviews.excellent') };
@@ -127,19 +160,28 @@ export default function TrustReviews() {
     { id: 'other', icon: <User className="w-3.5 h-3.5" />, label: 'Outro' }
   ];
 
-  const handlePostReview = () => {
-    const review: Review = {
-      id: Date.now().toString(),
-      name: newName,
-      initials: newName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
-      rating: newRating,
-      topic: topics.find(t => t.id === newTopic)?.label || newTopic,
-      text: newComment,
-      date: new Date().toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' }),
-      roleIcon: selectedRole
-    };
+  const handlePostReview = async () => {
+    const topicLabel = topics.find(t => t.id === newTopic)?.label || newTopic;
     
-    setReviews([review, ...reviews]);
+    const { error } = await supabase
+      .from('portfolio_reviews')
+      .insert([
+        { 
+          name: newName, 
+          rating: newRating, 
+          comment: newComment, 
+          topic: topicLabel,
+          role_icon: selectedRole,
+          is_approved: false // Enviar como não aprovado por defeito
+        }
+      ]);
+
+    if (error) {
+      alert('Erro ao enviar review. Tenta novamente.');
+      console.error(error);
+      return;
+    }
+    
     setSubmitted(true);
     
     setTimeout(() => {
