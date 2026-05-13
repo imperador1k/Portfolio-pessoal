@@ -1,13 +1,22 @@
 import express from 'express';
 import cors from 'cors';
 import { Resend } from 'resend';
-import { getNotificationTemplate, getAutoReplyTemplate } from '../server/templates';
+import { getNotificationTemplate, getAutoReplyTemplate } from './templates';
 
 const app = express();
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// Health Check Route
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    env: process.env.RESEND_API ? 'API_KEY_PRESENT' : 'API_KEY_MISSING'
+  });
+});
 
 app.post('/api/send-email', async (req, res) => {
   const { name, email, subject, message } = req.body;
