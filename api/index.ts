@@ -1,39 +1,41 @@
-import express from 'express';
-import cors from 'cors';
 import { Resend } from 'resend';
 import { getNotificationTemplate, getAutoReplyTemplate } from './templates';
 
-const app = express();
+export default async function handler(req: any, res: any) {
+  // CORS Headers
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
 
-// Middlewares
-app.use(cors());
-app.use(express.json());
+  // Handle Options request
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
-// Health Check Route
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    env: process.env.RESEND_API ? 'API_KEY_PRESENT' : 'API_KEY_MISSING'
-  });
-});
+  // Only allow POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
+  }
 
-app.post('/api/send-email', async (req, res) => {
   const { name, email, subject, message } = req.body;
 
   if (!process.env.RESEND_API) {
-    console.error('RESEND_API is missing in environment variables');
-    return res.status(500).json({ success: false, error: 'Configuração do servidor incompleta (API Key).' });
+    return res.status(500).json({ success: false, error: 'RESEND_API key is missing' });
   }
 
   if (!name || !email || !message) {
-    return res.status(400).json({ success: false, error: 'Por favor, preencha todos os campos.' });
+    return res.status(400).json({ success: false, error: 'Preencha todos os campos obrigatórios.' });
   }
 
   const resend = new Resend(process.env.RESEND_API);
 
   try {
-    // 1. Send notification to YOU (the owner)
+    // 1. Enviar notificação para ti
     const notification = await resend.emails.send({
       from: 'Portfolio <contacto@miguelweb.dev>',
       to: 'migasmps2005@gmail.com',
@@ -43,28 +45,24 @@ app.post('/api/send-email', async (req, res) => {
     });
 
     if (notification.error) {
-      console.error('Erro Resend (Notificação):', notification.error);
       return res.status(400).json({ success: false, error: notification.error.message });
     }
 
-    // 2. Send Auto-Reply to the VISITOR
-    const autoReply = await resend.emails.send({
-      from: 'Miguel Santos <contacto@miguelweb.dev>',
-      to: email,
-      subject: 'Confirmação de contacto - Miguel Santos',
-      html: getAutoReplyTemplate(name),
-    });
-
-    if (autoReply.error) {
-      console.error('Erro Resend (Auto-Reply):', autoReply.error);
+    // 2. Enviar Auto-Reply (Opcional - não bloqueia o sucesso se falhar)
+    try {
+      await resend.emails.send({
+        from: 'Miguel Santos <contacto@miguelweb.dev>',
+        to: email,
+        subject: 'Confirmação de contacto - Miguel Santos',
+        html: getAutoReplyTemplate(name),
+      });
+    } catch (e) {
+      console.error('Erro no auto-reply:', e);
     }
 
-    res.status(200).json({ success: true, message: 'Processamento de emails concluído!' });
+    return res.status(200).json({ success: true, message: 'Email enviado com sucesso!' });
   } catch (error: any) {
-    console.error('Server Error:', error);
-    res.status(500).json({ success: false, error: error.message || 'Erro interno no servidor.' });
+    console.error('Fatal Error:', error);
+    return res.status(500).json({ success: false, error: error.message || 'Erro interno no servidor.' });
   }
-});
-
-// Export the app for Vercel
-export default app;
+}

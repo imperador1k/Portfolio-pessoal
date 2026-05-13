@@ -221,8 +221,8 @@ export default function ResumeView() {
                 </div>
                 
                 <a 
-                  href="/cv.pdf" 
-                  download="Miguel_Santos_CV_2026.pdf"
+                  href="/CV_MiguelSantos.pdf" 
+                  download="CV_MiguelSantos.pdf"
                   className="relative z-10 w-full md:w-auto shrink-0 flex items-center justify-center gap-2.5 px-7 py-3.5 bg-slate-900 hover:bg-black text-white rounded-xl font-medium text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
                 >
                   <Download className="w-4 h-4" />
