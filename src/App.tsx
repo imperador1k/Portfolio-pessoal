@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import MouseGradient from './components/MouseGradient';
+import DelayedRender from './components/DelayedRender';
 
 // Lazy loaded components (below the fold)
 const AboutMe = React.lazy(() => import('./components/AboutMe'));
@@ -35,28 +36,32 @@ function App() {
           <Navbar />
           <main>
             <Hero />
-            <Suspense fallback={<Fallback />}>
-              <AboutMe />
-              <div className="px-5 sm:px-6 lg:px-10 mb-12">
-                <LocationMap />
-              </div>
-              <CareerMarathon />
-              <Certifications />
-              <Skills />
-              <GithubProfile />
-              <LinkedInProfile />
-              <YoutubeProfile />
-              <SpotifyProfile />
-              <ClaudeChat />
-              <ResumeView />
-              <TrustReviews />
-              <TechStackSlider />
-            </Suspense>
+            <DelayedRender fallback={<Fallback />}>
+              <Suspense fallback={<Fallback />}>
+                <AboutMe />
+                <div className="px-5 sm:px-6 lg:px-10 mb-12">
+                  <LocationMap />
+                </div>
+                <CareerMarathon />
+                <Certifications />
+                <Skills />
+                <GithubProfile />
+                <LinkedInProfile />
+                <YoutubeProfile />
+                <SpotifyProfile />
+                <ClaudeChat />
+                <ResumeView />
+                <TrustReviews />
+                <TechStackSlider />
+              </Suspense>
+            </DelayedRender>
           </main>
-          <Suspense fallback={null}>
-            <Footer />
-            <SupportModal />
-          </Suspense>
+          <DelayedRender>
+            <Suspense fallback={null}>
+              <Footer />
+              <SupportModal />
+            </Suspense>
+          </DelayedRender>
         </div>
     </div>
   );
