@@ -92,6 +92,7 @@ export default function TrustReviews() {
   const [newName, setNewName] = useState('');
   const [newComment, setNewComment] = useState('');
   const [selectedRole, setSelectedRole] = useState('dev');
+  const [honeypot, setHoneypot] = useState(''); // Bot trap
 
   const getTranslatedRatingLabel = (rating: number) => {
     if (rating >= 4.5) return t('claude.reviews.excellent');
@@ -161,6 +162,19 @@ export default function TrustReviews() {
   ];
 
   const handlePostReview = async () => {
+    // Honeypot check (Bots fill everything)
+    if (honeypot) return;
+
+    // 1. Anti-Spam: LocalStorage Cooldown (24h)
+    const lastSubmission = localStorage.getItem('last_review_submission');
+    if (lastSubmission) {
+      const hoursSince = (Date.now() - parseInt(lastSubmission)) / (1000 * 60 * 60);
+      if (hoursSince < 24) {
+        alert('Só podes enviar uma review a cada 24 horas. Obrigado pela compreensão!');
+        return;
+      }
+    }
+
     const topicLabel = topics.find(t => t.id === newTopic)?.label || newTopic;
     
     const { error } = await supabase
@@ -172,7 +186,7 @@ export default function TrustReviews() {
           comment: newComment, 
           topic: topicLabel,
           role_icon: selectedRole,
-          is_approved: false // Enviar como não aprovado por defeito
+          is_approved: false
         }
       ]);
 
@@ -182,6 +196,8 @@ export default function TrustReviews() {
       return;
     }
     
+    // Mark submission time
+    localStorage.setItem('last_review_submission', Date.now().toString());
     setSubmitted(true);
     
     setTimeout(() => {
@@ -540,6 +556,17 @@ export default function TrustReviews() {
                                 placeholder={t('claude.reviews.modal.msg_placeholder')}
                                 className="w-full px-8 py-6 bg-slate-50/50 border border-slate-100 rounded-[32px] focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:bg-white transition-all text-sm font-bold shadow-inner resize-none"
                               />
+                           </div>
+
+                           {/* Honeypot field (hidden from humans) */}
+                           <div className="hidden" aria-hidden="true">
+                             <input 
+                               type="text" 
+                               value={honeypot} 
+                               onChange={(e) => setHoneypot(e.target.value)} 
+                               tabIndex={-1}
+                               autocomplete="off"
+                             />
                            </div>
 
                            <motion.button 
