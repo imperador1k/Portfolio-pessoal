@@ -622,7 +622,6 @@ export const pt = {
         msg_label: 'A tua opinião',
         msg_placeholder: 'O Miguel é realmente um Elite Developer...',
         topic_label: 'Review Topic',
-        topic_placeholder: 'Choose a topic...',
         topic_placeholder: 'Escolhe um tópico',
         topics: {
           engineering: 'Engenharia de Software',

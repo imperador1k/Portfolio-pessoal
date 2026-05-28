@@ -16,26 +16,11 @@ import TrustReviews from './components/TrustReviews';
 import TechStackSlider from './components/TechStackSlider';
 import Footer from './components/Footer';
 import MouseGradient from './components/MouseGradient';
-import SplashScreen from './components/SplashScreen';
 import SupportModal from './components/SupportModal';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Sync with SplashScreen duration (2800ms) + small buffer for smooth transition
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="min-h-screen bg-white">
-      <SplashScreen isLoading={isLoading} />
-      
-      {!isLoading && (
         <div className="animate-in fade-in duration-700">
           <MouseGradient />
           <Navbar />
@@ -60,7 +45,6 @@ function App() {
           <Footer />
           <SupportModal />
         </div>
-      )}
     </div>
   );
 }

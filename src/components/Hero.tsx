@@ -483,9 +483,7 @@ export default function Hero() {
                     transition={{ delay: 0.2 }}
                     className={`w-full h-16 ${activeTab === 'Theme.tsx' ? 'bg-[#19191C]/80 border-b border-white/5' : 'bg-white/80 border-b border-slate-100'} backdrop-blur-md flex justify-between items-center px-5 pt-4 z-40 shrink-0 relative transition-colors duration-500`}
                   >
-                     <motion.button 
-                       whileTap={{ scale: 0.9 }} 
-                       onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }} 
+                     <motion.button aria-label="Toggle Menu" whileTap={{ scale: 0.9 }} onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }} 
                        className={`p-2 rounded-xl ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}
                      >
                        <Menu className="w-4 h-4" />
@@ -494,9 +492,7 @@ export default function Hero() {
                         <span className={`text-[12px] font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-900'} font-mono leading-none`}>miguel.kt</span>
                         <span className="text-[8px] text-jb-primary font-mono font-bold animate-pulse">● RUNNING</span>
                      </div>
-                     <motion.button 
-                       whileTap={{ scale: 0.9 }} 
-                       onClick={() => setEmulatorTab('me')}
+                     <motion.button aria-label="Open Profile" whileTap={{ scale: 0.9 }} onClick={() => setEmulatorTab('me')}
                        className={`p-2 rounded-xl ${activeTab === 'Theme.tsx' ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-800'} transition-colors`}
                      >
                         <UserCircle className="w-4 h-4" />
@@ -516,7 +512,7 @@ export default function Hero() {
                      >
                          <div className="flex justify-between items-center mb-6">
                             <span className="text-xl font-bold text-slate-900 tracking-tight">Menu</span>
-                            <button onClick={() => setIsMenuOpen(false)} className="p-2 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors">
+                            <button aria-label="Close Menu" onClick={() => setIsMenuOpen(false)} className="p-2 rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors">
                                ×
                             </button>
                          </div>
@@ -601,7 +597,7 @@ export default function Hero() {
                             <div className="flex items-center gap-4 w-full">
                               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-jb-primary to-jb-secondary p-[2px] shadow-lg shadow-jb-primary/20">
                                 <div className={`w-full h-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326]' : 'bg-white'} rounded-[14px] flex items-center justify-center transition-colors overflow-hidden`}>
-                                  <img src="/icon.png" alt="Miguel Santos" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
+                                  <img src="/icon.png" alt="Miguel Santos" fetchPriority="high" className="w-full h-full object-cover" />
                                 </div>
                               </div>
                               <div className="flex flex-col">
@@ -623,7 +619,7 @@ export default function Hero() {
                                  { title: t('hero.emulator.home.services.ui.title'), desc: t('hero.emulator.home.services.ui.desc'), color: 'border-purple-200 bg-purple-50/30' }
                                ].map((service, i) => (
                                  <div key={i} className={`w-full border rounded-2xl p-4 transition-colors ${service.color} ${activeTab === 'Theme.tsx' ? 'bg-[#232326]/50 border-white/5' : ''}`}>
-                                    <h4 className={`text-xs font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} mb-1`}>{service.title}</h4>
+                                    <h3 className={`text-xs font-bold ${activeTab === 'Theme.tsx' ? 'text-white' : 'text-slate-800'} mb-1`}>{service.title}</h3>
                                     <p className={`text-[10px] ${activeTab === 'Theme.tsx' ? 'text-slate-400' : 'text-slate-500'} font-mono leading-tight`}>{service.desc}</p>
                                  </div>
                                ))}

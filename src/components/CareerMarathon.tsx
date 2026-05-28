@@ -257,17 +257,17 @@ function ActivityCard({ activity, index }: { activity: any, index: number }) {
                </p>
                {activity.image && (
                   <div className="w-full h-48 sm:w-32 sm:h-32 lg:w-48 lg:h-48 shrink-0 rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 border-2 border-slate-100 group-hover:border-[#FC4C02]/20 transition-colors">
-                     <img src={activity.image} alt={activity.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3s] ease-out" loading="lazy" decoding="async" />
+                     <img src={activity.image} alt={activity.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3s] ease-out" />
                   </div>
                )}
             </div>
 
             {/* Dynamic Splits */}
             <div className="mb-8 bg-slate-50 border border-slate-100 rounded-2xl p-5 shadow-sm">
-               <h5 className="text-[10px] lg:text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
+               <h4 className="text-[10px] lg:text-xs font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
                   <BarChart3 className="w-4 h-4 text-[#FC4C02]" />
                   {t('timeline.split_evolution')}
-               </h5>
+               </h4>
                <div className="space-y-3">
                   {activity.splits.map((s: any, i: number) => (
                      <div key={i} className="flex items-center justify-between group/split py-1 border-b border-white last:border-0">
@@ -355,7 +355,7 @@ function ActivityCard({ activity, index }: { activity: any, index: number }) {
                                  className="flex gap-3"
                               >
                                  <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden shrink-0 mt-1">
-                                    <img src={`https://i.pravatar.cc/100?u=${i + 150}`} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                                    <img src={`https://i.pravatar.cc/100?u=${i + 150}`} alt="" className="w-full h-full object-cover" />
                                  </div>
                                  <div className="bg-white px-4 py-2.5 rounded-xl border border-slate-100 shadow-sm grow text-sm">
                                     <p className="font-bold text-slate-800 text-[10px] mb-0.5">{comment.user}</p>

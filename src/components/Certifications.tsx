@@ -77,8 +77,7 @@ function CertificateModal({ cert, onClose, t }: { cert: typeof certsData[0], onC
             <img 
               src={cert.image} 
               alt={title} 
-              className="max-w-full max-h-full object-contain shadow-lg"
-            loading="lazy" decoding="async" />
+              className="max-w-full max-h-full object-contain shadow-lg" />
           </div>
 
           {/* Info Sidebar */}
@@ -158,8 +157,7 @@ export default function Certifications() {
                 <img 
                   src={cert.image} 
                   alt={title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-100 md:opacity-40 group-hover:opacity-100 grayscale-0 md:grayscale group-hover:grayscale-0"
-                loading="lazy" decoding="async" />
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-100 md:opacity-40 group-hover:opacity-100 grayscale-0 md:grayscale group-hover:grayscale-0" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
               </div>
 

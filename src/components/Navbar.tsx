@@ -106,7 +106,7 @@ export default function Navbar() {
             animate={{ opacity: isOpen ? 0 : 1 }}
             className="group font-black text-2xl tracking-tighter text-slate-800 z-10 flex items-center gap-2"
           >
-            <span className="text-[#FC4C02]">M</span>
+            <span className="text-[#E03C00]">M</span>
             <span>SANTOS</span>
             <div className="ml-1 h-4 flex items-center">
               <AudioVisualizer isPlaying={isSpotifyPlaying} />
@@ -145,7 +145,7 @@ export default function Navbar() {
                <div className="flex-1 flex flex-col min-h-max">
                   {/* Branding */}
                   <div className="font-black text-2xl tracking-tighter text-slate-800 flex items-center gap-2 mb-12">
-                     <span className="text-[#FC4C02]">M</span><span>SANTOS</span>
+                     <span className="text-[#E03C00]">M</span><span>SANTOS</span>
                   </div>
                   
                   {/* Profile */}
@@ -155,7 +155,7 @@ export default function Navbar() {
                      </div>
                      <div>
                         <h2 className="text-2xl font-black text-slate-800 leading-none">Miguel Santos</h2>
-                        <p className="text-[11px] text-[#FC4C02] font-black uppercase tracking-[0.2em] mt-3">Software Engineer</p>
+                        <p className="text-[11px] text-[#E03C00] font-black uppercase tracking-[0.2em] mt-3">Software Engineer</p>
                      </div>
                   </div>
 
@@ -163,7 +163,7 @@ export default function Navbar() {
                   <div>
                      <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em] mb-4">Personal Vision</h4>
                      <p className="text-3xl font-bold text-slate-700 tracking-tight leading-tight italic max-w-sm">
-                        "Engineering is not just code, it's the architecture of <span className="text-[#FC4C02]">innovation</span>."
+                        "Engineering is not just code, it's the architecture of <span className="text-[#E03C00]">innovation</span>."
                      </p>
                   </div>
 
@@ -192,7 +192,7 @@ export default function Navbar() {
                {/* Mobile Header (Only visible on Mobile) */}
                <div className="lg:hidden px-8 pt-4 pb-2 flex flex-col gap-4 items-start z-20">
                   <div className="space-y-0.5">
-                     <div className="font-black text-xl tracking-tighter text-slate-800 flex items-center gap-2"><span className="text-[#FC4C02]">M</span><span>SANTOS</span></div>
+                     <div className="font-black text-xl tracking-tighter text-slate-800 flex items-center gap-2"><span className="text-[#E03C00]">M</span><span>SANTOS</span></div>
                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Software Architecture</p>
                   </div>
                   <div className="flex p-0.5 bg-slate-100 rounded-full border border-slate-200">
@@ -209,7 +209,7 @@ export default function Navbar() {
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
                     className="lg:hidden flex items-center gap-2 mb-4 px-2"
                   >
-                     <ChevronDown className="w-3 h-3 text-[#FC4C02] animate-bounce" />
+                     <ChevronDown className="w-3 h-3 text-[#E03C00] animate-bounce" />
                      <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Explore Hub</p>
                   </motion.div>
 
@@ -225,17 +225,17 @@ export default function Navbar() {
                           >
                              <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2 lg:gap-3">
-                                   <span className="text-[9px] lg:text-[10px] font-black text-[#FC4C02] font-mono">0{i+1}</span>
+                                   <span className="text-[9px] lg:text-[10px] font-black text-[#E03C00] font-mono">0{i+1}</span>
                                    <div className="hidden lg:block flex-1 h-[1px] bg-slate-50 group-hover:bg-[#FC4C02]/20 transition-colors" />
                                 </div>
-                                <Icon className={`w-4 h-4 lg:hidden transition-all duration-500 ${activeSection === item.id ? 'text-[#FC4C02]' : 'text-slate-300'}`} />
+                                <Icon className={`w-4 h-4 lg:hidden transition-all duration-500 ${activeSection === item.id ? 'text-[#E03C00]' : 'text-slate-300'}`} />
                              </div>
 
-                             <h3 className={`text-base lg:text-3xl xl:text-4xl font-black tracking-tighter leading-none transition-all duration-500 ${activeSection === item.id ? 'text-[#FC4C02]' : 'text-slate-800 group-hover:text-[#FC4C02] lg:group-hover:pl-4'}`}>
+                             <h3 className={`text-base lg:text-3xl xl:text-4xl font-black tracking-tighter leading-none transition-all duration-500 ${activeSection === item.id ? 'text-[#E03C00]' : 'text-slate-800 group-hover:text-[#E03C00] lg:group-hover:pl-4'}`}>
                                 {item.name}
                              </h3>
 
-                             <ArrowUpRight className={`hidden lg:block absolute top-10 right-0 w-6 h-6 text-[#FC4C02] opacity-0 group-hover:opacity-100 transition-all duration-500 -translate-y-4 group-hover:translate-y-0`} />
+                             <ArrowUpRight className={`hidden lg:block absolute top-10 right-0 w-6 h-6 text-[#E03C00] opacity-0 group-hover:opacity-100 transition-all duration-500 -translate-y-4 group-hover:translate-y-0`} />
                           </a>
                         </motion.div>
                       );

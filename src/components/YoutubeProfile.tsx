@@ -73,8 +73,7 @@ const YoutubeProfile = () => {
            <img 
             src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80" 
             alt="YouTube Banner" 
-            className="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
-           loading="lazy" decoding="async" />
+            className="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
            <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
         </a>
 
@@ -88,7 +87,7 @@ const YoutubeProfile = () => {
                 rel="noopener noreferrer"
                 className="block w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white hover:opacity-90 transition-opacity"
               >
-                <img src="/youtube.png" alt="Avatar" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                <img src="/youtube.png" alt="Avatar" className="w-full h-full object-cover" />
               </a>
             </div>
 
@@ -211,8 +210,7 @@ const YoutubeProfile = () => {
                      <img 
                       src={video.thumbnail} 
                       alt={t(`youtube.videos.${video.key}.title`)}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                     loading="lazy" decoding="async" />
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-2xl">
                            <Play className="w-6 h-6 fill-black text-black ml-1" />
@@ -225,7 +223,7 @@ const YoutubeProfile = () => {
                   
                   <div className="flex gap-3">
                      <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 hidden sm:block">
-                        <img src="/youtube.png" className="w-full h-full object-cover" loading="lazy" decoding="async" alt="" />
+                        <img src="/youtube.png" className="w-full h-full object-cover" alt="" />
                      </div>
                      <div className="flex flex-col gap-1">
                         <h4 className="text-sm font-bold text-slate-900 line-clamp-2 leading-tight group-hover:text-[#FF0000] transition-colors">

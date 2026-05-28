@@ -97,7 +97,7 @@ export default function Footer() {
         >
           {[...codeStream, ...codeStream].map((cmd, i) => (
             <span key={i} className="flex items-center gap-4">
-              <Cpu className="w-3 h-3 text-[#FC4C02]/40" />
+              <Cpu className="w-3 h-3 text-[#E03C00]/40" />
               {cmd}
             </span>
           ))}
@@ -115,7 +115,7 @@ export default function Footer() {
                 viewport={{ once: true }}
                 className="space-y-6"
               >
-                 <div className="flex items-center gap-3 text-[#FC4C02] font-black uppercase text-[11px] tracking-[0.3em]">
+                 <div className="flex items-center gap-3 text-[#E03C00] font-black uppercase text-[11px] tracking-[0.3em]">
                     <span className="w-8 h-px bg-[#FC4C02]" />
                     {t('footer.explore')}
                  </div>
@@ -129,7 +129,7 @@ export default function Footer() {
                       href="mailto:migasmps2005@gmail.com"
                       className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl flex items-center gap-3 group"
                     >
-                       <Mail className="w-4 h-4 text-[#FC4C02]" />
+                       <Mail className="w-4 h-4 text-[#E03C00]" />
                        {t('footer.social.email')}
                     </motion.a>
                     <motion.a 
@@ -138,7 +138,7 @@ export default function Footer() {
                       href="#contactos"
                       className="px-8 py-4 bg-white border border-slate-200 text-slate-900 rounded-2xl font-black text-sm uppercase tracking-widest shadow-sm hover:shadow-xl transition-all flex items-center gap-3"
                     >
-                       <MessageSquare className="w-4 h-4 text-[#FC4C02]" />
+                       <MessageSquare className="w-4 h-4 text-[#E03C00]" />
                        Get in touch
                     </motion.a>
                  </div>
@@ -147,7 +147,7 @@ export default function Footer() {
 
            <div className="grid grid-cols-2 gap-12 lg:pl-12">
               <div className="space-y-6">
-                 <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Status</h4>
+                 <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Status</h3>
                  <div className="space-y-4">
                     <div className="flex items-center gap-3">
                        <div className="relative">
@@ -157,14 +157,14 @@ export default function Footer() {
                        <span className="text-sm font-bold text-slate-600">Disponível para Projetos</span>
                     </div>
                     <div className="flex items-center gap-3 text-slate-500">
-                       <Globe className="w-4 h-4 text-[#FC4C02]" />
+                       <Globe className="w-4 h-4 text-[#E03C00]" />
                        <span className="text-sm font-semibold">Porto, Portugal (UTC+0)</span>
                     </div>
                  </div>
               </div>
 
               <div className="space-y-6">
-                 <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{t('footer.connect')}</h4>
+                 <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">{t('footer.connect')}</h3>
                  <div className="flex gap-4">
                     {[
                       { href: 'https://github.com/Imperador1k', icon: Github, label: 'GitHub' },
@@ -176,7 +176,7 @@ export default function Footer() {
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={{ y: -5, scale: 1.1 }}
-                        className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-500 hover:text-[#FC4C02] hover:bg-white hover:shadow-xl transition-all"
+                        className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-500 hover:text-[#E03C00] hover:bg-white hover:shadow-xl transition-all"
                       >
                         <Icon className="w-5 h-5" />
                       </motion.a>
@@ -191,7 +191,7 @@ export default function Footer() {
           
           <div className="col-span-2 lg:col-span-2">
             <a href="#home" className="inline-flex items-center gap-3 font-black text-3xl text-slate-900 mb-6 group tracking-tighter">
-              <span className="text-[#FC4C02]">M</span>
+              <span className="text-[#E03C00]">M</span>
               <span>SANTOS</span>
             </a>
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs font-medium">
@@ -200,13 +200,13 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1">
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8">{t('footer.explore')}</h4>
+            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-8">{t('footer.explore')}</h3>
             <ul className="space-y-4">
               {navLinks.slice(0, 5).map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm font-bold text-slate-500 hover:text-[#FC4C02] transition-colors flex items-center gap-2 group"
+                    className="text-sm font-bold text-slate-500 hover:text-[#E03C00] transition-colors flex items-center gap-2 group"
                   >
                     <span className="w-0 group-hover:w-3 h-px bg-[#FC4C02] transition-all duration-300" />
                     {link.label}
@@ -217,13 +217,13 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1">
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8">Social</h4>
+            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-8">Social</h3>
             <ul className="space-y-4">
               {navLinks.slice(5).map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm font-bold text-slate-500 hover:text-[#FC4C02] transition-colors flex items-center gap-2 group"
+                    className="text-sm font-bold text-slate-500 hover:text-[#E03C00] transition-colors flex items-center gap-2 group"
                   >
                     <span className="w-0 group-hover:w-3 h-px bg-[#FC4C02] transition-all duration-300" />
                     {link.label}

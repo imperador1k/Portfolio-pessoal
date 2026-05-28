@@ -46,8 +46,8 @@ export default function LocationMap() {
               viewport={{ once: true }}
               className="inline-flex items-center gap-2 bg-[#FC4C02]/10 border border-[#FC4C02]/20 px-3 py-1.5 rounded-full mb-8 w-fit"
             >
-               <MapPin className="w-3.5 h-3.5 text-[#FC4C02]" />
-               <span className="text-[10px] font-black text-[#FC4C02] uppercase tracking-widest">{t('location_map.badge')}</span>
+               <MapPin className="w-3.5 h-3.5 text-[#E03C00]" />
+               <span className="text-[10px] font-black text-[#E03C00] uppercase tracking-widest">{t('location_map.badge')}</span>
             </motion.div>
 
             <motion.div
@@ -57,7 +57,7 @@ export default function LocationMap() {
             >
               <h4 className="text-4xl lg:text-6xl font-black text-slate-900 tracking-tighter mb-6 leading-[0.9] uppercase">
                 {t('location_map.title_main')} <br/>
-                <span className="text-[#FC4C02]">{t('location_map.title_highlight')}</span>
+                <span className="text-[#E03C00]">{t('location_map.title_highlight')}</span>
               </h4>
               <p className="text-slate-500 text-lg leading-relaxed max-w-md mb-12">
                 {t('location_map.description')}
@@ -74,7 +74,7 @@ export default function LocationMap() {
                 <div className="text-2xl font-mono font-bold text-slate-900 tabular-nums">
                   {formatTime(time)}
                 </div>
-                <p className="text-[11px] text-[#FC4C02] font-medium">Lisboa, Portugal (WET)</p>
+                <p className="text-[11px] text-[#E03C00] font-medium">Lisboa, Portugal (WET)</p>
               </div>
 
               <div className="space-y-2">
@@ -93,7 +93,7 @@ export default function LocationMap() {
             <motion.a
               href="#contactos"
               whileHover={{ x: 5 }}
-              className="mt-12 flex items-center gap-2 text-[#FC4C02] font-bold text-sm group/btn"
+              className="mt-12 flex items-center gap-2 text-[#E03C00] font-bold text-sm group/btn"
             >
               Vamos trabalhar juntos <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:-translate-y-1 group-hover/btn:translate-x-1" />
             </motion.a>
@@ -151,7 +151,7 @@ export default function LocationMap() {
             {/* Overlay Info Card */}
             <div className="absolute bottom-10 right-10 flex items-center gap-3 bg-white/90 backdrop-blur-md border border-slate-200 p-4 rounded-2xl shadow-2xl">
               <div className="w-10 h-10 rounded-full bg-[#FC4C02]/10 flex items-center justify-center">
-                <Globe2 className="w-5 h-5 text-[#FC4C02]" />
+                <Globe2 className="w-5 h-5 text-[#E03C00]" />
               </div>
               <div>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Localização</p>
