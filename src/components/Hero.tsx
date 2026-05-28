@@ -601,7 +601,7 @@ export default function Hero() {
                             <div className="flex items-center gap-4 w-full">
                               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-jb-primary to-jb-secondary p-[2px] shadow-lg shadow-jb-primary/20">
                                 <div className={`w-full h-full ${activeTab === 'Theme.tsx' ? 'bg-[#232326]' : 'bg-white'} rounded-[14px] flex items-center justify-center transition-colors overflow-hidden`}>
-                                  <img src="/icon.png" alt="Miguel" className="w-full h-full object-cover" />
+                                  <img src="/icon.png" alt="Miguel Santos" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
                                 </div>
                               </div>
                               <div className="flex flex-col">
