@@ -216,7 +216,7 @@ export default function ResumeView() {
             <div className="h-48 sm:h-64 w-full relative shrink-0">
                <div className="absolute inset-0 bg-slate-100 overflow-hidden">
                   <img 
-                    src="/windows11.jpg" 
+                    src="/windows11.webp" 
                     alt="Cover" 
                     className="w-full h-full object-cover object-center" />
                </div>

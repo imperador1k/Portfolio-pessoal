@@ -16,9 +16,9 @@ import {
 import { useLanguage } from '../i18n/LanguageContext';
 
 const stories = [
-  { id: 1, image: "/discipline.jpg", key: "s1", category_key: "discipline" },
-  { id: 2, image: "/motorcycle.jpg", key: "s2", category_key: "ride" },
-  { id: 3, image: "/mountain.jpg", key: "s3", category_key: "mountain" }
+  { id: 1, image: "/discipline.webp", key: "s1", category_key: "discipline" },
+  { id: 2, image: "/motorcycle.webp", key: "s2", category_key: "ride" },
+  { id: 3, image: "/mountain.webp", key: "s3", category_key: "mountain" }
 ];
 
 const hobbies = [
@@ -26,7 +26,7 @@ const hobbies = [
     id: 1,
     key: "p1",
     category_key: "academy",
-    image: "/discipline.jpg",
+    image: "/discipline.webp",
     baseLikes: 1200,
     comments: "42",
     tag: "consistent"
@@ -35,7 +35,7 @@ const hobbies = [
     id: 2,
     key: "p2",
     category_key: "natural",
-    image: "/natural.jpg",
+    image: "/natural.webp",
     baseLikes: 856,
     comments: "12",
     tag: "clarity"
@@ -44,7 +44,7 @@ const hobbies = [
     id: 3,
     key: "p3",
     category_key: "motorcycle",
-    image: "/motorcycle.jpg",
+    image: "/motorcycle.webp",
     baseLikes: 3100,
     comments: "156",
     tag: "adrenaline"
@@ -53,7 +53,7 @@ const hobbies = [
     id: 4,
     key: "p4",
     category_key: "travel",
-    image: "/mountain.jpg",
+    image: "/mountain.webp",
     baseLikes: 2400,
     comments: "89",
     tag: "adventure"
@@ -62,7 +62,7 @@ const hobbies = [
     id: 5,
     key: "p5",
     category_key: "photography",
-    image: "/water.png",
+    image: "/water.webp",
     baseLikes: 942,
     comments: "28",
     tag: "visuals"
@@ -71,7 +71,7 @@ const hobbies = [
     id: 6,
     key: "p6",
     category_key: "origins",
-    image: "/journey.jpg",
+    image: "/journey.webp",
     baseLikes: 5200,
     comments: "999",
     tag: "roots"
@@ -271,7 +271,7 @@ export default function AboutMe() {
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-[3px] bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 relative z-10 transition-transform duration-500 group-hover:scale-105">
                 <div className="w-full h-full rounded-full border-[3px] border-white overflow-hidden bg-slate-200 shadow-inner">
                    <img 
-                    src="/icon.png" 
+                    src="/icon.webp" 
                     alt="Miguel Santos Profile"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                    />
@@ -472,7 +472,7 @@ export default function AboutMe() {
                 {/* Header */}
                 <div className="absolute top-10 left-4 z-50 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-slate-200">
-                    <img src="/icon.png" alt="Miguel Profile" className="w-full h-full object-cover" />
+                    <img src="/icon.webp" alt="Miguel Profile" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white text-xs font-bold shadow-sm">miguelsantos.pr</span>
@@ -591,7 +591,7 @@ export default function AboutMe() {
                         {/* Original Post Desc */}
                         <div className="flex gap-3">
                           <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0">
-                            <img src="/icon.png" alt="Miguel Profile" className="w-full h-full object-cover" />
+                            <img src="/icon.webp" alt="Miguel Profile" className="w-full h-full object-cover" />
                           </div>
                           <div className="text-sm">
                             <span className="font-bold mr-2">miguelsantos.pr</span>
@@ -671,7 +671,7 @@ export default function AboutMe() {
                   <div className="p-4 border-b border-slate-100 flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 p-[2px]">
                       <div className="w-full h-full rounded-full bg-white border border-white overflow-hidden">
-                        <img src="/icon.png" alt="Miguel Profile" className="w-full h-full object-cover" />
+                        <img src="/icon.webp" alt="Miguel Profile" className="w-full h-full object-cover" />
                       </div>
                     </div>
                     <div className="flex flex-col">
@@ -685,7 +685,7 @@ export default function AboutMe() {
                     {/* Post Description as First Comment */}
                     <div className="flex gap-3">
                       <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0">
-                        <img src="/icon.png" alt="Miguel Profile" className="w-full h-full object-cover" />
+                        <img src="/icon.webp" alt="Miguel Profile" className="w-full h-full object-cover" />
                       </div>
                       <div className="text-sm">
                         <span className="font-bold mr-2">miguelsantos.pr</span>

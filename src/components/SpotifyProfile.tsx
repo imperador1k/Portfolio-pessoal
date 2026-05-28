@@ -145,11 +145,11 @@ export default function SpotifyProfile() {
         tracks = [
           { 
             id: 'mock1', title: 'Deep Focus (Emergency Fallback)', artist: { name: 'Engineering Radio' }, 
-            album: { cover_medium: '/journey.jpg' }, preview: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', duration: 300 
+            album: { cover_medium: '/journey.webp' }, preview: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', duration: 300 
           },
           { 
             id: 'mock2', title: 'Night Shift Flow', artist: { name: 'Miguel Santos' }, 
-            album: { cover_medium: '/discipline.jpg' }, preview: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', duration: 240 
+            album: { cover_medium: '/discipline.webp' }, preview: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', duration: 240 
           }
         ];
       }
@@ -163,7 +163,7 @@ export default function SpotifyProfile() {
       return [
         { 
           id: 'err1', title: 'Check your connection', artist: { name: 'System' }, 
-          album: { cover_medium: '/motorcycle.jpg' }, preview: '', duration: 0 
+          album: { cover_medium: '/motorcycle.webp' }, preview: '', duration: 0 
         }
       ];
     } finally {
@@ -633,7 +633,7 @@ export default function SpotifyProfile() {
                             whileHover={{ scale: 1.05 }}
                             className="w-40 h-40 sm:w-48 sm:h-48 rounded-full shadow-2xl overflow-hidden border-4 border-white bg-slate-100 shrink-0"
                           >
-                            <img src="/whatsapp.png" alt="Miguel Santos" className="w-full h-full object-cover" />
+                            <img src="/whatsapp.webp" alt="Miguel Santos" className="w-full h-full object-cover" />
                           </motion.div>
                           <div className="flex flex-col mb-2">
                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Profile</span>
@@ -736,7 +736,7 @@ export default function SpotifyProfile() {
                   {/* Artist Card */}
                   <div className="bg-[#f6f6f6] rounded-xl overflow-hidden group">
                      <div className="h-40 bg-slate-200 relative overflow-hidden">
-                        <img src="/whatsapp.png" alt="Artist" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <img src="/whatsapp.webp" alt="Artist" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className="absolute top-3 left-3 px-2 py-0.5 bg-black/40 backdrop-blur-md rounded text-[10px] font-bold text-white uppercase tracking-wider">
                            {t('spotify.about_artist')}
                         </div>

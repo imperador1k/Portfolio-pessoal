@@ -204,7 +204,7 @@ export default function GithubProfile() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="w-full aspect-square rounded-full border border-slate-200 overflow-hidden shadow-sm"
               >
-                <img src="/git.png" alt="Profile" className="w-full h-full object-cover" />
+                <img src="/git.webp" alt="Profile" className="w-full h-full object-cover" />
               </motion.div>
               <div className="absolute bottom-4 right-4 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-sm cursor-pointer hover:bg-slate-50">
                  <span className="text-xl">🏃‍♂️</span>
