@@ -219,7 +219,7 @@ export default function ResumeView() {
                     src="/windows11.jpg" 
                     alt="Cover" 
                     className="w-full h-full object-cover object-center"
-                  / loading="lazy" decoding="async">
+                  loading="lazy" decoding="async" />
                </div>
             </div>
 

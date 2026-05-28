@@ -550,7 +550,7 @@ export default function SpotifyProfile() {
                   <div className="pb-12">
                     <div className="px-8 pt-6 pb-8 bg-linear-to-b from-slate-100 to-white flex items-end gap-6">
                       <div className="w-48 h-48 sm:w-60 sm:h-60 shadow-2xl overflow-hidden rounded-lg shrink-0">
-                        <img src={currentPlaylist.tracks?.length loading="lazy" decoding="async" alt="" > 0 ? (currentPlaylist.tracks[0].album.cover_xl || currentPlaylist.tracks[0].album.cover_medium) : currentPlaylist.img} alt={currentPlaylist.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                        <img src={currentPlaylist.tracks?.length > 0 ? (currentPlaylist.tracks[0].album.cover_xl || currentPlaylist.tracks[0].album.cover_medium) : currentPlaylist.img} alt={currentPlaylist.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                       </div>
                       <div className="mb-2">
                         <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2 inline-block">Public Playlist</span>

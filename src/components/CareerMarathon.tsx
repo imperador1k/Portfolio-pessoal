@@ -257,7 +257,7 @@ function ActivityCard({ activity, index }: { activity: any, index: number }) {
                </p>
                {activity.image && (
                   <div className="w-full h-48 sm:w-32 sm:h-32 lg:w-48 lg:h-48 shrink-0 rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 border-2 border-slate-100 group-hover:border-[#FC4C02]/20 transition-colors">
-                     <img src={activity.image} alt={activity.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3s] ease-out" / loading="lazy" decoding="async">
+                     <img src={activity.image} alt={activity.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3s] ease-out" loading="lazy" decoding="async" />
                   </div>
                )}
             </div>
@@ -355,7 +355,7 @@ function ActivityCard({ activity, index }: { activity: any, index: number }) {
                                  className="flex gap-3"
                               >
                                  <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden shrink-0 mt-1">
-                                    <img src={`https://i.pravatar.cc/100?u=${i + 150}`} alt="" className="w-full h-full object-cover" / loading="lazy" decoding="async">
+                                    <img src={`https://i.pravatar.cc/100?u=${i + 150}`} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                                  </div>
                                  <div className="bg-white px-4 py-2.5 rounded-xl border border-slate-100 shadow-sm grow text-sm">
                                     <p className="font-bold text-slate-800 text-[10px] mb-0.5">{comment.user}</p>
