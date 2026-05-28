@@ -272,7 +272,9 @@ export default function AboutMe() {
                 <div className="w-full h-full rounded-full border-[3px] border-white overflow-hidden bg-slate-200 shadow-inner">
                    <img 
                     src="/icon.png" 
-                    alt="Miguel" 
+                    alt="Miguel Santos Profile" 
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                    />
                 </div>
@@ -474,7 +476,7 @@ export default function AboutMe() {
                 {/* Header */}
                 <div className="absolute top-10 left-4 z-50 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-slate-200">
-                    <img src="/icon.png" className="w-full h-full object-cover" />
+                    <img src="/icon.png" alt="Miguel Profile" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-white text-xs font-bold shadow-sm">miguelsantos.pr</span>
@@ -494,6 +496,9 @@ export default function AboutMe() {
                   >
                     <img 
                       src={stories[currentStoryIndex].image} 
+                      alt="Story Content"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
@@ -592,7 +597,7 @@ export default function AboutMe() {
                         {/* Original Post Desc */}
                         <div className="flex gap-3">
                           <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0">
-                            <img src="/icon.png" className="w-full h-full object-cover" />
+                            <img src="/icon.png" alt="Miguel Profile" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                           </div>
                           <div className="text-sm">
                             <span className="font-bold mr-2">miguelsantos.pr</span>
@@ -649,6 +654,8 @@ export default function AboutMe() {
                   <img 
                     src={selectedPost.image} 
                     alt={t(`about.posts_content.${selectedPost.key}.title`)} 
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                   {/* Heart Animation on Double Click */}
@@ -672,7 +679,7 @@ export default function AboutMe() {
                   <div className="p-4 border-b border-slate-100 flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 p-[2px]">
                       <div className="w-full h-full rounded-full bg-white border border-white overflow-hidden">
-                        <img src="/icon.png" className="w-full h-full object-cover" />
+                        <img src="/icon.png" alt="Miguel Profile" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                       </div>
                     </div>
                     <div className="flex flex-col">
@@ -686,7 +693,7 @@ export default function AboutMe() {
                     {/* Post Description as First Comment */}
                     <div className="flex gap-3">
                       <div className="w-8 h-8 rounded-full bg-slate-100 overflow-hidden shrink-0">
-                        <img src="/icon.png" className="w-full h-full object-cover" />
+                        <img src="/icon.png" alt="Miguel Profile" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                       </div>
                       <div className="text-sm">
                         <span className="font-bold mr-2">miguelsantos.pr</span>

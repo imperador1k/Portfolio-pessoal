@@ -470,7 +470,7 @@ export default function SpotifyProfile() {
                             className={`flex items-center gap-4 p-2 hover:bg-slate-100 rounded-lg cursor-pointer group transition-colors ${currentTrack.id === track.id ? 'bg-slate-50' : ''}`}
                           >
                             <div className="w-10 h-10 rounded overflow-hidden shrink-0 relative">
-                              <img src={track.album.cover_medium} className="w-full h-full object-cover" />
+                              <img src={track.album.cover_medium} alt={track.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                               <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100">
                                 <Play className="w-4 h-4 text-white fill-white" />
                               </div>
@@ -534,7 +534,7 @@ export default function SpotifyProfile() {
                           className="p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors group cursor-pointer"
                         >
                           <div className="aspect-square rounded-lg bg-slate-200 mb-4 overflow-hidden shadow-md relative">
-                              <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+                              <img src={item.img} alt={item.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                               <button className="absolute bottom-2 right-2 w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center shadow-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all text-white fill-white">
                                 <Play className="w-5 h-5 fill-white" />
                               </button>
@@ -550,7 +550,7 @@ export default function SpotifyProfile() {
                   <div className="pb-12">
                     <div className="px-8 pt-6 pb-8 bg-linear-to-b from-slate-100 to-white flex items-end gap-6">
                       <div className="w-48 h-48 sm:w-60 sm:h-60 shadow-2xl overflow-hidden rounded-lg shrink-0">
-                        <img src={currentPlaylist.tracks?.length > 0 ? (currentPlaylist.tracks[0].album.cover_xl || currentPlaylist.tracks[0].album.cover_medium) : currentPlaylist.img} alt={currentPlaylist.title} className="w-full h-full object-cover" />
+                        <img src={currentPlaylist.tracks?.length loading="lazy" decoding="async" alt="" > 0 ? (currentPlaylist.tracks[0].album.cover_xl || currentPlaylist.tracks[0].album.cover_medium) : currentPlaylist.img} alt={currentPlaylist.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                       </div>
                       <div className="mb-2">
                         <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2 inline-block">Public Playlist</span>
@@ -597,6 +597,9 @@ export default function SpotifyProfile() {
                               <div className="flex items-center gap-3 min-w-0">
                                 <img 
                                   src={track.album?.cover_medium || track.artworkUrl100 || 'https://via.placeholder.com/100'} 
+                                  alt={track.title || track.trackName || "Track Cover"}
+                                  loading="lazy"
+                                  decoding="async"
                                   className="w-8 h-8 rounded shrink-0 object-cover" 
                                   onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/100' }}
                                 />
@@ -633,7 +636,7 @@ export default function SpotifyProfile() {
                             whileHover={{ scale: 1.05 }}
                             className="w-40 h-40 sm:w-48 sm:h-48 rounded-full shadow-2xl overflow-hidden border-4 border-white bg-slate-100 shrink-0"
                           >
-                            <img src="/whatsapp.png" alt="Miguel Santos" className="w-full h-full object-cover" />
+                            <img src="/whatsapp.png" alt="Miguel Santos" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                           </motion.div>
                           <div className="flex flex-col mb-2">
                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Profile</span>
@@ -682,7 +685,7 @@ export default function SpotifyProfile() {
                               className="p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors group cursor-pointer"
                             >
                               <div className="aspect-square rounded-lg bg-slate-200 mb-4 overflow-hidden shadow-md relative">
-                                  <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+                                  <img src={item.img} alt={item.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                   <button className="absolute bottom-2 right-2 w-10 h-10 bg-[#1DB954] rounded-full flex items-center justify-center shadow-xl opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all text-white fill-white">
                                     <Play className="w-5 h-5 fill-white" />
                                   </button>
@@ -714,7 +717,7 @@ export default function SpotifyProfile() {
                <div className="px-6 pb-6 space-y-6 overflow-y-auto no-scrollbar">
                   {/* Big Cover */}
                   <div className="aspect-square rounded-xl bg-slate-900 overflow-hidden shadow-2xl relative group">
-                     <img src={currentTrack.cover} alt={currentTrack.title} className="w-full h-full object-cover opacity-80" />
+                     <img src={currentTrack.cover} alt={currentTrack.title} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-80" />
                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Play className="w-12 h-12 text-white fill-white" />
                      </div>
@@ -737,7 +740,7 @@ export default function SpotifyProfile() {
                   {/* Artist Card */}
                   <div className="bg-[#f6f6f6] rounded-xl overflow-hidden group">
                      <div className="h-40 bg-slate-200 relative overflow-hidden">
-                        <img src="/whatsapp.png" alt="Artist" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <img src="/whatsapp.png" alt="Artist" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className="absolute top-3 left-3 px-2 py-0.5 bg-black/40 backdrop-blur-md rounded text-[10px] font-bold text-white uppercase tracking-wider">
                            {t('spotify.about_artist')}
                         </div>
@@ -771,7 +774,7 @@ export default function SpotifyProfile() {
              {/* Left: Song Info */}
              <div className="w-[30%] flex items-center gap-3">
                 <div className="w-14 h-14 bg-slate-900 rounded shadow-md shrink-0 overflow-hidden">
-                   <img src={currentTrack.cover} alt={currentTrack.title} className="w-full h-full object-cover" />
+                   <img src={currentTrack.cover} alt={currentTrack.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </div>
                 <div className="hidden sm:block overflow-hidden">
                    <div className="flex items-center gap-2">
@@ -858,6 +861,9 @@ export default function SpotifyProfile() {
                 animate={{ rotate: isPlaying ? 360 : 0 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 src={currentTrack.cover} 
+                alt={currentTrack.title}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover rounded-full border-2 border-white shadow-md"
               />
               <div className="absolute inset-0 flex items-center justify-center">

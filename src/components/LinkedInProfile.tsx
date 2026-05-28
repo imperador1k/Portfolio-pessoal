@@ -279,7 +279,7 @@ export default function LinkedInProfile() {
                     src="/banner_linkedin.png" 
                     alt="LinkedIn Banner" 
                     className="w-full h-full object-cover"
-                   />
+                   / loading="lazy" decoding="async">
                    <div className="absolute inset-0 bg-black/5"></div>
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function LinkedInProfile() {
               <div className="px-6 pb-6 relative">
                 <div className="absolute -top-16 left-6">
                   <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white overflow-hidden shadow-lg bg-slate-100">
-                    <img src="/icon.png" alt="Miguel Santos" className="w-full h-full object-cover" />
+                    <img src="/icon.png" alt="Miguel Santos" className="w-full h-full object-cover" / loading="lazy" decoding="async">
                   </div>
                 </div>
                 
@@ -342,13 +342,13 @@ export default function LinkedInProfile() {
                   <div className="hidden md:block space-y-3">
                     <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
                        <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-100">
-                          <img src="https://cdn-icons-png.flaticon.com/512/1006/1006363.png" className="w-6 h-6 object-contain" />
+                          <img src="https://cdn-icons-png.flaticon.com/512/1006/1006363.png" className="w-6 h-6 object-contain" / loading="lazy" decoding="async" alt="">
                        </div>
                        <span className="max-w-[150px] hover:text-[#0a66c2] hover:underline cursor-pointer">Web Developer Freelance</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
                        <div className="w-8 h-8 rounded bg-white flex items-center justify-center overflow-hidden border border-slate-100">
-                          <img src="/ipt.png" className="w-6 h-6 object-contain" />
+                          <img src="/ipt.png" className="w-6 h-6 object-contain" / loading="lazy" decoding="async" alt="">
                        </div>
                        <span className="max-w-[150px] hover:text-[#0a66c2] hover:underline cursor-pointer">Instituto Politécnico de Tomar</span>
                     </div>
@@ -373,7 +373,7 @@ export default function LinkedInProfile() {
               <div className="p-6">
                 <div className="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100">
                    <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200">
-                      <img src="/icon.png" alt="Miguel Santos" className="w-full h-full object-cover" />
+                      <img src="/icon.png" alt="Miguel Santos" className="w-full h-full object-cover" / loading="lazy" decoding="async">
                    </div>
                    <div>
                       <p className="text-xs text-slate-500 mb-0.5">{t('linkedin.messaging.to')}</p>
@@ -524,7 +524,7 @@ export default function LinkedInProfile() {
                   ].map(person => (
                     <div key={person.name} className="flex gap-3 border-b border-slate-100 pb-4 last:border-0 last:pb-0">
                        <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100 shrink-0">
-                          <img src={person.img} className="w-full h-full object-cover" />
+                          <img src={person.img} className="w-full h-full object-cover" / loading="lazy" decoding="async" alt="">
                        </div>
                         <div>
                            <p className="text-xs font-bold text-slate-900">{person.name}</p>
@@ -565,7 +565,7 @@ export default function LinkedInProfile() {
             <div className="flex items-center gap-2">
                <div className="relative">
                   <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200">
-                    <img src="/icon.png" className="w-full h-full object-cover" />
+                    <img src="/icon.png" className="w-full h-full object-cover" / loading="lazy" decoding="async" alt="">
                   </div>
                   <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></div>
                </div>
@@ -589,7 +589,7 @@ export default function LinkedInProfile() {
                   <div className="flex-1 p-4 overflow-y-auto bg-slate-50 space-y-4 no-scrollbar">
                      <div className="flex flex-col items-center py-4 border-b border-slate-200 mb-2">
                         <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200 mb-2 shadow-sm">
-                          <img src="/icon.png" className="w-full h-full object-cover" />
+                          <img src="/icon.png" className="w-full h-full object-cover" / loading="lazy" decoding="async" alt="">
                         </div>
                         <p className="text-xs font-bold text-slate-900">Miguel Santos</p>
                         <p className="text-[9px] text-slate-500 text-center px-4 leading-tight opacity-75">
@@ -627,7 +627,7 @@ export default function LinkedInProfile() {
                            ) : (
                              <div key={i} className="flex gap-2">
                                 <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white shadow-sm">
-                                   <img src="/icon.png" className="w-full h-full object-cover" />
+                                   <img src="/icon.png" className="w-full h-full object-cover" / loading="lazy" decoding="async" alt="">
                                 </div>
                                 <div className="max-w-[85%] p-3 rounded-2xl text-[11px] leading-relaxed shadow-sm bg-white border border-slate-100 text-slate-700 rounded-tl-none">
                                    <p>{msg.text}</p>
@@ -740,7 +740,7 @@ export default function LinkedInProfile() {
               <div className="flex items-center justify-between px-6 py-4 sm:px-8 sm:py-6 border-b border-slate-100/50">
                 <div className="flex items-center gap-4">
                    <div className="w-12 h-12 rounded-full border-2 border-[#0a66c2] p-0.5 overflow-hidden shadow-sm">
-                      <img src="/icon.png" className="w-full h-full rounded-full object-cover" />
+                      <img src="/icon.png" className="w-full h-full rounded-full object-cover" / loading="lazy" decoding="async" alt="">
                    </div>
                    <div>
                       <h3 className="text-xl font-bold text-slate-900 tracking-tight">Miguel Santos</h3>
