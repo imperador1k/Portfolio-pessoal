@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface DelayedRenderProps {
   children: React.ReactNode;
@@ -7,45 +7,64 @@ interface DelayedRenderProps {
 
 export default function DelayedRender({ children, fallback = null }: DelayedRenderProps) {
   const [shouldRender, setShouldRender] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // We want to clear the main thread for the initial render (LCP/FCP).
-    // The easiest way is to wait until the browser is idle, or use a fallback timer.
-    let timerId: ReturnType<typeof setTimeout>;
-    
+    if (shouldRender) return;
+
     const triggerRender = () => {
       setShouldRender(true);
     };
 
-    // If requestIdleCallback is supported, use it. Otherwise, fallback to a timeout.
-    if ('requestIdleCallback' in window) {
-      // @ts-ignore
-      window.requestIdleCallback(() => {
-        timerId = setTimeout(triggerRender, 100); // Add a small extra delay after idle just in case
-      });
-    } else {
-      timerId = setTimeout(triggerRender, 1500); // 1.5s fallback delay for Safari/older browsers
-    }
-
-    // Also trigger immediately on user interaction (scroll, click, touch)
+    // User interactions are guaranteed to mean the user is active on the page
     const handleInteraction = () => {
-      setShouldRender(true);
+      triggerRender();
     };
 
     window.addEventListener('scroll', handleInteraction, { once: true, passive: true });
     window.addEventListener('touchstart', handleInteraction, { once: true, passive: true });
     window.addEventListener('mousemove', handleInteraction, { once: true, passive: true });
 
+    let observer: IntersectionObserver | null = null;
+    if (containerRef.current && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              triggerRender();
+              if (observer) {
+                observer.disconnect();
+              }
+            }
+          });
+        },
+        {
+          rootMargin: '300px 0px', // start loading when user is 300px close
+        }
+      );
+      observer.observe(containerRef.current);
+    } else {
+      // Fallback for bots/legacy browsers with lack of IntersectionObserver
+      const timer = setTimeout(triggerRender, 5000);
+      return () => clearTimeout(timer);
+    }
+
     return () => {
-      clearTimeout(timerId);
       window.removeEventListener('scroll', handleInteraction);
       window.removeEventListener('touchstart', handleInteraction);
       window.removeEventListener('mousemove', handleInteraction);
+      if (observer) {
+        observer.disconnect();
+      }
     };
-  }, []);
+  }, [shouldRender]);
 
   if (!shouldRender) {
-    return <>{fallback}</>;
+    return (
+      <div ref={containerRef} style={{ minHeight: '150px', width: '100%' }} className="flex justify-center items-center">
+        {fallback}
+      </div>
+    );
   }
 
   return <>{children}</>;
