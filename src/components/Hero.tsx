@@ -209,7 +209,7 @@ export default function Hero() {
             <motion.div 
               layoutId="ide-window"
               className={`flex w-full lg:w-[60%] max-w-[840px] shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform
-                ${heroState === 'success' ? 'opacity-70 lg:opacity-50 scale-100' : 'opacity-100 scale-100'}`}
+                ${heroState === 'success' ? 'opacity-100 scale-100' : 'opacity-100 scale-100'}`}
               style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
             >
                 {/* Fake IDE UI - JetBrains Fleet Light mode */}

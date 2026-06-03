@@ -587,7 +587,27 @@ export const pt = {
       user_query: 'Podes dar uma ajuda no código do Miguel?',
       ai_response: 'Erro Crítico: Miguel Santos detetado. Acesso à lógica negado. O Miguel constrói tudo com engenharia pura e 0% de assistência artificial.',
       ai_cta: 'No entanto, o seu processador biológico requer cafeína. Queres abastecer o sistema?',
-      support_btn: 'Oferecer um Café (Fuel)'
+      support_btn: 'Oferecer um Café (Fuel)',
+      viewing_project: '[Visualizando Projeto: {name}]',
+      viewing_artifact: '[Visualizando Artefato: {name}]',
+      file_not_found: 'Ficheiro não encontrado ou encriptado pelo Miguel.',
+      cv_title: 'Aqui está o teu CV, Miguel. Deixa-me explicar as decisões principais:',
+      cv_strategy_label: 'Posicionamento estratégico:',
+      cv_strategy_desc: ' O título evita qualquer referência a "estudante" ou "júnior", posicionando-te diretamente como alguém que pensa em arquitetura.',
+      cv_metrics_label: 'Métricas Reais:',
+      cv_metrics_desc: ' Cada ponto tem uma ação forte e um resultado justificável.',
+      cv_status: 'A ler habilidade de design frontend para artefato de CV >'
+    },
+    projects: {
+      "Imperador": "Imperador: O super-algoritmo secreto do Miguel para dominar o mercado de café mundial. Cuidado, o código contém 99% de cafeína pura e foi banido em 3 continentes por excesso de produtividade.",
+      "Port-test": "Port-test: Uma simulação em loop infinito onde o Miguel testa se o seu cérebro consegue compilar Kotlin mais rápido do que a máquina. Spoiler: Ele ganha sempre e a máquina fica com ciúmes.",
+      "Code-Vault": "Code-Vault: Um cofre ultra-secreto que guarda o lendário snippet que resolve qualquer bug automaticamente apenas ao olhar fixamente para o ecrã durante 3 segundos.",
+      "System-Core": "System-Core: A parte mais profunda do portfólio que mantém este servidor a correr... ou pelo menos finge que sim muito bem enquanto tu procuras o PDF do currículo."
+    },
+    artifacts: {
+      "Engineering_Hub_Diagram_svg": "Engineering_Hub_Diagram.svg: Um diagrama tão complexo que até o próprio Claude fica baralhado ao processá-lo. Parece um mapa de estradas mas na verdade é o Miguel a decidir qual café beber a seguir.",
+      "Dev_Blueprint_V2_pdf": "Dev_Blueprint_V2.pdf: O plano mestre para construir a UI perfeita sem escrever uma única linha de CSS feio. Contém regras sagradas contra placeholders e botões tortos.",
+      "Performance_Audit_json": "Performance_Audit.json: Resultados da auditoria de elite: Velocidade = Velocidade da luz, Bugs = 0, Cafeína no Sangue = 404 Overflow. Performance aprovada por unanimidade!"
     },
     share: {
       btn: 'Partilhar',

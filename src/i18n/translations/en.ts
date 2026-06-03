@@ -575,7 +575,27 @@ export const en = {
       user_query: 'Can you help Miguel with the code?',
       ai_response: 'Critical Error: Miguel Santos detected. Access to logic denied. Miguel builds everything with pure engineering and 0% artificial assistance.',
       ai_cta: 'However, his biological processor requires caffeine. Do you want to refuel the system?',
-      support_btn: 'Buy me a Coffee (Fuel)'
+      support_btn: 'Buy me a Coffee (Fuel)',
+      viewing_project: '[Viewing Project: {name}]',
+      viewing_artifact: '[Viewing Artifact: {name}]',
+      file_not_found: 'File not found or encrypted by Miguel.',
+      cv_title: 'Here is your CV, Miguel. Let me explain the key decisions:',
+      cv_strategy_label: 'Strategic positioning:',
+      cv_strategy_desc: ' The title avoids any reference to "student" or "junior", positioning you directly as someone who thinks about architecture.',
+      cv_metrics_label: 'Real Metrics:',
+      cv_metrics_desc: ' Each point has a strong action and a justifiable result.',
+      cv_status: 'Reading frontend design skill for CV artifact >'
+    },
+    projects: {
+      "Imperador": "Imperador: Miguel's secret super-algorithm to dominate the global coffee market. Warning: the code is 99% pure caffeine and has been banned in 3 continents for extreme productivity.",
+      "Port-test": "Port-test: An infinite loop simulation where Miguel tests if his brain can compile Kotlin faster than the machine. Spoiler: He always wins, leaving the machine jealous.",
+      "Code-Vault": "Code-Vault: An ultra-secret vault storing the legendary snippet that automatically fixes any bug just by staring intensely at the screen for 3 seconds.",
+      "System-Core": "System-Core: The deepest part of the portfolio that keeps this server running... or at least pretends to do it extremely well while you search for the resume PDF."
+    },
+    artifacts: {
+      "Engineering_Hub_Diagram_svg": "Engineering_Hub_Diagram.svg: A diagram so complex that even Claude gets confused trying to render it. It looks like a road map but it's actually just Miguel deciding which coffee to drink next.",
+      "Dev_Blueprint_V2_pdf": "Dev_Blueprint_V2.pdf: The master blueprint to build the perfect UI without writing a single line of ugly CSS. Contains sacred rules against placeholders and misaligned buttons.",
+      "Performance_Audit_json": "Performance_Audit.json: Elite audit results: Speed = Speed of light, Bugs = 0, Blood Caffeine Level = 404 Overflow. Elite performance confirmed!"
     },
     share: {
       btn: 'Share',

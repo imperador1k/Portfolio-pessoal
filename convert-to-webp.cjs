@@ -15,8 +15,17 @@ async function convertToWebP() {
       const webpPath = path.join(dir, baseName + '.webp');
       
       try {
-        await sharp(filePath)
-          .webp({ quality: 80, effort: 6 }) // High quality WebP conversion
+        const metadata = await sharp(filePath).metadata();
+        const isIcon = file === 'icon.png' || file === 'whatsapp.png' || file === 'youtube.png' || file === 'git.png';
+        const maxWidth = isIcon ? 256 : 1600;
+
+        let s = sharp(filePath);
+        if (metadata.width > maxWidth) {
+          s = s.resize({ width: maxWidth, withoutEnlargement: true });
+        }
+
+        await s
+          .webp({ quality: 85, effort: 6 }) // High quality WebP conversion
           .toFile(webpPath);
           
         const oldSize = fs.statSync(filePath).size;

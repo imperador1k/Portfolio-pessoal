@@ -12,7 +12,7 @@ async function processImages() {
     
     if (ext === '.jpg' || ext === '.jpeg' || ext === '.png') {
       const isIcon = file === 'icon.png' || file === 'whatsapp.png' || file === 'youtube.png' || file === 'git.png';
-      const maxWidth = isIcon ? 256 : 800; // Profile pictures/icons can be much smaller
+      const maxWidth = isIcon ? 256 : 1600; // Profile pictures/icons can be much smaller
       
       const tempPath = filePath + '.tmp' + ext;
       
@@ -26,9 +26,9 @@ async function processImages() {
         }
 
         if (ext === '.jpg' || ext === '.jpeg') {
-          s = s.jpeg({ quality: 60, progressive: true });
+          s = s.jpeg({ quality: 85, progressive: true });
         } else if (ext === '.png') {
-          s = s.png({ quality: 60, compressionLevel: 9 });
+          s = s.png({ quality: 85, compressionLevel: 9 });
         }
         
         await s.toFile(tempPath);

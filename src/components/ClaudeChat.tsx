@@ -33,13 +33,25 @@ const ClaudeLogo = ({ className = "w-4 h-4" }: { className?: string }) => (
 );
 
 export default function ClaudeChat() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'new' | 'cv'>('new');
+  const [activeView, setActiveView] = useState<'new' | 'cv' | 'interactive_chat'>('new');
   const [chatStep, setChatStep] = useState(0);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+
+  // Dynamic chat states
+  const [messages, setMessages] = useState<{ 
+    sender: 'user' | 'claude'; 
+    text?: string; 
+    textKey?: string; 
+    textParams?: Record<string, string>; 
+    isError?: boolean 
+  }[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [hasTokens, setHasTokens] = useState(true);
 
   // Set sidebar to false on small screens initially
   useEffect(() => {
@@ -75,6 +87,84 @@ export default function ClaudeChat() {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
+  const handleNewChat = () => {
+    setActiveView('new');
+    setMessages([]);
+    setInputValue('');
+    setIsTyping(false);
+    setHasTokens(true);
+    setIsMobileMenuOpen(false);
+  };
+
+  const renderMessageText = (msg: { text?: string; textKey?: string; textParams?: Record<string, string> }) => {
+    if (msg.textKey) {
+      let val = t(msg.textKey);
+      if (msg.textParams) {
+        Object.entries(msg.textParams).forEach(([k, v]) => {
+          val = val.replace(`{${k}}`, v);
+        });
+      }
+      return val;
+    }
+    return msg.text;
+  };
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim() || isTyping || !hasTokens) return;
+
+    const userText = inputValue;
+    setInputValue('');
+    setActiveView('interactive_chat');
+    
+    // Add User Message
+    setMessages(prev => [...prev, { sender: 'user', text: userText }]);
+    setIsTyping(true);
+
+    // Simulate Claude's thinking and token exhaustion response
+    setTimeout(() => {
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          sender: 'claude',
+          textKey: 'claude.limit.message',
+          isError: true
+        }
+      ]);
+      setHasTokens(false);
+    }, 1500);
+  };
+
+  const handleItemClick = (type: 'project' | 'artifact', name: string) => {
+    if (isTyping) return;
+    
+    setActiveView('interactive_chat');
+    setIsMobileMenuOpen(false);
+    
+    // Add User Message using key
+    setMessages(prev => [
+      ...prev, 
+      { 
+        sender: 'user', 
+        textKey: type === 'project' ? 'claude.chat.viewing_project' : 'claude.chat.viewing_artifact',
+        textParams: { name } 
+      }
+    ]);
+    setIsTyping(true);
+
+    setTimeout(() => {
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          sender: 'claude',
+          textKey: type === 'project' ? `claude.projects.${name}` : `claude.artifacts.${name.replace('.', '_')}`
+        }
+      ]);
+    }, 1000);
+  };
+
   useEffect(() => {
     if (activeView === 'cv') {
       const timer = setInterval(() => {
@@ -89,10 +179,7 @@ export default function ClaudeChat() {
   const SidebarContent = () => (
     <>
       <div className="p-4 flex items-center justify-between">
-         <div className="flex items-center gap-2 cursor-pointer" onClick={() => {
-           setActiveView('new');
-           setIsMobileMenuOpen(false);
-         }}>
+         <div className="flex items-center gap-2 cursor-pointer" onClick={handleNewChat}>
             <ClaudeLogo className="w-5 h-5 text-slate-800" />
             <span className="text-xl font-medium text-slate-800">Claude</span>
          </div>
@@ -106,10 +193,7 @@ export default function ClaudeChat() {
 
       <div className="px-3 space-y-1">
          <button 
-          onClick={() => {
-            setActiveView('new');
-            setIsMobileMenuOpen(false);
-          }}
+          onClick={handleNewChat}
           className="w-full flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-xl text-[13px] font-medium text-slate-700 shadow-sm hover:shadow-md transition-all group"
          >
             <Plus className="w-4 h-4 text-slate-400 group-hover:text-slate-900" />
@@ -132,7 +216,11 @@ export default function ClaudeChat() {
 
          <div className="px-3 py-2 text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-4">Projetos</div>
          {projects.map((proj, i) => (
-           <div key={i} className="flex items-center gap-3 px-3 py-1.5 hover:bg-slate-200/50 rounded-lg cursor-pointer transition-colors text-slate-500 group">
+           <div 
+            key={i} 
+            onClick={() => handleItemClick('project', proj)}
+            className="flex items-center gap-3 px-3 py-1.5 hover:bg-slate-200/50 rounded-lg cursor-pointer transition-colors text-slate-500 group"
+           >
               <Folder className="w-4 h-4 group-hover:text-slate-900" />
               <span className="text-[13px] font-medium group-hover:text-slate-900">{proj}</span>
            </div>
@@ -140,7 +228,11 @@ export default function ClaudeChat() {
 
          <div className="px-3 py-2 text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-4">Artefatos</div>
          {artefacts.map((art, i) => (
-           <div key={i} className="flex items-center gap-3 px-3 py-1.5 hover:bg-slate-200/50 rounded-lg cursor-pointer transition-colors text-slate-500 group">
+           <div 
+            key={i} 
+            onClick={() => handleItemClick('artifact', art)}
+            className="flex items-center gap-3 px-3 py-1.5 hover:bg-slate-200/50 rounded-lg cursor-pointer transition-colors text-slate-500 group"
+           >
               <Box className="w-4 h-4 group-hover:text-slate-900" />
               <span className="text-[13px] font-medium group-hover:text-slate-900 truncate">{art}</span>
            </div>
@@ -254,7 +346,9 @@ export default function ClaudeChat() {
                     {isSidebarOpen ? <PanelLeftClose className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                   </button>
                   <div className="flex items-center gap-1 sm:gap-2 text-[12px] sm:text-[13px] font-medium text-slate-600 cursor-pointer hover:bg-slate-50 px-2 py-1 rounded-md transition-colors truncate max-w-[150px] sm:max-w-none">
-                     <span className="truncate">{activeView === 'cv' ? 'CV Chat' : 'Novo Bate-papo'}</span>
+                     <span className="truncate">
+                        {activeView === 'cv' ? 'CV Chat' : activeView === 'interactive_chat' ? 'Claude Chat' : 'Novo Bate-papo'}
+                     </span>
                      <ChevronDown className="w-3 h-3 shrink-0" />
                   </div>
                 </div>
@@ -291,22 +385,27 @@ export default function ClaudeChat() {
                         {t('claude.welcome')}
                       </motion.h2>
 
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                      <form 
+                        onSubmit={handleSendMessage}
                         className="w-full bg-white border border-slate-200 rounded-[24px] p-4 sm:p-6 shadow-[0_2px_15px_rgba(0,0,0,0.03)] relative overflow-hidden"
                       >
                          <div className="text-left mb-10 sm:mb-16 flex items-center gap-2">
-                            <motion.span 
-                              className="text-[15px] sm:text-[17px] text-slate-400"
-                            >
-                               Digite / para habilidades
-                            </motion.span>
-                            <motion.span 
-                              animate={{ opacity: [0, 1, 0] }}
-                              transition={{ repeat: Infinity, duration: 1 }}
-                              className="w-0.5 h-6 bg-[#D97757]" 
+                            <input
+                              type="text"
+                              value={inputValue}
+                              onChange={(e) => setInputValue(e.target.value)}
+                              placeholder={t('claude.input_placeholder') || "Pergunta sobre habilidades ou projetos..."}
+                              className="w-full text-[15px] sm:text-[17px] text-slate-800 outline-none border-none placeholder-slate-400 bg-transparent"
+                              disabled={isTyping}
+                              autoFocus
                             />
+                            {inputValue === '' && (
+                              <motion.span 
+                                animate={{ opacity: [0, 1, 0] }}
+                                transition={{ repeat: Infinity, duration: 1 }}
+                                className="w-0.5 h-6 bg-[#D97757] shrink-0" 
+                              />
+                            )}
                          </div>
                          
                          <div className="flex items-center justify-between">
@@ -316,14 +415,16 @@ export default function ClaudeChat() {
                                   <span>Sonnet 4.6 <span className="hidden sm:inline font-normal opacity-60">Adaptativo</span></span>
                                   <ChevronDown className="w-3 h-3" />
                                </div>
-                               <div className="flex items-center gap-1">
-                                  <div className="w-1 h-3 bg-slate-200 rounded-full" />
-                                  <div className="w-1 h-3 bg-slate-200 rounded-full" />
-                                  <div className="w-1 h-3 bg-slate-200 rounded-full" />
-                               </div>
+                               <button 
+                                 type="submit"
+                                 disabled={!inputValue.trim() || isTyping}
+                                 className={`p-2 rounded-xl transition-all ${inputValue.trim() ? 'bg-[#D97757] text-white hover:bg-[#c26549] cursor-pointer shadow-sm' : 'bg-slate-100 text-slate-300 cursor-not-allowed'}`}
+                               >
+                                  <ArrowUpRight className="w-4 h-4" />
+                               </button>
                             </div>
                          </div>
-                      </motion.div>
+                      </form>
 
                       <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
                          {[
@@ -332,14 +433,19 @@ export default function ClaudeChat() {
                            { label: t('claude.actions.code'), icon: Code },
                            { label: t('claude.actions.personal'), icon: Coffee },
                          ].map((action, i) => (
-                           <button key={i} className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-[12px] sm:text-[13px] font-medium text-slate-500 hover:bg-slate-50 transition-all">
+                           <button 
+                             key={i}
+                             type="button"
+                             onClick={() => setInputValue(action.label)}
+                             className="flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-[12px] sm:text-[13px] font-medium text-slate-500 hover:bg-slate-50 transition-all"
+                           >
                               <action.icon className="w-3 h-3" />
                               {action.label}
                            </button>
                          ))}
                       </div>
                     </motion.div>
-                  ) : (
+                  ) : activeView === 'cv' ? (
                     <motion.div 
                       key="chat"
                       initial={{ opacity: 0 }}
@@ -347,14 +453,14 @@ export default function ClaudeChat() {
                       className="w-full flex flex-col gap-8 sm:gap-12 text-[15px] sm:text-[16px] leading-[1.6]"
                     >
                        <div className="text-slate-600 italic border-l-2 border-slate-100 pl-4 mb-2 text-sm sm:text-base">
-                          Reading frontend design skill for CV artifact &gt;
+                          {t('claude.chat.cv_status')}
                        </div>
 
                        <div className="text-slate-800 space-y-6">
-                          <p className="font-bold text-lg">Aqui está o teu CV, Miguel. Deixa-me explicar as decisões principais:</p>
+                          <p className="font-bold text-lg">{t('claude.chat.cv_title')}</p>
                           <div className="space-y-4 text-sm sm:text-base">
-                             <p><strong className="text-slate-900">Posicionamento estratégico:</strong> O título evita qualquer referência a "estudante" ou "júnior", posicionando-te diretamente como alguém que pensa em arquitetura.</p>
-                             <p><strong className="text-slate-900">Métricas Reais:</strong> Cada ponto tem uma ação forte e um resultado justificável.</p>
+                             <p><strong className="text-slate-900">{t('claude.chat.cv_strategy_label')}</strong> {t('claude.chat.cv_strategy_desc')}</p>
+                             <p><strong className="text-slate-900">{t('claude.chat.cv_metrics_label')}</strong> {t('claude.chat.cv_metrics_desc')}</p>
                           </div>
                        </div>
 
@@ -389,6 +495,60 @@ export default function ClaudeChat() {
                          </motion.div>
                        )}
                     </motion.div>
+                  ) : (
+                    <motion.div 
+                      key="interactive_chat"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="w-full flex flex-col gap-6 text-[15px] sm:text-[16px] leading-[1.6]"
+                    >
+                       {messages.map((msg, i) => (
+                          <div key={i} className={`flex gap-4 items-start ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                             {msg.sender === 'claude' && (
+                                <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 shrink-0">
+                                   <ClaudeLogo className="w-5 h-5 text-[#D97757]" />
+                                </div>
+                             )}
+                             <div className={`max-w-[85%] rounded-2xl p-4 ${msg.sender === 'user' ? 'bg-[#f0eee4] text-slate-800' : msg.isError ? 'bg-red-50/50 border border-red-100 text-slate-800' : 'bg-white border border-slate-200 text-slate-800'}`}>
+                                <p className="whitespace-pre-wrap">{renderMessageText(msg)}</p>
+                                
+                                {msg.sender === 'claude' && msg.isError && (
+                                   <div className="mt-4 flex flex-col gap-4">
+                                      <p className="text-slate-500 text-sm">
+                                         {t('claude.limit.cta')}
+                                      </p>
+                                      <motion.a 
+                                        href="https://buymeacoffee.com/imperador1k"
+                                        target="_blank"
+                                        className="inline-flex items-center gap-3 px-6 py-3 bg-amber-400 text-slate-900 rounded-2xl font-black shadow-lg text-xs uppercase w-fit"
+                                      >
+                                         <Coffee className="w-5 h-5" />
+                                         <span>{t('claude.chat.support_btn')}</span>
+                                      </motion.a>
+                                   </div>
+                                )}
+                             </div>
+                             {msg.sender === 'user' && (
+                                <div className="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-md">
+                                   M
+                                </div>
+                             )}
+                          </div>
+                       ))}
+                       
+                       {isTyping && (
+                          <div className="flex gap-4 items-start justify-start animate-pulse">
+                             <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100 shrink-0">
+                                <ClaudeLogo className="w-5 h-5 text-[#D97757]" />
+                             </div>
+                             <div className="bg-white border border-slate-200 rounded-2xl p-4 flex gap-1 items-center justify-center h-10 w-16">
+                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                             </div>
+                          </div>
+                       )}
+                    </motion.div>
                   )}
                 </AnimatePresence>
 
@@ -396,37 +556,62 @@ export default function ClaudeChat() {
 
              {/* Token Limit UI (Fixed for mobile) */}
              <div className="sticky bottom-0 bg-white/95 backdrop-blur-md border-t border-slate-100 pb-4 pt-4 px-4 sm:px-6 flex flex-col items-center z-20">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3 sm:gap-5 shadow-lg relative overflow-hidden"
-                >
-                   <div className="absolute top-0 left-0 w-1 h-full bg-[#D97757]" />
-                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
-                      <ClaudeLogo className="w-5 h-5 sm:w-6 sm:h-6 text-[#D97757]" />
-                   </div>
-                   <div className="flex-1">
-                      <p className="text-[13px] sm:text-[14px] font-bold text-slate-900 leading-tight">
-                         {t('claude.limit.message')}
-                      </p>
-                      <p className="hidden sm:block text-[12px] text-slate-500 mt-1 leading-relaxed">
-                         {t('claude.limit.cta')}
-                      </p>
-                   </div>
-                   <motion.a 
-                      href="https://buymeacoffee.com/imperador1k"
-                      className="shrink-0 px-3 sm:px-4 py-2 bg-slate-900 text-white rounded-xl text-[11px] sm:text-[12px] font-bold"
-                   >
-                      {t('claude.limit.btn')}
-                   </motion.a>
-                </motion.div>
+                {!hasTokens ? (
+                  <>
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3 sm:gap-5 shadow-lg relative overflow-hidden"
+                    >
+                       <div className="absolute top-0 left-0 w-1 h-full bg-[#D97757]" />
+                       <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                          <ClaudeLogo className="w-5 h-5 sm:w-6 sm:h-6 text-[#D97757]" />
+                       </div>
+                       <div className="flex-1">
+                          <p className="text-[13px] sm:text-[14px] font-bold text-slate-900 leading-tight">
+                             {t('claude.limit.message')}
+                          </p>
+                          <p className="hidden sm:block text-[12px] text-slate-500 mt-1 leading-relaxed">
+                             {t('claude.limit.cta')}
+                          </p>
+                       </div>
+                       <motion.a 
+                          href="https://buymeacoffee.com/imperador1k"
+                          className="shrink-0 px-3 sm:px-4 py-2 bg-slate-900 text-white rounded-xl text-[11px] sm:text-[12px] font-bold animate-pulse"
+                       >
+                          {t('claude.limit.btn')}
+                       </motion.a>
+                    </motion.div>
 
-                <div className="w-full max-w-2xl mt-3">
-                   <div className="w-full bg-[#fcfaf8] border border-slate-100 rounded-full px-5 py-2.5 flex items-center justify-between text-slate-300">
-                      <span className="text-[12px] truncate">Limite de mensagens atingido...</span>
-                      <ArrowUpRight className="w-4 h-4 opacity-20" />
-                   </div>
-                </div>
+                    <div className="w-full max-w-2xl mt-3">
+                       <div className="w-full bg-[#fcfaf8] border border-slate-100 rounded-full px-5 py-2.5 flex items-center justify-between text-slate-300 select-none">
+                          <span className="text-[12px] truncate">Limite de mensagens atingido...</span>
+                          <ArrowUpRight className="w-4 h-4 opacity-20" />
+                       </div>
+                    </div>
+                  </>
+                ) : (
+                  <form 
+                    onSubmit={handleSendMessage}
+                    className="w-full max-w-2xl bg-[#fcfaf8] border border-slate-200 rounded-full px-5 py-2.5 flex items-center justify-between text-slate-800 shadow-sm focus-within:border-slate-300 transition-colors"
+                  >
+                     <input
+                       type="text"
+                       value={inputValue}
+                       onChange={(e) => setInputValue(e.target.value)}
+                       placeholder={t('claude.input_placeholder') || "Pergunta sobre habilidades ou projetos..."}
+                       className="w-full bg-transparent border-none outline-none text-[13px] sm:text-[14px] text-slate-800 placeholder-slate-400"
+                       disabled={isTyping}
+                     />
+                     <button
+                       type="submit"
+                       disabled={!inputValue.trim() || isTyping}
+                       className={`p-1.5 rounded-full transition-all shrink-0 ml-2 ${inputValue.trim() ? 'bg-[#D97757] text-white hover:bg-[#c26549]' : 'bg-transparent text-slate-300'}`}
+                     >
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                     </button>
+                  </form>
+                )}
              </div>
 
           </div>
